@@ -1,5 +1,7 @@
 package gameScreens;
+
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -25,11 +27,18 @@ public class OrkTest extends Unit {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+
+		drawDraggingZone(g2d);
 	}
 
 	@Override
 	public void update() {
 
+	}
+
+	@Override
+	public Rectangle getBounds() {
+		return new Rectangle(getX(), getY(), 30, 40);
 	}
 
 }

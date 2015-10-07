@@ -1,4 +1,5 @@
 package gameEngine;
+
 import java.awt.event.KeyListener;
 
 import javax.swing.JFrame;
@@ -27,6 +28,7 @@ public class Game {
 		window.add(gameThread);
 		window.addKeyListener(keyboardListener);
 		window.addMouseListener(mousepadListener);
+		window.addMouseMotionListener(mousepadListener);
 
 		new Thread(gameThread).start();
 

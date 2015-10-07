@@ -1,33 +1,57 @@
 package entity;
+
 import gameEngine.MousepadListener;
 import gameEngine.Screen;
+
+import java.awt.Graphics2D;
+import java.awt.Rectangle;
 
 public abstract class Unit extends AbstractEntity {
 
 	private boolean marked;
 
 	private int nextX = getX(), nextY = getY();
+	private int x, y, w, h;
+	private Screen sc;
 
 	public Unit(int x, int y) {
 		super(x, y);
 	}
 
-	// public Rectangle getBounds() {
-	// return new Rectangle(getX(), getY(), 25, 32);
-	// }
-
 	public void update(Screen screen) {
+		sc = screen;
 		MousepadListener mpl = screen.getScreenFactory().getGame().getMousepadListener();
 		if (mpl.isLeftClicked()) {
-			if ((mpl.getX() >= getX() && mpl.getX() <= getX() + 50) && (mpl.getY() >= getY() && mpl.getY() <= getY() + 50)) { // 50 dynamisch machen
-				marked = true;
+			if (mpl.isDragging()) {
+				if (mpl.getMarkX() < mpl.getX()) {
+					x = mpl.getMarkX();
+				} else {
+					x = mpl.getX();
+				}
+				if (mpl.getMarkY() < mpl.getY()) {
+					y = mpl.getMarkY();
+				} else {
+					y = mpl.getY();
+				}
+				w = Math.abs(mpl.getX() - mpl.getMarkX());
+				h = Math.abs(mpl.getY() - mpl.getMarkY());
+				Rectangle draggingZone = new Rectangle(x, y, w, h);
+				if (draggingZone.intersects(getBounds())) {
+					marked = true;
+				} else {
+					marked = false;
+				}
 			} else {
-				marked = false;
+				if ((mpl.getX() >= getX() && mpl.getX() <= getX() + 50) && (mpl.getY() >= getY() && mpl.getY() <= getY() + 50)) { // 50 dynamisch machen
+					marked = true;
+				} else {
+					marked = false;
+				}
 			}
 		} else if (mpl.isRightClicked()) {
 			if (marked == true) {
-				nextX = mpl.getX() - 10;
-				nextY = mpl.getY() - 40;
+				nextX = mpl.getX();
+				nextY = mpl.getY();
 			}
 		}
 
@@ -47,8 +71,18 @@ public abstract class Unit extends AbstractEntity {
 		}
 	}
 
+	public abstract Rectangle getBounds();
+
 	public void checkCollision() {
 
+	}
+
+	public void drawDraggingZone(Graphics2D g2d) {
+		if (sc.getScreenFactory().getGame().getMousepadListener().isDragging() && sc.getScreenFactory().getGame().getMousepadListener().isLeftClicked()) {
+			if (sc.getScreenFactory().getGame().getMousepadListener().getMarkX() != -1 && sc.getScreenFactory().getGame().getMousepadListener().getMarkY() != -1) {
+				g2d.drawRect(x, y, w, h);
+			}
+		}
 	}
 
 	public boolean isMarked() {
