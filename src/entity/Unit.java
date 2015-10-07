@@ -42,7 +42,7 @@ public abstract class Unit extends AbstractEntity {
 					marked = false;
 				}
 			} else {
-				if ((mpl.getX() >= getX() && mpl.getX() <= getX() + 50) && (mpl.getY() >= getY() && mpl.getY() <= getY() + 50)) { // 50 dynamisch machen
+				if ((mpl.getX() >= getX() && mpl.getX() <= getX() + getBounds().getWidth()) && (mpl.getY() >= getY() && mpl.getY() <= getY() + getBounds().getHeight())) { // 50 dynamisch machen
 					marked = true;
 				} else {
 					marked = false;
@@ -71,10 +71,7 @@ public abstract class Unit extends AbstractEntity {
 		}
 	}
 
-	public abstract Rectangle getBounds();
-
 	public void checkCollision() {
-
 	}
 
 	public void drawDraggingZone(Graphics2D g2d) {

@@ -1,4 +1,7 @@
 package entity;
+
+import java.awt.Rectangle;
+
 public abstract class AbstractEntity implements IEntity {
 
 	private int x, y;
@@ -23,5 +26,7 @@ public abstract class AbstractEntity implements IEntity {
 	public void setY(int y) {
 		this.y = y;
 	}
+
+	public abstract Rectangle getBounds();
 
 }

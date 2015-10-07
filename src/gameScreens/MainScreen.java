@@ -1,4 +1,6 @@
 package gameScreens;
+
+import entity.Unit;
 import gameEngine.Screen;
 import gameEngine.ScreenFactory;
 
@@ -9,7 +11,7 @@ import java.util.Random;
 public class MainScreen extends Screen {
 
 	private int y = 0;
-	private ArrayList<OrkTest> orks = new ArrayList<OrkTest>();
+	private ArrayList<Unit> units = new ArrayList<Unit>();
 
 	public MainScreen(ScreenFactory screenFactory) {
 		super(screenFactory);
@@ -20,22 +22,26 @@ public class MainScreen extends Screen {
 		Random rnd = new Random();
 		System.out.println("Main Creating!");
 		for (int i = 0; i < 100; i++) {
-			orks.add(new OrkTest(rnd.nextInt(700) + 40, rnd.nextInt(500) + 40));
+			units.add(new OrkTest(rnd.nextInt(700) + 40, rnd.nextInt(500) + 40));
 		}
 
 	}
 
 	@Override
 	public void onUpdate() {
-		for (int i = 0; i < orks.size(); i++) {
-			orks.get(i).update(this);
+		for (int i = 0; i < units.size(); i++) {
+			units.get(i).update(this);
 		}
 	}
 
 	@Override
 	public void onDraw(Graphics2D g2d) {
-		for (int i = 0; i < orks.size(); i++) {
-			orks.get(i).draw(g2d);
+		for (int i = 0; i < units.size(); i++) {
+			units.get(i).draw(g2d);
 		}
+	}
+
+	public ArrayList<Unit> getUnits() {
+		return units;
 	}
 }
