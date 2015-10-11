@@ -2,6 +2,9 @@ package gameEngine;
 
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.util.ArrayList;
+
+import entity.AbstractEntity;
 
 public abstract class Screen {
 	private int x, y, w, h;
@@ -20,6 +23,8 @@ public abstract class Screen {
 	public ScreenFactory getScreenFactory() {
 		return screenFactory;
 	}
+
+	public abstract ArrayList<AbstractEntity> getEntitys();
 
 	public Rectangle getDraggingZone() {
 		return new Rectangle(x, y, w, h);

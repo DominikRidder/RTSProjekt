@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import Utilitys.Point;
 import gameEngine.MousepadListener;
 import gameEngine.Screen;
-import gameScreens.MainScreen;
 
 public abstract class Unit extends AbstractEntity {
 
@@ -71,11 +70,10 @@ public abstract class Unit extends AbstractEntity {
 	}
 
 	public int checkCollision() {
-		ArrayList<Unit> units = ((MainScreen) sc.getScreenFactory().getCurrentScreen()).getUnits();
-		for (int i = 0; i < units.size(); i++) {
-			Unit unit = units.get(i);
-
-			if (getBounds().intersects(unit.getBounds()) && !getBounds().equals(unit.getBounds())) {
+		ArrayList<AbstractEntity> entitys = sc.getScreenFactory().getCurrentScreen().getEntitys();
+		for (int i = 0; i < entitys.size(); i++) {
+			AbstractEntity entity = entitys.get(i);
+			if (getBounds().intersects(entity.getBounds()) && !getBounds().equals(entity.getBounds())) {
 			}
 		}
 		return 0;

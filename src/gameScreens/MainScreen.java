@@ -4,14 +4,14 @@ import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.Random;
 
-import entity.Unit;
+import entity.AbstractEntity;
 import gameEngine.MousepadListener;
 import gameEngine.Screen;
 import gameEngine.ScreenFactory;
 
 public class MainScreen extends Screen {
 
-	private ArrayList<Unit> units = new ArrayList<Unit>();
+	private ArrayList<AbstractEntity> entitys = new ArrayList<AbstractEntity>();
 
 	public MainScreen(ScreenFactory screenFactory) {
 		super(screenFactory);
@@ -22,22 +22,22 @@ public class MainScreen extends Screen {
 		Random rnd = new Random();
 		System.out.println("Main Creating!");
 		for (int i = 0; i < 10; i++) {
-			units.add(new OrkTest(rnd.nextInt(700) + 40, rnd.nextInt(500) + 40));
+			entitys.add(new OrkTest(rnd.nextInt(700) + 40, rnd.nextInt(500) + 40));
 		}
 
 	}
 
 	@Override
 	public void onUpdate() {
-		for (int i = 0; i < units.size(); i++) {
-			units.get(i).update(this);
+		for (int i = 0; i < entitys.size(); i++) {
+			entitys.get(i).update(this);
 		}
 	}
 
 	@Override
 	public void onDraw(Graphics2D g2d) {
-		for (int i = 0; i < units.size(); i++) {
-			units.get(i).draw(g2d);
+		for (int i = 0; i < entitys.size(); i++) {
+			entitys.get(i).draw(g2d);
 		}
 		MousepadListener mpl = this.getScreenFactory().getGame().getMousepadListener();
 		if (mpl.isDragging()) {
@@ -58,16 +58,17 @@ public class MainScreen extends Screen {
 
 	}
 
-	public ArrayList<Unit> getUnits() {
-		return units;
-	}
-
 	public void drawDraggingZone(Graphics2D g2d) {
 		if (this.getScreenFactory().getGame().getMousepadListener().isDragging() && this.getScreenFactory().getGame().getMousepadListener().isLeftClicked()) {
 			if (this.getScreenFactory().getGame().getMousepadListener().getMarkX() != -1 && this.getScreenFactory().getGame().getMousepadListener().getMarkY() != -1) {
 				g2d.drawRect(getX(), getY(), getW(), getH());
 			}
 		}
+	}
+
+	@Override
+	public ArrayList<AbstractEntity> getEntitys() {
+		return entitys;
 	}
 
 }

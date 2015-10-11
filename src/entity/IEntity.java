@@ -1,5 +1,8 @@
 package entity;
+
 import java.awt.Graphics2D;
+
+import gameEngine.Screen;
 
 public interface IEntity {
 
@@ -12,6 +15,8 @@ public interface IEntity {
 	public void setY(int y);
 
 	public void update();
+
+	public void update(Screen sc);
 
 	public void draw(Graphics2D g2d);
 
