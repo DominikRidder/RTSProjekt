@@ -27,7 +27,6 @@ public class OrkTest extends Unit {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		drawDraggingZone(g2d);
 	}
 
 	@Override

@@ -9,6 +9,11 @@ public class Point {
 		this.setY(y);
 	}
 
+	public Point(Double x, Double y) {
+		this.setX(x.intValue());
+		this.setY(y.intValue());
+	}
+
 	public int getX() {
 		return x;
 	}
