@@ -1,16 +1,19 @@
 package entity;
 
-import gameEngine.MousepadListener;
-import gameEngine.Screen;
-
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.util.ArrayList;
+
+import Utilitys.Point;
+import gameEngine.MousepadListener;
+import gameEngine.Screen;
+import gameScreens.MainScreen;
 
 public abstract class Unit extends AbstractEntity {
 
 	private boolean marked;
 
-	private int nextX = getX(), nextY = getY();
+	private ArrayList<Point> wayPoints = new ArrayList<Point>();
 	private int x, y, w, h;
 	private Screen sc;
 
@@ -49,29 +52,50 @@ public abstract class Unit extends AbstractEntity {
 				}
 			}
 		} else if (mpl.isRightClicked()) {
+			System.out.println("RECHTS");
 			if (marked == true) {
-				nextX = mpl.getX();
-				nextY = mpl.getY();
+				wayPoints.clear();
+				wayPoints.add(new Point(mpl.getX(), mpl.getY()));
 			}
 		}
 
-		if (getX() != nextX) {
-			if (getX() < nextX) {
+		// int collisionArt = checkCollision();
+		Point next;
+		if (wayPoints.size() == 0) {
+			next = new Point(getX(), getY());
+		} else {
+			next = new Point(wayPoints.get(0).getX(), wayPoints.get(0).getY());
+		}
+
+		if (getX() != next.getX()) {
+			if (getX() < next.getX()) {
 				setX(getX() + 1);
 			} else {
 				setX(getX() - 1);
 			}
 		}
-		if (getY() != nextY) {
-			if (getY() < nextY) {
+		if (getY() != next.getY()) {
+			if (getY() < next.getY()) {
 				setY(getY() + 1);
 			} else {
 				setY(getY() - 1);
 			}
 		}
+		if (getX() == next.getX() && getY() == next.getY() && wayPoints.size() > 0) {
+			wayPoints.remove(0);
+		}
 	}
 
-	public void checkCollision() {
+	public int checkCollision() {
+		ArrayList<Unit> units = ((MainScreen) sc.getScreenFactory().getCurrentScreen()).getUnits();
+		for (int i = 0; i < units.size(); i++) {
+			Unit unit = units.get(i);
+			if (getBounds().intersects(unit.getBounds()) && !getBounds().equals(unit.getBounds())) {
+				if (unit.getX() < getX()) {
+				}
+			}
+		}
+		return 0;
 	}
 
 	public void drawDraggingZone(Graphics2D g2d) {

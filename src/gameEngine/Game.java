@@ -6,19 +6,32 @@ import javax.swing.JFrame;
 
 public class Game {
 
-	private final JFrame window = new JFrame();
-	private final ScreenFactory screenFactory;
-	private final GameThread gameThread;
-	private final KeyboardListener keyboardListener;
-	private final MousepadListener mousepadListener;
+	private JFrame window = new JFrame();
+	private ScreenFactory screenFactory;
+	private GameThread gameThread;
+	private KeyboardListener keyboardListener;
+	private MousepadListener mousepadListener;
 
 	public Game(int windowX, int windowY, String title) {
 		window.setSize(windowX, windowY);
+		window.setTitle(title);
+		init();
+		new Thread(gameThread).start();
+	}
+
+	public Game(String title) {
+		window.setExtendedState(JFrame.MAXIMIZED_BOTH);
+		window.setUndecorated(true);
+		window.setTitle(title);
+		init();
+		new Thread(gameThread).start();
+	}
+
+	private void init() {
 		window.setResizable(false);
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		window.setFocusable(true);
 		window.setLocationRelativeTo(null);
-		window.setTitle(title);
 		window.setVisible(true);
 		screenFactory = new ScreenFactory(this);
 		gameThread = new GameThread(this);
@@ -29,9 +42,6 @@ public class Game {
 		window.addKeyListener(keyboardListener);
 		window.addMouseListener(mousepadListener);
 		window.addMouseMotionListener(mousepadListener);
-
-		new Thread(gameThread).start();
-
 	}
 
 	public MousepadListener getMousepadListener() {

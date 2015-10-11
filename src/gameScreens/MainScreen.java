@@ -21,7 +21,7 @@ public class MainScreen extends Screen {
 	public void onCreate() {
 		Random rnd = new Random();
 		System.out.println("Main Creating!");
-		for (int i = 0; i < 100; i++) {
+		for (int i = 0; i < 1; i++) {
 			units.add(new OrkTest(rnd.nextInt(700) + 40, rnd.nextInt(500) + 40));
 		}
 
