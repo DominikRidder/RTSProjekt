@@ -7,7 +7,6 @@ import java.awt.RenderingHints;
 import javax.swing.JPanel;
 
 public class GameThread extends JPanel implements Runnable {
-
 	private final Game game;
 
 	public GameThread(Game game) {

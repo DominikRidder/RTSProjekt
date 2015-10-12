@@ -1,10 +1,13 @@
 package entity;
 
-import java.util.ArrayList;
-
-import Utilitys.Point;
 import gameEngine.MousepadListener;
 import gameEngine.Screen;
+import gameScreens.MainScreen;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import Utilitys.Point;
 
 public abstract class Unit extends AbstractEntity {
 
@@ -42,7 +45,6 @@ public abstract class Unit extends AbstractEntity {
 			}
 		}
 
-		int collisionArt = checkCollision();
 		Point next;
 		if (wayPoints.size() == 0) {
 			next = new Point(getX(), getY());
@@ -64,20 +66,28 @@ public abstract class Unit extends AbstractEntity {
 				setY(getY() - 1);
 			}
 		}
+
+		checkCollision();
+
 		if (getX() == next.getX() && getY() == next.getY() && wayPoints.size() > 0) {
 			wayPoints.remove(0);
 		}
 	}
 
-	public int checkCollision() {
-		ArrayList<AbstractEntity> entitys = sc.getScreenFactory().getCurrentScreen().getEntitys();
-		for (int i = 0; i < entitys.size(); i++) {
-			AbstractEntity entity = entitys.get(i);
-			if (getBounds().intersects(entity.getBounds()) && !getBounds().equals(entity.getBounds())) {
-			}
-		}
-		return 0;
+	public void checkCollision() {
+		HashMap<AbstractEntity, Integer> entitys = ((MainScreen) sc.getScreenFactory().getCurrentScreen()).getEntityWithMap();
 
+		int field = entitys.get(this);
+		int rad = 1;
+		while (entitys.containsValue(field)) {
+			field = MainScreen.pointToMapConst(x, y);
+		}
+		// ArrayList<AbstractEntity> inField = new ArrayList<AbstractEntity>();
+		// for (Entry<AbstractEntity, Integer> entry : entitys.entrySet()) {
+		// if (entry.getValue() == field) {
+		// inField.add(entry.getKey());
+		// }
+		// }
 	}
 
 	public boolean isMarked() {

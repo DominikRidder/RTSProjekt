@@ -1,11 +1,12 @@
 package gameEngine;
 
 import java.awt.event.KeyListener;
+import java.awt.image.BufferStrategy;
 
 import javax.swing.JFrame;
 
 public class Game {
-
+	private BufferStrategy strat;
 	private JFrame window = new JFrame();
 	private ScreenFactory screenFactory;
 	private GameThread gameThread;
@@ -42,6 +43,7 @@ public class Game {
 		window.addKeyListener(keyboardListener);
 		window.addMouseListener(mousepadListener);
 		window.addMouseMotionListener(mousepadListener);
+		makeStrat();
 	}
 
 	public MousepadListener getMousepadListener() {
@@ -58,6 +60,15 @@ public class Game {
 
 	public JFrame getWindow() {
 		return window;
+	}
+
+	public void makeStrat() {
+		window.createBufferStrategy(2);
+		strat = window.getBufferStrategy();
+	}
+
+	public BufferStrategy getStrat() {
+		return strat;
 	}
 
 }

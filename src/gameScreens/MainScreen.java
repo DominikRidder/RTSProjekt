@@ -1,28 +1,33 @@
 package gameScreens;
 
-import java.awt.Graphics2D;
-import java.util.ArrayList;
-import java.util.Random;
-
 import entity.AbstractEntity;
 import gameEngine.MousepadListener;
 import gameEngine.Screen;
 import gameEngine.ScreenFactory;
 
+import java.awt.Graphics2D;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map.Entry;
+import java.util.Random;
+
 public class MainScreen extends Screen {
 
 	private ArrayList<AbstractEntity> entitys = new ArrayList<AbstractEntity>();
+	private HashMap<AbstractEntity, Integer> entitysOnMap = new HashMap<AbstractEntity, Integer>();
 
 	public MainScreen(ScreenFactory screenFactory) {
 		super(screenFactory);
+
 	}
 
 	@Override
 	public void onCreate() {
 		Random rnd = new Random();
 		System.out.println("Main Creating!");
-		for (int i = 0; i < 10; i++) {
+		for (int i = 0; i < 100; i++) {
 			entitys.add(new OrkTest(rnd.nextInt(700) + 40, rnd.nextInt(500) + 40));
+			entitysOnMap.put(entitys.get(i), pointToMapConst(entitys.get(i).getX(), entitys.get(i).getY()));
 		}
 
 	}
@@ -32,6 +37,11 @@ public class MainScreen extends Screen {
 		for (int i = 0; i < entitys.size(); i++) {
 			entitys.get(i).update(this);
 		}
+		for (Entry<AbstractEntity, Integer> entry : entitysOnMap.entrySet()) {
+			AbstractEntity key = entry.getKey();
+			entry.setValue(pointToMapConst(key.getX(), key.getY()));
+		}
+
 	}
 
 	@Override
@@ -66,9 +76,18 @@ public class MainScreen extends Screen {
 		}
 	}
 
-	@Override
 	public ArrayList<AbstractEntity> getEntitys() {
 		return entitys;
+	}
+
+	public HashMap<AbstractEntity, Integer> getEntityWithMap() {
+		return entitysOnMap;
+	}
+
+	public static int pointToMapConst(int x, int y) {
+		int a = x / 25;
+		int b = y / 25;
+		return a + b * 10;
 	}
 
 }
