@@ -1,12 +1,7 @@
-<<<<<<< HEAD
-#blub
-.*~
-.classpath
-.settings/
-=======
 #mwinkens: ignorierte dateien:
+.project
+bin/
 .classpath
 .settings/
 .*~
 
->>>>>>> f38952cda9e78863bdbce359a44d92e35433bc82
