@@ -10,6 +10,7 @@ public class Game {
 	private final JFrame window = new JFrame();
 	private ScreenFactory screenFactory;
 	private GameThread gameThread;
+	private MusikThread musikThread;
 	private KeyboardListener keyboardListener;
 	private MousepadListener mousepadListener;
 
@@ -18,6 +19,7 @@ public class Game {
 		window.setTitle(title);
 		init();
 		new Thread(gameThread).start();
+		new Thread(musikThread).start();
 	}
 
 	public Game(String title) {
@@ -26,6 +28,7 @@ public class Game {
 		window.setTitle(title);
 		init();
 		new Thread(gameThread).start();
+
 	}
 
 	private void init() {
@@ -36,14 +39,14 @@ public class Game {
 		window.setVisible(true);
 		screenFactory = new ScreenFactory(this);
 		gameThread = new GameThread(this);
+		musikThread = new MusikThread();
 		keyboardListener = new KeyboardListener();
 		mousepadListener = new MousepadListener();
-
+		window.add(musikThread);
 		window.add(gameThread);
 		window.addKeyListener(keyboardListener);
 		window.addMouseListener(mousepadListener);
 		window.addMouseMotionListener(mousepadListener);
-		makeStrat();
 	}
 
 	public MousepadListener getMousepadListener() {
@@ -60,15 +63,6 @@ public class Game {
 
 	public JFrame getWindow() {
 		return window;
-	}
-
-	public void makeStrat() {
-		window.createBufferStrategy(2);
-		strat = window.getBufferStrategy();
-	}
-
-	public BufferStrategy getStrat() {
-		return strat;
 	}
 
 }
