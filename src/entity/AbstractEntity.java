@@ -52,8 +52,10 @@ public abstract class AbstractEntity implements IEntity {
 	}
 	
 	public boolean isCollision(AbstractEntity e) {
-		if((Math.abs(e.getX() - this.getX()) < (e.getBounds().getWidth() + this.getBounds().getWidth()) )
-				&& (Math.abs(e.getY() - this.getY()) < (e.getBounds().getHeight() + this.getBounds().getHeight()))) {
+		Rectangle rg1 = e.getBounds();
+		Rectangle rg2 = this.getBounds();
+		if((Math.abs(e.getX() - this.getX()) < (rg1.getWidth() + rg2.getWidth()) )
+				&& (Math.abs(e.getY() - this.getY()) < (rg1.getHeight() + rg2.getHeight()))) {
 			return true;
 		}
 		return false;
