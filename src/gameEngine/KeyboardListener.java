@@ -4,7 +4,7 @@ import java.awt.event.KeyListener;
 
 public class KeyboardListener implements KeyListener {
 
-	private boolean[] keys = new boolean[256];
+	private final boolean[] keys = new boolean[256];
 
 	@Override
 	public void keyPressed(KeyEvent event) {
