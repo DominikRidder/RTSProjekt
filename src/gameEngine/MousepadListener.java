@@ -13,18 +13,22 @@ public class MousepadListener implements MouseListener, MouseMotionListener {
 	private boolean rightClicked = false;
 	private boolean dragging = false;
 
+	@Override
 	public void mouseClicked(MouseEvent event) {
 
 	}
 
+	@Override
 	public void mouseEntered(MouseEvent event) {
 
 	}
 
+	@Override
 	public void mouseExited(MouseEvent event) {
 
 	}
 
+	@Override
 	public void mousePressed(MouseEvent event) {
 		dragging = true;
 		mouseX = event.getX();
@@ -38,6 +42,7 @@ public class MousepadListener implements MouseListener, MouseMotionListener {
 		}
 	}
 
+	@Override
 	public void mouseReleased(MouseEvent event) {
 		leftClicked = false;
 		rightClicked = false;
@@ -66,6 +71,7 @@ public class MousepadListener implements MouseListener, MouseMotionListener {
 		return mouseY - 20;
 	}
 
+	@Override
 	public void mouseDragged(MouseEvent e) {
 		if (dragging) {
 			setMarkX(e.getX());
@@ -73,6 +79,7 @@ public class MousepadListener implements MouseListener, MouseMotionListener {
 		}
 	}
 
+	@Override
 	public void mouseMoved(MouseEvent e) {
 	}
 
