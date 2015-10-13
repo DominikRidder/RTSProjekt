@@ -29,7 +29,6 @@ public class MainScreen extends Screen {
 			entitys.add(new OrkTest(rnd.nextInt(700) + 40, rnd.nextInt(500) + 40));
 			entitysOnMap.put(entitys.get(i), pointToMapConst(entitys.get(i).getX(), entitys.get(i).getY()));
 		}
-
 	}
 
 	@Override

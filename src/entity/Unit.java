@@ -40,6 +40,7 @@ public abstract class Unit extends AbstractEntity {
 		} else if (mpl.isRightClicked()) {
 			if (marked == true) {
 				wayPoints.clear();
+
 				wayPoints.add(new Point(mpl.getX(), mpl.getY()));
 			}
 		}
@@ -52,16 +53,16 @@ public abstract class Unit extends AbstractEntity {
 		}
 
 		AbstractEntity e = hasCollision();
-		if(e != null && e instanceof Unit){//TODO: FIXME 
-			int x = e.getX();//tausche auftraege (teleportier dich mit deinem nachbarn xD)
+		if (e != null && e instanceof Unit) {// TODO: FIXME
+			int x = e.getX();// tausche auftraege (teleportier dich mit deinem nachbarn xD)
 			int y = e.getY();
 			e.setX(this.getX());
 			e.setY(this.getY());
 			this.setX(x);
 			this.setY(y);
 		}
-		
-		if (getX() != next.getX()) {//moving?
+
+		if (getX() != next.getX()) {// moving?
 			if (getX() < next.getX()) {
 				setX(getX() + 1);
 			} else {
@@ -76,28 +77,10 @@ public abstract class Unit extends AbstractEntity {
 			}
 		}
 
-		//checkCollision();
-
 		if (getX() == next.getX() && getY() == next.getY() && wayPoints.size() > 0) {
 			wayPoints.remove(0);
 		}
 	}
-
-	/*public void checkCollision() {
-		HashMap<AbstractEntity, Integer> entitys = ((MainScreen) sc.getScreenFactory().getCurrentScreen()).getEntityWithMap();
-
-		int field = entitys.get(this);
-		int rad = 1;
-		while (entitys.containsValue(field)) {
-			field = MainScreen.pointToMapConst(x, y);
-		}
-		// ArrayList<AbstractEntity> inField = new ArrayList<AbstractEntity>();
-		// for (Entry<AbstractEntity, Integer> entry : entitys.entrySet()) {
-		// if (entry.getValue() == field) {
-		// inField.add(entry.getKey());
-		// }
-		// }
-	}*/
 
 	public boolean isMarked() {
 		return marked;
