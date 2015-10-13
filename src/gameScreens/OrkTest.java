@@ -39,6 +39,8 @@ public class OrkTest extends Unit {
 
 	@Override
 	public Rectangle getBounds() {
+		rg.x = this.getX();
+		rg.y = this.getY();
 		return rg;
 	}
 
