@@ -1,7 +1,6 @@
 package gameScreens;
 
 import gameEngine.Game;
-import gameScreens.MainScreen;
 
 public class RTS {
 

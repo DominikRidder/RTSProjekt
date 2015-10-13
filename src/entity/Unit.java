@@ -2,10 +2,8 @@ package entity;
 
 import gameEngine.MousepadListener;
 import gameEngine.Screen;
-import gameScreens.MainScreen;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import Utilitys.Point;
 
@@ -13,7 +11,7 @@ public abstract class Unit extends AbstractEntity {
 
 	private boolean marked;
 
-	private ArrayList<Point> wayPoints = new ArrayList<Point>();
+	private final ArrayList<Point> wayPoints = new ArrayList<Point>();
 	private int x, y, w, h;
 	private Screen sc;
 
@@ -21,6 +19,7 @@ public abstract class Unit extends AbstractEntity {
 		super(x, y);
 	}
 
+	@Override
 	public void update(Screen screen) {
 		sc = screen;
 		MousepadListener mpl = screen.getScreenFactory().getGame().getMousepadListener();
@@ -52,29 +51,34 @@ public abstract class Unit extends AbstractEntity {
 			next = new Point(wayPoints.get(0).getX(), wayPoints.get(0).getY());
 		}
 
-		if (getX() != next.getX()) {
-			if (getX() < next.getX()) {
-				setX(getX() + 1);
-			} else {
-				setX(getX() - 1);
+		if(hasCollision() == null)
+		{
+			if (getX() != next.getX()) {//moving?
+				if (getX() < next.getX()) {
+					setX(getX() + 1);
+				} else {
+					setX(getX() - 1);
+				}
+			}
+			if (getY() != next.getY()) {
+				if (getY() < next.getY()) {
+					setY(getY() + 1);
+				} else {
+					setY(getY() - 1);
+				}
 			}
 		}
-		if (getY() != next.getY()) {
-			if (getY() < next.getY()) {
-				setY(getY() + 1);
-			} else {
-				setY(getY() - 1);
-			}
-		}
+		else
+			setX(getX()+1);
 
-		checkCollision();
+		//checkCollision();
 
 		if (getX() == next.getX() && getY() == next.getY() && wayPoints.size() > 0) {
 			wayPoints.remove(0);
 		}
 	}
 
-	public void checkCollision() {
+	/*public void checkCollision() {
 		HashMap<AbstractEntity, Integer> entitys = ((MainScreen) sc.getScreenFactory().getCurrentScreen()).getEntityWithMap();
 
 		int field = entitys.get(this);
@@ -88,7 +92,7 @@ public abstract class Unit extends AbstractEntity {
 		// inField.add(entry.getKey());
 		// }
 		// }
-	}
+	}*/
 
 	public boolean isMarked() {
 		return marked;
