@@ -51,25 +51,30 @@ public abstract class Unit extends AbstractEntity {
 			next = new Point(wayPoints.get(0).getX(), wayPoints.get(0).getY());
 		}
 
-		if(hasCollision() == null)
-		{
-			if (getX() != next.getX()) {//moving?
-				if (getX() < next.getX()) {
-					setX(getX() + 1);
-				} else {
-					setX(getX() - 1);
-				}
-			}
-			if (getY() != next.getY()) {
-				if (getY() < next.getY()) {
-					setY(getY() + 1);
-				} else {
-					setY(getY() - 1);
-				}
+		AbstractEntity e = hasCollision();
+		if(e != null && e instanceof Unit){//TODO: FIXME 
+			int x = e.getX();//tausche auftraege (teleportier dich mit deinem nachbarn xD)
+			int y = e.getY();
+			e.setX(this.getX());
+			e.setY(this.getY());
+			this.setX(x);
+			this.setY(y);
+		}
+		
+		if (getX() != next.getX()) {//moving?
+			if (getX() < next.getX()) {
+				setX(getX() + 1);
+			} else {
+				setX(getX() - 1);
 			}
 		}
-		else
-			setX(getX()+1);
+		if (getY() != next.getY()) {
+			if (getY() < next.getY()) {
+				setY(getY() + 1);
+			} else {
+				setY(getY() - 1);
+			}
+		}
 
 		//checkCollision();
 
