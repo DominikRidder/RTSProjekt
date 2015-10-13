@@ -3,7 +3,7 @@ package Utilitys;
 import java.util.LinkedList;
 
 public class Graph {
-	private LinkedList<Node> nodes;
+	private final LinkedList<Node> nodes;
 	private int[][] matrix;
 
 	public Graph() {
