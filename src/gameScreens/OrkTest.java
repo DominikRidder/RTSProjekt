@@ -13,9 +13,12 @@ import entity.Unit;
 public class OrkTest extends Unit {
 
 	private BufferedImage img;
+	private final Rectangle rg;
 
 	public OrkTest(int x, int y) {
 		super(x, y);
+		rg = new Rectangle(getX(), getY(), 3, 4);
+		
 	}
 
 	@Override
@@ -36,7 +39,7 @@ public class OrkTest extends Unit {
 
 	@Override
 	public Rectangle getBounds() {
-		return new Rectangle(getX(), getY(), 30, 40);
+		return rg;
 	}
 
 }

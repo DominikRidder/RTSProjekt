@@ -1,8 +1,8 @@
 package entity;
 
-import java.awt.Graphics2D;
-
 import gameEngine.Screen;
+
+import java.awt.Graphics2D;
 
 public interface IEntity {
 

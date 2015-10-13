@@ -7,7 +7,7 @@ import javax.swing.JFrame;
 
 public class Game {
 	private BufferStrategy strat;
-	private JFrame window = new JFrame();
+	private final JFrame window = new JFrame();
 	private ScreenFactory screenFactory;
 	private GameThread gameThread;
 	private KeyboardListener keyboardListener;
