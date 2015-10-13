@@ -14,7 +14,6 @@ public class GameThread extends JPanel implements Runnable {
 		setFocusable(true);
 	}
 
-	@Override
 	public void run() {
 		while (true) {
 			try {

@@ -18,7 +18,6 @@ public class OrkTest extends Unit {
 		super(x, y);
 	}
 
-	@Override
 	public void draw(Graphics2D g2d) {
 		BufferedImage img;
 		try {
@@ -29,7 +28,6 @@ public class OrkTest extends Unit {
 		}
 	}
 
-	@Override
 	public void update() {
 
 	}

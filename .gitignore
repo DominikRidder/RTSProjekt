@@ -1,0 +1,4 @@
+#mwinkens: ignorierte dateien:
+.*~
+.classpath
+.settings/
