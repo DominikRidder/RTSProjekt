@@ -18,7 +18,7 @@ public class OrkTest extends Unit {
 	public OrkTest(int x, int y) {
 		super(x, y);
 		rg = new Rectangle(getX(), getY(), 3, 4);
-		
+
 	}
 
 	@Override
