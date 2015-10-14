@@ -53,33 +53,71 @@ public abstract class Unit extends AbstractEntity {
 		}
 
 		AbstractEntity e = hasCollision();
-		if (e != null && e instanceof Unit) {// TODO: FIXME
-			int x = e.getX();// tausche auftraege (teleportier dich mit deinem nachbarn xD)
-			int y = e.getY();
-			e.setX(this.getX());
-			e.setY(this.getY());
-			this.setX(x);
-			this.setY(y);
+		if(e != null && (getX() != next.getX() || getY() != next.getY())) {
+			next.setX(getX());
+			next.setY(getY());
+			System.out.println("i stucked at spawn :C");
+			return;
 		}
-
+		
+		int prevx = getX();
+		int prevy = getY();
 		if (getX() != next.getX()) {// moving?
-			if (getX() < next.getX()) {
-				setX(getX() + 1);
-			} else {
-				setX(getX() - 1);
+			addX(getX() < next.getX() ? 1 : -1);
+			e = hasCollision();
+			if(e != null){
+				setX(prevx);
 			}
 		}
 		if (getY() != next.getY()) {
-			if (getY() < next.getY()) {
-				setY(getY() + 1);
-			} else {
-				setY(getY() - 1);
+			addY(getY() < next.getY() ? 1 : -1);
+			e = hasCollision();
+			if(e != null){
+				setY(prevy);
 			}
 		}
 
 		if (getX() == next.getX() && getY() == next.getY() && wayPoints.size() > 0) {
 			wayPoints.remove(0);
 		}
+	}
+		
+	public void move(int direction) {
+		int startdirection = direction;
+		do {
+			if(direction%4 == 0){
+				setX(getX() + 1);
+				AbstractEntity e = hasCollision();
+				if(e != null) {
+					setX(getX() -1);//move back
+					direction++;//try another way;
+				}
+			}
+			else if(direction%4 == 1){
+				setY(getY() + 1);
+				AbstractEntity e = hasCollision();
+				if(e != null) {
+					setY(getY() - 1);//move back
+					direction++;//try another way;
+				}
+			}
+			else if(direction%4 == 2){
+				setX(getX() - 1);
+				AbstractEntity e = hasCollision();
+				if(e != null) {
+					setX(getX() +1);//move back
+					direction++;//try another way;
+				}
+			}
+			else if(direction%4 == 3){
+				setY(getY() - 1);
+				AbstractEntity e = hasCollision();
+				if(e != null) {
+					setY(getY() +1);//move back
+					direction++;//try another way;
+				}
+			}
+		} while(startdirection != direction%4);
 	}
 
 	public boolean isMarked() {
