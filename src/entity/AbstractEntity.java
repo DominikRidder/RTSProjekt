@@ -36,6 +36,14 @@ public abstract class AbstractEntity implements IEntity {
 	public void setY(int y) {
 		this.y = y;
 	}
+	
+	public void addX(int x){
+		this.x +=x;
+	}
+	
+	public void addY(int y){
+		this.y +=y;
+	}
 
 	public abstract Rectangle getBounds();
 	
