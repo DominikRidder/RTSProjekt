@@ -25,7 +25,7 @@ public class GameScreen extends Screen {
 	public void onCreate() {
 		Random rnd = new Random();
 		System.out.println("Main Creating!");
-		for (int i = 0; i < 20; i++) {
+		for (int i = 0; i < 1000; i++) {
 			entitys.add(new OrkTest(rnd.nextInt(700) + 40, rnd.nextInt(500) + 40));
 			entitysOnMap.put(entitys.get(i), pointToMapConst(entitys.get(i).getX(), entitys.get(i).getY()));
 		}
