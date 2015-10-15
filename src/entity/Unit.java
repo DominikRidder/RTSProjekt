@@ -81,44 +81,6 @@ public abstract class Unit extends AbstractEntity {
 			wayPoints.remove(0);
 		}
 	}
-		
-	public void move(int direction) {
-		int startdirection = direction;
-		do {
-			if(direction%4 == 0){
-				setX(getX() + 1);
-				AbstractEntity e = hasCollision();
-				if(e != null) {
-					setX(getX() -1);//move back
-					direction++;//try another way;
-				}
-			}
-			else if(direction%4 == 1){
-				setY(getY() + 1);
-				AbstractEntity e = hasCollision();
-				if(e != null) {
-					setY(getY() - 1);//move back
-					direction++;//try another way;
-				}
-			}
-			else if(direction%4 == 2){
-				setX(getX() - 1);
-				AbstractEntity e = hasCollision();
-				if(e != null) {
-					setX(getX() +1);//move back
-					direction++;//try another way;
-				}
-			}
-			else if(direction%4 == 3){
-				setY(getY() - 1);
-				AbstractEntity e = hasCollision();
-				if(e != null) {
-					setY(getY() +1);//move back
-					direction++;//try another way;
-				}
-			}
-		} while(startdirection != direction%4);
-	}
 
 	public boolean isMarked() {
 		return marked;
