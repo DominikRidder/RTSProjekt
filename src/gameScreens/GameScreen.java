@@ -7,6 +7,7 @@ import gameEngine.ScreenFactory;
 
 import java.awt.Graphics2D;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Random;
@@ -32,6 +33,7 @@ public class GameScreen extends Screen {
 
 	@Override
 	public void onUpdate() {
+		Collections.sort(entitys);//In diese Zeile hab ich so viel hirnschmalz verbraten
 		for (int i = 0; i < entitys.size(); i++) {
 			entitys.get(i).update(this);
 		}

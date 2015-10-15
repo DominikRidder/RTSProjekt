@@ -43,5 +43,4 @@ public class OrkTest extends Unit {
 		rg.y = this.getY();
 		return rg;
 	}
-
 }
