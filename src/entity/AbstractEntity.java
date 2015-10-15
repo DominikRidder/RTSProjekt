@@ -82,6 +82,9 @@ public abstract class AbstractEntity implements IEntity, Comparable<AbstractEnti
 	 *  The one that is most to the top left corner, ist the first one who gets rendered
 	 */
 	public int compareTo(AbstractEntity o) {
+		if(this.getY() == o.getY()){
+			return this.getX() < o.getX() ? -1 : 1;
+		}
 		return this.getY() < o.getY() ? -1 : 1;
 	}
 
