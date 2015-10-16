@@ -3,7 +3,7 @@ package entity;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 
-public abstract class AbstractEntity implements IEntity {
+public abstract class AbstractEntity implements IEntity, Comparable<AbstractEntity> {
 	private final int entityID;
 	private static int entityCounter = 0;
 	private static ArrayList<AbstractEntity> l_Entities = new ArrayList<AbstractEntity>(20);
@@ -75,6 +75,17 @@ public abstract class AbstractEntity implements IEntity {
 	
 	public int getEntityID() {
 		return entityID;
+	}
+
+	@Override
+	/** compares for graphics only!
+	 *  The one that is most to the top left corner, ist the first one who gets rendered
+	 */
+	public int compareTo(AbstractEntity o) {
+		if(this.getY() == o.getY()){
+			return this.getX() < o.getX() ? -1 : 1;
+		}
+		return this.getY() < o.getY() ? -1 : 1;
 	}
 
 }

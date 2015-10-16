@@ -12,7 +12,7 @@ import sun.audio.AudioStream;
 
 public class MusikThread extends JPanel implements Runnable {
 
-	private AudioPlayer player = AudioPlayer.player;
+	private final AudioPlayer player = AudioPlayer.player;
 	private AudioStream audioStream;
 	private boolean isOn = false;
 
