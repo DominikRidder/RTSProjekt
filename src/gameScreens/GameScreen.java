@@ -7,6 +7,7 @@ import gameEngine.ScreenFactory;
 
 import java.awt.Graphics2D;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Random;
@@ -24,7 +25,7 @@ public class GameScreen extends Screen {
 	public void onCreate() {
 		Random rnd = new Random();
 		System.out.println("Main Creating!");
-		for (int i = 0; i < 20; i++) {
+		for (int i = 0; i < 1000; i++) {
 			entitys.add(new OrkTest(rnd.nextInt(700) + 40, rnd.nextInt(500) + 40));
 			entitysOnMap.put(entitys.get(i), pointToMapConst(entitys.get(i).getX(), entitys.get(i).getY()));
 		}
@@ -32,6 +33,7 @@ public class GameScreen extends Screen {
 
 	@Override
 	public void onUpdate() {
+		Collections.sort(entitys);//In diese Zeile hab ich so viel hirnschmalz verbraten
 		for (int i = 0; i < entitys.size(); i++) {
 			entitys.get(i).update(this);
 		}
