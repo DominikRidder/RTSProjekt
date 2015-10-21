@@ -67,4 +67,8 @@ public class Node {
 		return from;
 	}
 
+	public String toString() {
+		return "(" + x + ", " + y + ")";
+	}
+
 }
