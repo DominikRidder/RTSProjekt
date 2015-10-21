@@ -14,22 +14,24 @@ public class OrkTest extends Unit {
 
 	private BufferedImage img;
 	private final Rectangle rg;
+	private final Rectangle imgrg;
 
 	public OrkTest(int x, int y) {
 		super(x, y);
 		rg = new Rectangle(getX(), getY(), 3, 4);
 
+		try {
+			img = ImageIO.read(new File("Orc.png"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		imgrg = new Rectangle(getX(), getY(), img.getWidth(), img.getHeight());
 	}
 
 	@Override
 	public void draw(Graphics2D g2d) {
-		BufferedImage img;
-		try {
-			img = ImageIO.read(new File("Orc.png"));
-			g2d.drawImage(img, getX(), getY(), null);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		g2d.drawImage(img, getX(), getY(), null);
 	}
 
 	@Override
@@ -42,5 +44,11 @@ public class OrkTest extends Unit {
 		rg.x = this.getX();
 		rg.y = this.getY();
 		return rg;
+	}
+
+	public Rectangle getImageBounds() {
+		imgrg.x = this.getX();
+		imgrg.y = this.getY();
+		return imgrg;
 	}
 }

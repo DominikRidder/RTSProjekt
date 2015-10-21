@@ -9,6 +9,7 @@ import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map.Entry;
 import java.util.Random;
 
@@ -36,6 +37,7 @@ public class GameScreen extends Screen {
 
 	@Override
 	public void onUpdate() {
+		super.onUpdate();
 		Collections.sort(entitys);// In diese Zeile hab ich so viel hirnschmalz verbraten
 		for (int i = 0; i < entitys.size(); i++) {
 			entitys.get(i).update(this);
@@ -68,7 +70,7 @@ public class GameScreen extends Screen {
 			setH(Math.abs(mpl.getY() - mpl.getMarkY()));
 			drawDraggingZone(g2d);
 		}
-
+		super.onDraw(g2d);
 	}
 
 	public void drawDraggingZone(Graphics2D g2d) {

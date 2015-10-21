@@ -3,23 +3,41 @@ package gameEngine;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.ConcurrentModificationException;
 
 import Utilitys.Point;
 import entity.AbstractEntity;
+import gui.GuiElement;
 
 public abstract class Screen {
 	private int x, y, w, h;
 	private final ScreenFactory screenFactory;
-
+	private ArrayList<GuiElement> guiElems = new ArrayList<GuiElement>();
+	
 	public Screen(ScreenFactory screenFactory) {
 		this.screenFactory = screenFactory;
 	}
 
 	public abstract void onCreate();
 
-	public abstract void onUpdate();
+	public void onUpdate(){		
+		Collections.sort(guiElems);
+		for (GuiElement guiElem : guiElems){
+			guiElem.onUpdate(this);
+		}
+	}
 
-	public abstract void onDraw(Graphics2D g2d);
+	public void onDraw(Graphics2D g2d){
+		try{
+			for (GuiElement guiElem : guiElems){
+				guiElem.onDraw(g2d);
+			}
+		}catch(ConcurrentModificationException e){
+			// I guess that's a multithreading problem.
+
+		}
+	}
 
 	public ScreenFactory getScreenFactory() {
 		return screenFactory;
@@ -65,5 +83,9 @@ public abstract class Screen {
 
 	public static Point pointToMapConst(int x, int y) {
 		return new Point(x / 25, y / 25);
+	}
+	
+	public void addGuiElement(GuiElement guielem){
+		guiElems.add(guielem);
 	}
 }
