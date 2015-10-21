@@ -47,6 +47,8 @@ public abstract class AbstractEntity implements IEntity, Comparable<AbstractEnti
 
 	public abstract Rectangle getBounds();
 	
+	public abstract Rectangle getImageBounds();
+	
 	public AbstractEntity hasCollision() {//sucht automatisch die naechste hitbox
 		for(AbstractEntity e : l_Entities) {
 			if(e.entityID == this.entityID){

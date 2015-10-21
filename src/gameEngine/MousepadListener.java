@@ -30,7 +30,7 @@ public class MousepadListener implements MouseListener, MouseMotionListener {
 
 	@Override
 	public void mousePressed(MouseEvent event) {
-		dragging = true;
+//		dragging = true;
 		mouseX = event.getX();
 		mouseY = event.getY();
 		if (event.getButton() == MouseEvent.BUTTON1) {
@@ -44,6 +44,8 @@ public class MousepadListener implements MouseListener, MouseMotionListener {
 
 	@Override
 	public void mouseReleased(MouseEvent event) {
+		mouseX = event.getX();
+		mouseY = event.getY();
 		leftClicked = false;
 		rightClicked = false;
 		dragging = false;
@@ -68,11 +70,19 @@ public class MousepadListener implements MouseListener, MouseMotionListener {
 	}
 
 	public int getY() {
-		return mouseY - 20;
+		return mouseY /*- 20*/;
 	}
 
 	@Override
 	public void mouseDragged(MouseEvent e) {
+		int dragstartdist = 10;
+		if (leftClicked){
+			if (!dragging){
+				if ((Math.abs(mouseX-e.getX()) + Math.abs(mouseY-e.getY())) > dragstartdist){
+					dragging = true;
+				}
+			}
+		}
 		if (dragging) {
 			setMarkX(e.getX());
 			setMarkY(e.getY());
@@ -92,7 +102,7 @@ public class MousepadListener implements MouseListener, MouseMotionListener {
 	}
 
 	public int getMarkY() {
-		return markY - 20;
+		return markY /*- 20*/;
 	}
 
 	public void setMarkY(int markY) {
