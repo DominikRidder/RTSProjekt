@@ -12,10 +12,12 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Random;
 
+import Utilitys.Point;
+
 public class GameScreen extends Screen {
 
 	private final ArrayList<AbstractEntity> entitys = new ArrayList<AbstractEntity>();
-	private final HashMap<AbstractEntity, Integer> entitysOnMap = new HashMap<AbstractEntity, Integer>();
+	private final HashMap<AbstractEntity, Point> entitysOnMap = new HashMap<AbstractEntity, Point>();
 
 	public GameScreen(ScreenFactory screenFactory) {
 		super(screenFactory);
@@ -25,19 +27,20 @@ public class GameScreen extends Screen {
 	public void onCreate() {
 		Random rnd = new Random();
 		System.out.println("Main Creating!");
-		for (int i = 0; i < 1000; i++) {
+		for (int i = 0; i < 10; i++) {
 			entitys.add(new OrkTest(rnd.nextInt(700) + 40, rnd.nextInt(500) + 40));
 			entitysOnMap.put(entitys.get(i), pointToMapConst(entitys.get(i).getX(), entitys.get(i).getY()));
 		}
+
 	}
 
 	@Override
 	public void onUpdate() {
-		Collections.sort(entitys);//In diese Zeile hab ich so viel hirnschmalz verbraten
+		Collections.sort(entitys);// In diese Zeile hab ich so viel hirnschmalz verbraten
 		for (int i = 0; i < entitys.size(); i++) {
 			entitys.get(i).update(this);
 		}
-		for (Entry<AbstractEntity, Integer> entry : entitysOnMap.entrySet()) {
+		for (Entry<AbstractEntity, Point> entry : entitysOnMap.entrySet()) {
 			AbstractEntity key = entry.getKey();
 			entry.setValue(pointToMapConst(key.getX(), key.getY()));
 		}
@@ -81,14 +84,8 @@ public class GameScreen extends Screen {
 		return entitys;
 	}
 
-	public HashMap<AbstractEntity, Integer> getEntityWithMap() {
+	public HashMap<AbstractEntity, Point> getEntityWithMap() {
 		return entitysOnMap;
-	}
-
-	public static int pointToMapConst(int x, int y) {
-		int a = x / 25;
-		int b = y / 25;
-		return a + b * 10;
 	}
 
 }

@@ -4,16 +4,31 @@ public class Node {
 	private int x;
 	private int y;
 	private int heuristic;
-	private int range;
-	private int from;
-	private boolean visited;
+	private int cost;
 
-	public boolean isVisited() {
-		return visited;
+	private Node from;
+	private boolean begehbar = true;
+
+	public Node(int x, int y, int heuristic, int cost, Node from) {
+		this.x = x;
+		this.y = y;
+		this.heuristic = heuristic;
+		this.cost = cost;
+		this.from = from;
 	}
 
-	public void setVisited(boolean visited) {
-		this.visited = visited;
+	public int getTotalCost() {
+		return this.getLastCosts() + this.cost + this.heuristic;
+	}
+
+	public int getLastCosts() {
+		if (this.from == null)
+			return 0;
+		return this.from.getLastCosts() + this.cost;
+	}
+
+	public void setFrom(Node neuer) {
+		this.from = neuer;
 	}
 
 	public int getX() {
@@ -40,24 +55,16 @@ public class Node {
 		this.heuristic = heuristic;
 	}
 
-	public int getRange() {
-		return range;
+	public boolean isBegehbar() {
+		return begehbar;
 	}
 
-	public void setRange(int range) {
-		this.range = range;
+	public void setBegehbar(boolean begehbar) {
+		this.begehbar = begehbar;
 	}
 
-	public int getFrom() {
+	public Node getFrom() {
 		return from;
-	}
-
-	public void setFrom(int from) {
-		this.from = from;
-	}
-
-	public int getValue() {
-		return range + heuristic;
 	}
 
 }
