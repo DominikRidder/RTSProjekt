@@ -4,6 +4,7 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 
+import Utilitys.Point;
 import entity.AbstractEntity;
 
 public abstract class Screen {
@@ -60,5 +61,9 @@ public abstract class Screen {
 
 	public void setH(int h) {
 		this.h = h;
+	}
+
+	public static Point pointToMapConst(int x, int y) {
+		return new Point(x / 25, y / 25);
 	}
 }
