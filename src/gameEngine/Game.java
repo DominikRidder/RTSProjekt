@@ -36,11 +36,11 @@ public class Game {
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		window.setFocusable(true);
 		window.setLocationRelativeTo(null);
-		
+
 		screenFactory = new ScreenFactory(this);
 		gameThread = new GameThread(this);
 		musikThread = new MusikThread();
-		
+
 		keyboardListener = new KeyboardListener();
 		mousepadListener = new MousepadListener();
 		window.add(musikThread);
@@ -48,7 +48,7 @@ public class Game {
 		window.addKeyListener(keyboardListener);
 		window.addMouseListener(mousepadListener);
 		window.addMouseMotionListener(mousepadListener);
-		
+
 		window.setVisible(true);
 	}
 

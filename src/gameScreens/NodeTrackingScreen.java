@@ -34,7 +34,7 @@ public class NodeTrackingScreen extends Screen {
 				if (g.getNode(n.getX(), n.getY()) == null) {
 					Random r = new Random();
 					if (n.getX() == 0 && n.getY() == 0) {
-					} else if (n.getX() == 8 && n.getY() == 7) {
+					} else if (n.getX() == 4 && n.getY() == 4) {
 						id = g.getSize();
 					} else {
 						if (i % (r.nextInt(9) + 1) == 0) {
@@ -47,7 +47,7 @@ public class NodeTrackingScreen extends Screen {
 		}
 		System.out.println("End Creating");
 		System.out.println("Start Searching");
-		shortWay = g.search(0, 0, 8, 7);
+		shortWay = g.search(0, 0, 4, 4);
 		System.out.println("End Searching");
 
 	}
@@ -74,12 +74,15 @@ public class NodeTrackingScreen extends Screen {
 		g2d.setColor(Color.BLACK);
 
 		if (shortWay != null) {
+
 			while (shortWay.getFrom() != null) {
-				System.out.println("X " + shortWay.getX() + " y " + shortWay.getY());
 				zeichnen.add(shortWay);
 				shortWay = shortWay.getFrom();
+				System.out.println(shortWay);
 			}
+			zeichnen.add(shortWay);
 		}
+		shortWay = null;
 		for (int i = zeichnen.size() - 2; i > 0; i--) {
 			int j = i - 1;
 			g2d.drawLine((zeichnen.get(i).getX() - 1) * 25 + 12, (zeichnen.get(i).getY() - 1) * 25 + 12, (zeichnen.get(j).getX() - 1) * 25 + 12, (zeichnen.get(j).getY() - 1) * 25 + 12);
