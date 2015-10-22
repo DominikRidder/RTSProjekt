@@ -22,6 +22,8 @@ public class MainScreen extends Screen implements ActionListener {
 	public void onCreate() {
 		Button start = new Button(325, 60, 150, 50, "Einzelspieler");
 		start.addActionListener(this);
+		start.setBackgroudnColor(Color.BLACK);
+		start.setTextColor(Color.RED);
 		addGuiElement(start);
 		
 		String adding[] = {"Spiel Laden", "Archievments", "Highscore", "Einstellungen", "Exit"};
