@@ -13,29 +13,32 @@ import gui.GuiElement;
 public abstract class Screen {
 	private int x, y, w, h;
 	private final ScreenFactory screenFactory;
-	private ArrayList<GuiElement> guiElems = new ArrayList<GuiElement>();
-	
+	private ArrayList<GuiElement> guiElemens = new ArrayList<GuiElement>();
+
 	public Screen(ScreenFactory screenFactory) {
 		this.screenFactory = screenFactory;
 	}
 
 	public abstract void onCreate();
 
-	public void onUpdate(){		
-		Collections.sort(guiElems);
-		for (GuiElement guiElem : guiElems){
-			guiElem.onUpdate(this);
+	public void onUpdate() {
+		if (guiElemens.size() != 0) {
+			for (GuiElement guiElem : guiElemens) {
+				guiElem.onUpdate(this);
+			}
 		}
 	}
 
-	public void onDraw(Graphics2D g2d){
-		try{
-			for (GuiElement guiElem : guiElems){
-				guiElem.onDraw(g2d);
-			}
-		}catch(ConcurrentModificationException e){
-			// I guess that's a multithreading problem.
+	public void onDraw(Graphics2D g2d) {
+		if (guiElemens.size() != 0) {
+			try {
+				for (GuiElement guiElem : guiElemens) {
+					guiElem.onDraw(g2d);
+				}
+			} catch (ConcurrentModificationException e) {
+				// I guess that's a multithreading problem.
 
+			}
 		}
 	}
 
@@ -84,8 +87,13 @@ public abstract class Screen {
 	public static Point pointToMapConst(int x, int y) {
 		return new Point(x / 25, y / 25);
 	}
+
+	public void addGuiElement(GuiElement guielem) {
+		guiElemens.add(guielem);
+		updateGuiElementOrder();
+	}
 	
-	public void addGuiElement(GuiElement guielem){
-		guiElems.add(guielem);
+	public void updateGuiElementOrder(){
+		Collections.sort(guiElemens);
 	}
 }

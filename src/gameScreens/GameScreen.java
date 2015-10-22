@@ -4,8 +4,11 @@ import entity.AbstractEntity;
 import gameEngine.MousepadListener;
 import gameEngine.Screen;
 import gameEngine.ScreenFactory;
+import gui.Button;
 
 import java.awt.Graphics2D;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -15,7 +18,7 @@ import java.util.Random;
 
 import Utilitys.Point;
 
-public class GameScreen extends Screen {
+public class GameScreen extends Screen implements ActionListener{
 
 	private final ArrayList<AbstractEntity> entitys = new ArrayList<AbstractEntity>();
 	private final HashMap<AbstractEntity, Point> entitysOnMap = new HashMap<AbstractEntity, Point>();
@@ -32,7 +35,9 @@ public class GameScreen extends Screen {
 			entitys.add(new OrkTest(rnd.nextInt(700) + 40, rnd.nextInt(500) + 40));
 			entitysOnMap.put(entitys.get(i), pointToMapConst(entitys.get(i).getX(), entitys.get(i).getY()));
 		}
-
+		Button exit = new Button(this.getScreenFactory().getGame().getWindow().getWidth()-50, 0, 50, 50, "X");
+		exit.addActionListener(this);
+		addGuiElement(exit);
 	}
 
 	@Override
@@ -88,6 +93,14 @@ public class GameScreen extends Screen {
 
 	public HashMap<AbstractEntity, Point> getEntityWithMap() {
 		return entitysOnMap;
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		switch(e.getActionCommand()){ // name of the button
+		case "X":System.exit(0);break;
+		default:System.out.println("Unknown ActionEvent: "+e.getActionCommand()); break;
+		}
 	}
 
 }
