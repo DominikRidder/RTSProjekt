@@ -24,25 +24,18 @@ public class MainScreen extends Screen implements ActionListener {
 		start.addActionListener(this);
 		addGuiElement(start);
 		
-		Button load = new Button(0, 60, 150, 50, "Spiel Laden", start);
-		load.addActionListener(this);
-		addGuiElement(load);
+		String adding[] = {"Spiel Laden", "Archievments", "Highscore", "Einstellungen", "Exit"};
 		
-		Button archievments = new Button(0 , 60, 150, 50, "Archievments", load);
-		archievments.addActionListener(this);
-		addGuiElement(archievments);
-		
-		Button highscore = new Button(0, 60, 150, 50, "Highscore", archievments);
-		highscore.addActionListener(this);
-		addGuiElement(highscore);
-		
-		Button einstellungen = new Button(0, 60, 150, 50, "Einstellungen", highscore);
-		einstellungen.addActionListener(this);
-		addGuiElement(einstellungen);
-		
-		Button exit = new Button(0, 60, 150, 50, "Exit", einstellungen);
-		exit.addActionListener(this);
-		addGuiElement(exit);
+		Button lastbutton = start;
+		for (String toadd : adding){
+			Button newb = new Button(0, 60, 150, 50, toadd, lastbutton);
+			newb.setBackgroudnColor(Color.BLACK);
+			newb.setTextColor(Color.RED);
+			newb.addActionListener(this);
+			addGuiElement(newb);
+			
+			lastbutton = newb;
+		}
 	}
 
 	@Override

@@ -14,6 +14,7 @@ public class Button extends GuiElement {
 
 	private int width, height;
 	private String text;
+	private Color textcolor = Color.WHITE, backgroundcolor = Color.BLACK;
 	private boolean ispressed = false;
 
 	public Button(int x, int y, int width, int height, String text) {
@@ -32,7 +33,15 @@ public class Button extends GuiElement {
 		this.text = text;
 		setRelativTo(relativto);
 	}
-
+	
+	public void setTextColor(Color c){
+		textcolor = c;
+	}
+	
+	public void setBackgroudnColor(Color c){
+		backgroundcolor = c;
+	}
+	
 	public void setWidth(int width) {
 		this.width = width;
 	}
@@ -53,9 +62,9 @@ public class Button extends GuiElement {
 		int stringwidth = g2d.getFontMetrics().stringWidth(text);
 		int stringheight = g2d.getFontMetrics().getHeight();
 
-		g2d.setColor(Color.BLACK);
+		g2d.setColor(backgroundcolor);
 		g2d.fill3DRect(getX(), getY(), width, height, true);
-		g2d.setColor(Color.WHITE);
+		g2d.setColor(textcolor);
 		g2d.drawString(text, getX() + width / 2 - stringwidth / 2, getY()
 				+ height / 2 + stringheight/2);
 	}

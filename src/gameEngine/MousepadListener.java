@@ -70,7 +70,7 @@ public class MousepadListener implements MouseListener, MouseMotionListener {
 	}
 
 	public int getY() {
-		return mouseY /*- 20*/;
+		return mouseY - 20;
 	}
 
 	@Override
@@ -102,7 +102,7 @@ public class MousepadListener implements MouseListener, MouseMotionListener {
 	}
 
 	public int getMarkY() {
-		return markY /*- 20*/;
+		return markY - 20;
 	}
 
 	public void setMarkY(int markY) {
