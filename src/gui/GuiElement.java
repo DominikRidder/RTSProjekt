@@ -12,14 +12,21 @@ public abstract class GuiElement implements Comparable<GuiElement> {
 			1);
 	private int layer;
 	private int x, y;
-	private GuiElement relativto;
+	private int width,height;
 
-	public void setRelativTo(GuiElement relativto){
-		this.relativto = relativto;
+	public void setWidth(int width){
+		this.width = width;
+	}
+
+	public int getWidth() {
+		return width;
 	}
 	
-	public GuiElement getRelativTo(){
-		return relativto;
+	public void setHeight(int height){
+		this.height = height;
+	}
+	public int getHeight(){
+		return height;
 	}
 	
 	public void setLayer(int layer) {
@@ -35,7 +42,7 @@ public abstract class GuiElement implements Comparable<GuiElement> {
 	}
 
 	public int getX() {
-		return relativto == null ? x : x+relativto.getX();
+		return x;
 	}
 
 	public void setY(int y) {
@@ -43,7 +50,7 @@ public abstract class GuiElement implements Comparable<GuiElement> {
 	}
 
 	public int getY() {
-		return relativto == null ? y : y+relativto.getY();
+		return y;
 	}
 
 	public void addActionListener(ActionListener actionl) {

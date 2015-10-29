@@ -37,7 +37,7 @@ public class GameScreen extends Screen implements ActionListener{
 			entitysOnMap.put(entitys.get(i), pointToMapConst(entitys.get(i).getX(), entitys.get(i).getY()));
 		}
 		Button exit = new Button(this.getScreenFactory().getGame().getWindow().getWidth()-50, 0, 50, 50, "X");
-		exit.setBackgroudnColor(Color.BLACK);
+		exit.setBackgroundColor(Color.BLACK);
 		exit.setTextColor(Color.RED);
 		exit.addActionListener(this);
 		addGuiElement(exit);
