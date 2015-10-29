@@ -5,39 +5,41 @@ import gameEngine.MousepadListener;
 import gameEngine.Screen;
 import gameEngine.ScreenFactory;
 import gui.Button;
+import gui.GridLayout;
+import gui.Panel;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
+import javax.imageio.ImageIO;
+
 public class MainScreen extends Screen implements ActionListener {
-	
+
 	public MainScreen(ScreenFactory screenFactory) {
 		super(screenFactory);
 	}
 
 	@Override
 	public void onCreate() {
-		Button start = new Button(325, 60, 150, 50, "Einzelspieler");
-		start.addActionListener(this);
-		start.setBackgroudnColor(Color.BLACK);
-		start.setTextColor(Color.RED);
-		addGuiElement(start);
+		String adding[] = { "Einzelspieler","Spiel Laden", "Archievments", "Highscore",
+				"Einstellungen", "Exit" };
 		
-		String adding[] = {"Spiel Laden", "Archievments", "Highscore", "Einstellungen", "Exit"};
-		
-		Button lastbutton = start;
-		for (String toadd : adding){
-			Button newb = new Button(0, 60, 150, 50, toadd, lastbutton);
-			newb.setBackgroudnColor(Color.BLACK);
+		Panel p = new Panel(250, 100, 250, 250);
+		p.setLayout(new GridLayout(adding.length,1,p));
+		for (String toadd : adding) {
+			Button newb = new Button(toadd);
+			newb.setBackgroundColor(Color.BLACK);
 			newb.setTextColor(Color.RED);
 			newb.addActionListener(this);
-			addGuiElement(newb);
-			
-			lastbutton = newb;
+			p.addElement(newb);
 		}
+		this.addGuiElement(p);
 	}
 
 	@Override
@@ -58,10 +60,20 @@ public class MainScreen extends Screen implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		switch(e.getActionCommand()){ // name of the button
-		case "Einzelspieler": this.getScreenFactory().showScreen(new GameScreen(this.getScreenFactory())); break;
-		case "Exit":System.exit(0);break;
-		default:System.out.println("Unknown ActionEvent: "+e.getActionCommand()); break;
+		if (e.getActionCommand() == null){
+			return;
+		}
+		switch (e.getActionCommand()) { // name of the button
+		case "Einzelspieler":
+			this.getScreenFactory().showScreen(
+					new GameScreen(this.getScreenFactory()));
+			break;
+		case "Exit":
+			System.exit(0);
+			break;
+		default:
+			System.out.println("Unknown ActionEvent: " + e.getActionCommand());
+			break;
 		}
 	}
 
