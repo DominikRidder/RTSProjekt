@@ -3,6 +3,7 @@ package gui;
 import gameEngine.Screen;
 
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
@@ -14,6 +15,10 @@ public abstract class GuiElement implements Comparable<GuiElement> {
 	private int x, y;
 	private int width,height;
 
+	public Rectangle getBounds(){
+		return new Rectangle(getX(), getY(), getWidth(), getHeight());
+	}
+	
 	public void setWidth(int width){
 		this.width = width;
 	}

@@ -6,9 +6,12 @@ import gameEngine.Screen;
 import gameEngine.ScreenFactory;
 import gui.Button;
 import gui.GridLayout;
+import gui.GuiElement;
+import gui.JScrollPane;
 import gui.Panel;
 
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -39,13 +42,15 @@ public class MainScreen extends Screen implements ActionListener {
 			newb.addActionListener(this);
 			p.addElement(newb);
 		}
-		this.addGuiElement(p);
+		
+//		JScrollPane scroller = new JScrollPane(p, 250, 100, 100, 100);
+//		addGuiElement(scroller);
+		addGuiElement(p);
 	}
 
 	@Override
 	public void onUpdate() {
 		super.onUpdate(); // updating Gui Elements
-
 	}
 
 	@Override
