@@ -57,6 +57,10 @@ public class MousepadListener implements MouseListener, MouseMotionListener {
 		return leftClicked;
 	}
 
+	public void setLeftClicked(boolean leftClicked) {
+		this.leftClicked = leftClicked;
+	}
+	
 	public boolean isRightClicked() {
 		return rightClicked;
 	}
@@ -71,6 +75,14 @@ public class MousepadListener implements MouseListener, MouseMotionListener {
 
 	public int getY() {
 		return mouseY - 20;
+	}
+	
+	public void setX(int x) {
+		mouseX = x;
+	}
+	
+	public void setY(int y) {
+		mouseY = y;
 	}
 
 	@Override
