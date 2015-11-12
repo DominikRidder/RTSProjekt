@@ -1,5 +1,6 @@
 package gameScreens;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
@@ -19,7 +20,10 @@ public class OrkTest extends Unit {
 	public OrkTest(int x, int y) {
 		super(x, y);
 		rg = new Rectangle(getX(), getY(), 3, 4);
-
+		setMaxLife(10);
+		setLife(8);
+		setMinDmg(1);
+		setMaxDmg(3);
 		try {
 			img = ImageIO.read(new File("Orc.png"));
 		} catch (IOException e) {
@@ -32,6 +36,13 @@ public class OrkTest extends Unit {
 	@Override
 	public void draw(Graphics2D g2d) {
 		g2d.drawImage(img, getX(), getY(), null);
+		g2d.setColor(Color.BLACK);
+		g2d.drawRect(getX(), getY() + img.getHeight() - 4, img.getWidth(), 4);
+		g2d.setColor(Color.GREEN);
+		g2d.fillRect(getX() + 1, getY() + img.getHeight() - 3, img.getWidth() - 1, 3);
+		g2d.setColor(Color.RED);
+		double lost = (getLife() * 1.) / getMaxLife() * img.getWidth();
+		g2d.fillRect(getX() + 1 + (int) lost, getY() + img.getHeight() - 3, img.getWidth() - 1 - (int) lost, 3);
 	}
 
 	@Override
