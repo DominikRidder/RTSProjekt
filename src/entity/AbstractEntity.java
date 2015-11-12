@@ -36,45 +36,44 @@ public abstract class AbstractEntity implements IEntity, Comparable<AbstractEnti
 	public void setY(int y) {
 		this.y = y;
 	}
-	
-	public void addX(int x){
-		this.x +=x;
+
+	public void addX(int x) {
+		this.x += x;
 	}
-	
-	public void addY(int y){
-		this.y +=y;
+
+	public void addY(int y) {
+		this.y += y;
 	}
 
 	public abstract Rectangle getBounds();
-	
+
 	public abstract Rectangle getImageBounds();
-	
+
 	public AbstractEntity hasCollision() {//sucht automatisch die naechste hitbox
-		for(AbstractEntity e : l_Entities) {
-			if(e.entityID == this.entityID){
+		for (AbstractEntity e : l_Entities) {
+			if (e.entityID == this.entityID) {
 				continue;
 			}
-			if(isCollision(e)){
+			if (isCollision(e)) {
 				return e;
 			}
 		}
 		return null;
 	}
-	
+
 	public boolean isCollision(AbstractEntity e) {
 		Rectangle rg1 = e.getBounds();
 		Rectangle rg2 = this.getBounds();
-		if((Math.abs(e.getX() - this.getX()) < (rg1.getWidth() + rg2.getWidth()) )
-				&& (Math.abs(e.getY() - this.getY()) < (rg1.getHeight() + rg2.getHeight()))) {
+		if ((Math.abs(e.getX() - this.getX()) < (rg1.getWidth() + rg2.getWidth())) && (Math.abs(e.getY() - this.getY()) < (rg1.getHeight() + rg2.getHeight()))) {
 			return true;
 		}
 		return false;
 	}
-	
+
 	public double distance(AbstractEntity b) {
-		return Math.sqrt(Math.pow(Math.abs(this.getX()-b.getX()), 2)+Math.pow(Math.abs(this.getY()-b.getY()), 2));
+		return Math.sqrt(Math.pow(Math.abs(this.getX() - b.getX()), 2) + Math.pow(Math.abs(this.getY() - b.getY()), 2));
 	}
-	
+
 	public int getEntityID() {
 		return entityID;
 	}
@@ -84,10 +83,18 @@ public abstract class AbstractEntity implements IEntity, Comparable<AbstractEnti
 	 *  The one that is most to the top left corner, ist the first one who gets rendered
 	 */
 	public int compareTo(AbstractEntity o) {
-		if(this.getY() == o.getY()){
+		if (this.getY() == o.getY()) {
 			return this.getX() < o.getX() ? -1 : 1;
 		}
 		return this.getY() < o.getY() ? -1 : 1;
+	}
+
+	public int getLife() {
+		return 0;
+	}
+
+	public void setLife(int life) {
+
 	}
 
 }
