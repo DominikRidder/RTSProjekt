@@ -35,8 +35,7 @@ public class MainScreen extends Screen implements ActionListener {
 			newb.addActionListener(this);
 			p.addElement(newb);
 		}
-
-		
+	
 		ScrollPane scroller = new ScrollPane(p, 100, 100);
 		addGuiElement(scroller);
 //		addGuiElement(p);
