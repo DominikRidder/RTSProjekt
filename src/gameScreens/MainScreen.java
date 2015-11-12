@@ -7,7 +7,7 @@ import gameEngine.ScreenFactory;
 import gui.Button;
 import gui.GridLayout;
 import gui.GuiElement;
-import gui.JScrollPane;
+import gui.ScrollPane;
 import gui.Panel;
 
 import java.awt.Color;
@@ -43,9 +43,9 @@ public class MainScreen extends Screen implements ActionListener {
 			p.addElement(newb);
 		}
 		
-//		JScrollPane scroller = new JScrollPane(p, 250, 100, 100, 100);
-//		addGuiElement(scroller);
-		addGuiElement(p);
+		ScrollPane scroller = new ScrollPane(p, 250, 100, 200, 200);
+		addGuiElement(scroller);
+//		addGuiElement(p);
 	}
 
 	@Override

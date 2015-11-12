@@ -87,7 +87,7 @@ public class MousepadListener implements MouseListener, MouseMotionListener {
 
 	@Override
 	public void mouseDragged(MouseEvent e) {
-		int dragstartdist = 10;
+		int dragstartdist = 5;
 		if (leftClicked){
 			if (!dragging){
 				if ((Math.abs(mouseX-e.getX()) + Math.abs(mouseY-e.getY())) > dragstartdist){
