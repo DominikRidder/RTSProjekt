@@ -56,12 +56,12 @@ public class ScrollPane extends GuiElement {
 
 		if (getBounds().contains(mpl.getX(), mpl.getY())) {
 			mpl.setX(mpl.getX() + rx);
-			mpl.setY(mpl.getY() + ry + 20);
+			mpl.setY(mpl.getY() + ry);
 
 			scrollableclient.onUpdate(screen);
 
 			mpl.setX(mpl.getX() - rx);
-			mpl.setY(mpl.getY() - ry + 20);
+			mpl.setY(mpl.getY() - ry);
 		} else {
 			boolean wasclicked = mpl.isLeftClicked();
 			mpl.setLeftClicked(false);
