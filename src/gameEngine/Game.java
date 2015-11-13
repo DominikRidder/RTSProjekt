@@ -46,7 +46,7 @@ public class Game {
 		window.add(musikThread);
 		window.add(gameThread);
 		window.addKeyListener(keyboardListener);
-		
+
 		gameThread.addMouseListener(mousepadListener);
 		gameThread.addMouseMotionListener(mousepadListener);
 

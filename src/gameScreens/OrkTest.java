@@ -36,6 +36,10 @@ public class OrkTest extends Unit {
 	@Override
 	public void draw(Graphics2D g2d) {
 		g2d.drawImage(img, getX(), getY(), null);
+		drawLifeBar(g2d);
+	}
+
+	public void drawLifeBar(Graphics2D g2d) {
 		g2d.setColor(Color.BLACK);
 		g2d.drawRect(getX(), getY() + img.getHeight() - 4, img.getWidth(), 4);
 		g2d.setColor(Color.GREEN);
