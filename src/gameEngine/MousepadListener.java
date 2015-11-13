@@ -74,7 +74,7 @@ public class MousepadListener implements MouseListener, MouseMotionListener {
 	}
 
 	public int getY() {
-		return mouseY - 20;
+		return mouseY;
 	}
 	
 	public void setX(int x) {
@@ -114,7 +114,7 @@ public class MousepadListener implements MouseListener, MouseMotionListener {
 	}
 
 	public int getMarkY() {
-		return markY - 20;
+		return markY;
 	}
 
 	public void setMarkY(int markY) {
