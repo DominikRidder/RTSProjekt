@@ -5,8 +5,6 @@ import gameEngine.Screen;
 import gameEngine.ScreenFactory;
 import gui.Button;
 import gui.GridLayout;
-import gui.GuiElement;
-import gui.ScrollPane;
 import gui.Panel;
 import gui.ScrollPane;
 
@@ -26,7 +24,7 @@ public class MainScreen extends Screen implements ActionListener {
 	public void onCreate() {
 		String adding[] = { "Einzelspieler", "Spiel Laden", "Archievments", "Highscore", "Einstellungen", "WorldEditor", "Exit" };
 
-		Panel p = new Panel(250, 100, 250, 250);
+		Panel p = new Panel(250, 100, 250, 50 * adding.length);
 		p.setLayout(new GridLayout(adding.length, 1, p));
 		for (String toadd : adding) {
 			Button newb = new Button(toadd);
@@ -35,10 +33,10 @@ public class MainScreen extends Screen implements ActionListener {
 			newb.addActionListener(this);
 			p.addElement(newb);
 		}
-	
-		ScrollPane scroller = new ScrollPane(p, 100, 100);
+
+		ScrollPane scroller = new ScrollPane(p, 250, 50 * adding.length);
 		addGuiElement(scroller);
-//		addGuiElement(p);
+		// addGuiElement(p);
 	}
 
 	@Override

@@ -20,7 +20,6 @@ public abstract class Unit extends AbstractEntity {
 	private int minDmg;
 	private int maxDmg;
 	private int lastAttack = 0;
-	private Screen sc;
 
 	public Unit(int x, int y) {
 		super(x, y);
@@ -28,7 +27,6 @@ public abstract class Unit extends AbstractEntity {
 
 	@Override
 	public void update(Screen screen) {
-		sc = screen;
 		MousepadListener mpl = screen.getScreenFactory().getGame().getMousepadListener();
 		if (mpl.isLeftClicked()) {
 			if (mpl.isDragging()) {
@@ -52,7 +50,6 @@ public abstract class Unit extends AbstractEntity {
 					if (screen.getEntitys().get(i).getImageBounds().contains(mpl.getX(), mpl.getY()) && this != screen.getEntitys().get(i)) {
 						fight = true;
 						opponent = i;
-						System.out.println("Gefunden");
 						break;
 					}
 					fight = false;
