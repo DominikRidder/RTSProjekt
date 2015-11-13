@@ -1,10 +1,12 @@
 package gui;
 
+import gameEngine.MousepadListener;
 import gameEngine.Screen;
 
 import java.awt.Graphics2D;
+import java.awt.Point;
 
-public class GridLayout implements ILayout {
+public class GridLayout implements ILayout, CoordinateMapping {
 
 	private GuiElement[][] container;
 
@@ -28,6 +30,8 @@ public class GridLayout implements ILayout {
 
 	@Override
 	public void onUpdate(Screen screen) {
+		MousepadListener mpl = screen.getScreenFactory().getGame()
+				.getMousepadListener();
 		for (int i = 0; i < container.length; i++) {
 			for (int j = 0; j < container[0].length; j++) {
 				if (container[i][j] != null) {
@@ -35,7 +39,6 @@ public class GridLayout implements ILayout {
 				}
 			}
 		}
-
 	}
 
 	@Override
@@ -44,8 +47,10 @@ public class GridLayout implements ILayout {
 			for (int j = 0; j < container[0].length; j++) {
 				if (container[i][j] == null) {
 					container[i][j] = element;
-					element.setX(parent.getX() + parent.getWidth() / container.length * i);
-					element.setY(parent.getY() + parent.getHeight() / container[0].length * j);
+					element.setX(parent.getX() + parent.getWidth()
+							/ container.length * i);
+					element.setY(parent.getY() + parent.getHeight()
+							/ container[0].length * j);
 					element.setWidth(parent.getWidth() / container.length);
 					element.setHeight(parent.getHeight() / container[0].length);
 					return;
@@ -60,12 +65,28 @@ public class GridLayout implements ILayout {
 			for (int j = 0; j < container[0].length; j++) {
 				if (container[i][j] == null) {
 					container[i][j] = element;
-					element.setX(parent.getX() + element.getX());// container.length * i);
-					element.setY(parent.getY() + element.getY());// container[0].length * j);
+					element.setX(parent.getX() + element.getX());// container.length
+																	// * i);
+					element.setY(parent.getY() + element.getY());// container[0].length
+																	// * j);
 					return;
 				}
 			}
 		}
 		throw new RuntimeException("The Layout container is already full!");
 	}
+
+	public Point getCoordinate(int x, int y) {
+		int px = (x - parent.getX()) / (parent.getWidth() / container.length);
+		int py = (y - parent.getY())
+				/ (parent.getHeight() / container[0].length);
+
+		if (px >= 0 && px < container.length && py >= 0
+				&& py < container[0].length) {
+			return new Point(px, py);
+		} else {
+			return null;
+		}
+	}
+
 }
