@@ -9,12 +9,12 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.geom.AffineTransform;
 
-public class ScrollPane extends GuiElement {
+public class ScrollPane extends GuiElement implements CoordinateMapping {
 
 	private GuiElement scrollableclient;
 
 	private int rx, ry;
-	
+
 	private ScrollBar scrollx, scrolly;
 
 	/**
@@ -77,26 +77,35 @@ public class ScrollPane extends GuiElement {
 		private int orientation;
 		private int startdrag;
 
-		public ScrollBar(int orientation){
+		public ScrollBar(int orientation) {
 			this.orientation = orientation;
-			
+
 			if (orientation == X_ORIENTATION) {
-				bar = new Rectangle(getX(), getY() + getHeight(),(int) (getWidth() * ((double)getWidth())/scrollableclient.getWidth()), 10);
+				bar = new Rectangle(
+						getX(),
+						getY() + getHeight(),
+						(int) (getWidth() * ((double) getWidth()) / scrollableclient
+								.getWidth()), 10);
 			} else {
-				bar = new Rectangle(getX() + getWidth(), getY(),10,(int) (getHeight() * ((double)getHeight()/scrollableclient.getHeight())));
+				bar = new Rectangle(
+						getX() + getWidth(),
+						getY(),
+						10,
+						(int) (getHeight() * ((double) getHeight() / scrollableclient
+								.getHeight())));
 			}
 		}
 
 		public void onUpdate(Screen screen) {
 			MousepadListener mpl = screen.getScreenFactory().getGame()
 					.getMousepadListener();
-			
+
 			if (!dragOn) {
 				if (bar.contains(mpl.getX(), mpl.getY())) {
 					dragOn = true;
-					if (orientation == X_ORIENTATION){
+					if (orientation == X_ORIENTATION) {
 						startdrag = mpl.getX() - bar.x;
-					}else{
+					} else {
 						startdrag = mpl.getY() - bar.y;
 					}
 				}
@@ -114,25 +123,28 @@ public class ScrollPane extends GuiElement {
 					}
 				}
 			}
-			
+
 			if (orientation == X_ORIENTATION) {
-				if (bar.x < getX()){
+				if (bar.x < getX()) {
 					bar.x = getX();
-				}else if (bar.x > getX()+getWidth()-bar.width){
-					bar.x = getX()+getWidth()-bar.width;
+				} else if (bar.x > getX() + getWidth() - bar.width) {
+					bar.x = getX() + getWidth() - bar.width;
 				}
 			} else {
-				if (bar.y < getY()){
+				if (bar.y < getY()) {
 					bar.y = getY();
-				}else if (bar.y > getY()+getHeight()-bar.height){
-					bar.y = getY()+getHeight()-bar.height;
+				} else if (bar.y > getY() + getHeight() - bar.height) {
+					bar.y = getY() + getHeight() - bar.height;
 				}
 			}
-			
-			if (orientation == X_ORIENTATION){
-				rx = (int) ((scrollableclient.getWidth()-getWidth())*((double)bar.x-getX())/(getWidth()-bar.width));
-			}else{
-				ry = (int) ((scrollableclient.getHeight()-getHeight())*((double)bar.y-getY())/(getHeight()-bar.height));;
+
+			if (orientation == X_ORIENTATION) {
+				rx = (int) ((scrollableclient.getWidth() - getWidth())
+						* ((double) bar.x - getX()) / (getWidth() - bar.width));
+			} else {
+				ry = (int) ((scrollableclient.getHeight() - getHeight())
+						* ((double) bar.y - getY()) / (getHeight() - bar.height));
+				;
 			}
 		}
 
@@ -152,7 +164,19 @@ public class ScrollPane extends GuiElement {
 			}
 
 			g2d.setColor(Color.RED);
-			g2d.fill3DRect(bar.x, bar.y,bar.width, bar.height, false);
+			g2d.fill3DRect(bar.x, bar.y, bar.width, bar.height, false);
 		}
+	}
+
+	public Point getCoordinate(int x, int y) {
+		if (getBounds().contains(x, y)) {
+			if (scrollableclient instanceof CoordinateMapping) {
+				return ((CoordinateMapping) scrollableclient).getCoordinate(x
+						+ rx, y + ry);
+			}else{
+				throw new RuntimeException("scrollableclient don't support the CoordinateMapping!");
+			}
+		}
+		return null;
 	}
 }

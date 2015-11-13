@@ -1,6 +1,7 @@
 package gameScreens;
 
 import entity.AbstractEntity;
+import gameEngine.MousepadListener;
 import gameEngine.Screen;
 import gameEngine.ScreenFactory;
 import gui.Field;
@@ -8,6 +9,7 @@ import gui.GridLayout;
 import gui.Panel;
 import gui.ScrollPane;
 
+import java.awt.Point;
 import java.util.ArrayList;
 
 public class WorldEditor extends Screen {
@@ -16,6 +18,7 @@ public class WorldEditor extends Screen {
 	int height = 50;
 	Panel pWorld;
 	ScrollPane world;
+	Point lastposition;
 
 	public WorldEditor(ScreenFactory screenFactory) {
 		super(screenFactory);
@@ -37,6 +40,24 @@ public class WorldEditor extends Screen {
 		}
 	}
 
+	public void onUpdate(){
+		super.onUpdate();
+		
+		MousepadListener mpl = getScreenFactory().getGame()
+				.getMousepadListener();
+		
+		if (mpl.isLeftClicked() && lastposition == null){ // pro click kommt nur eine aktion hierdurch
+			lastposition = world.getCoordinate(mpl.getX(), mpl.getY());
+			
+			if (lastposition != null){ // click was im ScrollPane
+				System.out.println(lastposition);
+			}
+			
+		}else if (!mpl.isLeftClicked() && lastposition != null){
+			lastposition = null;
+		}
+	}
+	
 	@Override
 	public ArrayList<AbstractEntity> getEntitys() {
 		// TODO Auto-generated method stub
