@@ -16,10 +16,12 @@ public class OrkTest extends Unit {
 	private BufferedImage img;
 	private final Rectangle rg;
 	private final Rectangle imgrg;
+	private final int breite = 12;//Hitboxsizes
+	private final int hoehe = 12;
 
 	public OrkTest(int x, int y) {
 		super(x, y);
-		rg = new Rectangle(getX(), getY(), 3, 4);
+		rg = new Rectangle(getX(), getY(), breite, hoehe);
 		setMaxLife(10);
 		setLife(8);
 		setMinDmg(1);
@@ -61,6 +63,7 @@ public class OrkTest extends Unit {
 		return rg;
 	}
 
+	@Override
 	public Rectangle getImageBounds() {
 		imgrg.x = this.getX();
 		imgrg.y = this.getY();

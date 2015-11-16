@@ -1,19 +1,21 @@
 package gameEngine;
 
+import entity.AbstractEntity;
+import gui.GuiElement;
+
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.ConcurrentModificationException;
+import java.util.List;
 
 import Utilitys.Point;
-import entity.AbstractEntity;
-import gui.GuiElement;
 
 public abstract class Screen {
 	private int x, y, w, h;
 	private final ScreenFactory screenFactory;
-	private ArrayList<GuiElement> guiElemens = new ArrayList<GuiElement>();
+	private final ArrayList<GuiElement> guiElemens = new ArrayList<GuiElement>();
 
 	public Screen(ScreenFactory screenFactory) {
 		this.screenFactory = screenFactory;
@@ -46,7 +48,7 @@ public abstract class Screen {
 		return screenFactory;
 	}
 
-	public abstract ArrayList<AbstractEntity> getEntitys();
+	public abstract List<AbstractEntity> getEntitys();
 
 	public Rectangle getDraggingZone() {
 		return new Rectangle(x, y, w, h);

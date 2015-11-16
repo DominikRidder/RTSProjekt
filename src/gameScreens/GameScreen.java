@@ -10,7 +10,6 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -21,7 +20,7 @@ import Utilitys.Point;
 
 public class GameScreen extends Screen implements ActionListener{
 
-	private final ArrayList<AbstractEntity> entitys = new ArrayList<AbstractEntity>();
+	//private final List<AbstractEntity> entitys = new LinkedList<AbstractEntity>();
 	private final HashMap<AbstractEntity, Point> entitysOnMap = new HashMap<AbstractEntity, Point>();
 
 	public GameScreen(ScreenFactory screenFactory) {
@@ -32,8 +31,9 @@ public class GameScreen extends Screen implements ActionListener{
 	public void onCreate() {
 		Random rnd = new Random();
 		System.out.println("Main Creating!");
+		List<AbstractEntity> entitys = AbstractEntity.getEntities();
 		for (int i = 0; i < 10; i++) {
-			entitys.add(new OrkTest(rnd.nextInt(700) + 40, rnd.nextInt(500) + 40));
+			entitys.add(new OrkTest(rnd.nextInt(700) + 40, rnd.nextInt(500) + 40));//TODO get(i) funktion vermeiden, weil LinkedList
 			entitysOnMap.put(entitys.get(i), pointToMapConst(entitys.get(i).getX(), entitys.get(i).getY()));
 		}
 		Button exit = new Button(this.getScreenFactory().getGame().getWindow().getWidth()-50, 0, 50, 50, "X");
@@ -46,9 +46,9 @@ public class GameScreen extends Screen implements ActionListener{
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
-		Collections.sort(entitys);// In diese Zeile hab ich so viel hirnschmalz verbraten
-		for (int i = 0; i < entitys.size(); i++) {
-			entitys.get(i).update(this);
+		Collections.sort(AbstractEntity.getEntities());// In diese Zeile hab ich so viel hirnschmalz verbraten
+		for (AbstractEntity e : AbstractEntity.getEntities()) {//linkedList performance plus
+			e.update(this);
 		}
 		for (Entry<AbstractEntity, Point> entry : entitysOnMap.entrySet()) {
 			AbstractEntity key = entry.getKey();
@@ -59,8 +59,11 @@ public class GameScreen extends Screen implements ActionListener{
 
 	@Override
 	public void onDraw(Graphics2D g2d) {
-		for (int i = 0; i < entitys.size(); i++) {
-			entitys.get(i).draw(g2d);
+		/*for (AbstractEntity e : AbstractEntity.getEntities()) {//linkedList performance plus
+			e.draw(g2d);
+		}*/
+		for (int i = 0; i < AbstractEntity.getEntities().size(); i++) {
+			AbstractEntity.getEntities().get(i).draw(g2d);
 		}
 		MousepadListener mpl = this.getScreenFactory().getGame().getMousepadListener();
 		if (mpl.isDragging()) {
@@ -90,8 +93,9 @@ public class GameScreen extends Screen implements ActionListener{
 	}
 
 	@Override
-	public ArrayList<AbstractEntity> getEntitys() {
-		return entitys;
+	public List<AbstractEntity> getEntitys() {
+		//return entitys;
+		return AbstractEntity.getEntities();
 	}
 
 	public HashMap<AbstractEntity, Point> getEntityWithMap() {
