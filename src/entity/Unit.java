@@ -14,7 +14,7 @@ public abstract class Unit extends AbstractEntity {
 	private boolean fight;
 
 	private final ArrayList<Point> wayPoints = new ArrayList<Point>();
-	private int w, h;
+	//private int w, h;
 	private int maxLife;
 	private int life;
 	private int minDmg;
@@ -130,6 +130,7 @@ public abstract class Unit extends AbstractEntity {
 	public void setLife(int life) {
 		if (life < 0) {
 			this.life = 0;
+			//this.finalize();
 		} else {
 			this.life = life;
 		}
