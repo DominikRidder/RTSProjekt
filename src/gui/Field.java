@@ -26,8 +26,15 @@ public class Field extends GuiElement {
 
 	@Override
 	public void onUpdate(Screen screen) {
-		// TODO Auto-generated method stub
+		// TODO Auto-generated method stu
+	}
 
+	public void setImg(BufferedImage img) {
+		this.img = img;
+	}
+
+	public BufferedImage getImg() {
+		return img;
 	}
 
 }

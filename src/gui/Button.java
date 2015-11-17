@@ -2,22 +2,15 @@ package gui;
 
 import gameEngine.MousepadListener;
 import gameEngine.Screen;
-import gameEngine.ScreenFactory;
 
 import java.awt.Color;
-import java.awt.Font;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.ArrayList;
-
-import javax.imageio.ImageIO;
 
 public class Button extends GuiElement {
 
@@ -113,20 +106,16 @@ public class Button extends GuiElement {
 	// }
 	// }
 
-	public BufferedImage getScaledImage(BufferedImage image, int width,
-			int height) throws IOException {
+	public BufferedImage getScaledImage(BufferedImage image, int width, int height) throws IOException {
 		int imageWidth = image.getWidth();
 		int imageHeight = image.getHeight();
 
 		double scaleX = (double) width / imageWidth;
 		double scaleY = (double) height / imageHeight;
-		AffineTransform scaleTransform = AffineTransform.getScaleInstance(
-				scaleX, scaleY);
-		AffineTransformOp bilinearScaleOp = new AffineTransformOp(
-				scaleTransform, AffineTransformOp.TYPE_BILINEAR);
+		AffineTransform scaleTransform = AffineTransform.getScaleInstance(scaleX, scaleY);
+		AffineTransformOp bilinearScaleOp = new AffineTransformOp(scaleTransform, AffineTransformOp.TYPE_BILINEAR);
 
-		return bilinearScaleOp.filter(image, new BufferedImage(width, height,
-				image.getType()));
+		return bilinearScaleOp.filter(image, new BufferedImage(width, height, image.getType()));
 	}
 
 	public void setTextColor(Color c) {
@@ -156,16 +145,14 @@ public class Button extends GuiElement {
 			g2d.setColor(backgroundcolor);
 			g2d.fill3DRect(getX(), getY(), width, height, true);
 			g2d.setColor(textcolor);
-			g2d.drawString(text, getX() + width / 2 - stringwidth / 2, getY()
-					+ height / 2 + stringheight / 2);
+			g2d.drawString(text, getX() + width / 2 - stringwidth / 2, getY() + height / 2 + stringheight / 2);
 
 		}
 	}
 
 	public void onUpdate(Screen screen) {
-		MousepadListener mpl = screen.getScreenFactory().getGame()
-				.getMousepadListener();
-		
+		MousepadListener mpl = screen.getScreenFactory().getGame().getMousepadListener();
+
 		if (mpl.isLeftClicked()) {
 			if (!ispressed) {
 				if (inButton(mpl.getX(), mpl.getY())) {
@@ -183,16 +170,18 @@ public class Button extends GuiElement {
 	}
 
 	public boolean inButton(int x, int y) {
-		return (x >= getX() && y >= getY() && x <= getX() + getWidth() && y <= getY()
-				+ getHeight());
+		return (x >= getX() && y >= getY() && x <= getX() + getWidth() && y <= getY() + getHeight());
 	}
 
 	public void callActions() {
-		ActionEvent ace = new ActionEvent(this, ActionEvent.ACTION_PERFORMED,
-				text);
+		ActionEvent ace = new ActionEvent(this, ActionEvent.ACTION_PERFORMED, text);
 		for (ActionListener performing : getActionListener()) {
 			performing.actionPerformed(ace);
 		}
+	}
+
+	public BufferedImage getImage() {
+		return image;
 	}
 
 }

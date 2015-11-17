@@ -37,8 +37,10 @@ public class OrkTest extends Unit {
 
 	@Override
 	public void draw(Graphics2D g2d) {
-		g2d.drawImage(img, getX(), getY(), null);
-		drawLifeBar(g2d);
+		if (img != null) {
+			g2d.drawImage(img, getX(), getY(), null);
+			drawLifeBar(g2d);
+		}
 	}
 
 	public void drawLifeBar(Graphics2D g2d) {
