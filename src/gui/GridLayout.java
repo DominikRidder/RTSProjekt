@@ -88,4 +88,12 @@ public class GridLayout implements ILayout, CoordinateMapping {
 		return container[x][y];
 	}
 
+	public int getColumnSize() {
+		return container[0].length;
+	}
+
+	public int getRowSize() {
+		return container.length;
+	}
+
 }
