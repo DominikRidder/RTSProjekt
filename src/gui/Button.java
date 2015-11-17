@@ -146,8 +146,8 @@ public class Button extends GuiElement {
 			g2d.fill3DRect(getX(), getY(), width, height, true);
 			g2d.setColor(textcolor);
 			g2d.drawString(text, getX() + width / 2 - stringwidth / 2, getY() + height / 2 + stringheight / 2);
-
 		}
+		drawBorder(g2d);
 	}
 
 	public void onUpdate(Screen screen) {
