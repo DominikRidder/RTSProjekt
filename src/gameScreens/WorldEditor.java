@@ -12,6 +12,7 @@ import gui.Label;
 import gui.Panel;
 import gui.ScrollPane;
 
+import java.awt.Color;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -96,6 +97,22 @@ public class WorldEditor extends Screen implements ActionListener {
 		Button load = new Button("Karte laden");
 		load.addActionListener(this);
 
+		// ******** Zoom Buttons ********************
+		Button zoomin = new Button("+");
+		zoomin.setX(50);
+		zoomin.setY(100);
+		zoomin.setWidth(50);
+		zoomin.setHeight(50);
+		zoomin.addActionListener(this);
+		
+		Button zoomout = new Button("-");
+		zoomout.setX(50);
+		zoomout.setY(150);
+		zoomout.setWidth(50);
+		zoomout.setHeight(50);
+		zoomout.addActionListener(this);
+		// ********************************************
+		
 		Label lblCursorSize = new Label("Aktuelle Cursor Groesse = " + cursorSize);
 
 		functions.add(cursorSizePlus);
@@ -103,6 +120,8 @@ public class WorldEditor extends Screen implements ActionListener {
 		functions.add(lblCursorSize);
 		functions.add(save);
 		functions.add(load);
+		functions.add(zoomin);
+		functions.add(zoomout);
 
 		for (int i = 0; i < functions.size(); i++) {
 			pFunctions.addElement(functions.get(i));
@@ -112,7 +131,7 @@ public class WorldEditor extends Screen implements ActionListener {
 
 		addGuiElement(pTiles);
 		addGuiElement(pFunctions);
-
+		
 	}
 
 	public void onUpdate() {
@@ -201,6 +220,17 @@ public class WorldEditor extends Screen implements ActionListener {
 				exc.printStackTrace();
 			}
 			System.out.println(mapToString());
+			break;
+		case "+":
+			System.out.println("test");
+			scale *= 2;
+			pWorld.setSize(scale * 16 * width, scale * 16 * height);
+			break;
+		case "-":
+			if (scale != 1) {
+				scale /= 2;
+				pWorld.setSize(scale * 16 * width, scale * 16 * height);
+			}
 			break;
 		default:
 			System.out.println("Unknown ActionEvent: " + e.getActionCommand());

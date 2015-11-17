@@ -51,6 +51,17 @@ public class ScrollPane extends GuiElement implements CoordinateMapping {
 		MousepadListener mpl = screen.getScreenFactory().getGame()
 				.getMousepadListener();
 
+		if (this.needUpdate()){
+			scrollx = new ScrollBar(ScrollBar.X_ORIENTATION);
+			scrolly = new ScrollBar(ScrollBar.Y_ORIENTATION);
+			this.setUpdate(false);
+		}
+		
+		if (scrollableclient.needUpdate()){
+			setX(scrollableclient.getX());
+			setY(scrollableclient.getY());
+		}
+		
 		scrollx.onUpdate(screen);
 		scrolly.onUpdate(screen);
 
