@@ -99,17 +99,9 @@ public class WorldEditor extends Screen implements ActionListener {
 
 		// ******** Zoom Buttons ********************
 		Button zoomin = new Button("+");
-		zoomin.setX(50);
-		zoomin.setY(100);
-		zoomin.setWidth(50);
-		zoomin.setHeight(50);
 		zoomin.addActionListener(this);
 		
 		Button zoomout = new Button("-");
-		zoomout.setX(50);
-		zoomout.setY(150);
-		zoomout.setWidth(50);
-		zoomout.setHeight(50);
 		zoomout.addActionListener(this);
 		// ********************************************
 		
