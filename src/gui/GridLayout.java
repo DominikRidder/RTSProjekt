@@ -30,8 +30,7 @@ public class GridLayout implements ILayout, CoordinateMapping {
 
 	@Override
 	public void onUpdate(Screen screen) {
-		MousepadListener mpl = screen.getScreenFactory().getGame()
-				.getMousepadListener();
+		MousepadListener mpl = screen.getScreenFactory().getGame().getMousepadListener();
 		for (int i = 0; i < container.length; i++) {
 			for (int j = 0; j < container[0].length; j++) {
 				if (container[i][j] != null) {
@@ -47,10 +46,8 @@ public class GridLayout implements ILayout, CoordinateMapping {
 			for (int j = 0; j < container[0].length; j++) {
 				if (container[i][j] == null) {
 					container[i][j] = element;
-					element.setX(parent.getX() + parent.getWidth()
-							/ container.length * i);
-					element.setY(parent.getY() + parent.getHeight()
-							/ container[0].length * j);
+					element.setX(parent.getX() + parent.getWidth() / container.length * i);
+					element.setY(parent.getY() + parent.getHeight() / container[0].length * j);
 					element.setWidth(parent.getWidth() / container.length);
 					element.setHeight(parent.getHeight() / container[0].length);
 					return;
@@ -78,15 +75,17 @@ public class GridLayout implements ILayout, CoordinateMapping {
 
 	public Point getCoordinate(int x, int y) {
 		int px = (x - parent.getX()) / (parent.getWidth() / container.length);
-		int py = (y - parent.getY())
-				/ (parent.getHeight() / container[0].length);
+		int py = (y - parent.getY()) / (parent.getHeight() / container[0].length);
 
-		if (px >= 0 && px < container.length && py >= 0
-				&& py < container[0].length) {
+		if (px >= 0 && px < container.length && py >= 0 && py < container[0].length) {
 			return new Point(px, py);
 		} else {
 			return null;
 		}
+	}
+
+	public GuiElement getElement(int x, int y) {
+		return container[x][y];
 	}
 
 }

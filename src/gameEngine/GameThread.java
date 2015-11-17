@@ -21,7 +21,7 @@ public class GameThread extends JPanel implements Runnable {
 				if (game.getScreenFactory().getCurrentScreen() != null)
 					game.getScreenFactory().getCurrentScreen().onUpdate();
 				Thread.sleep(10);
-				
+
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 				//System.out.println("fuck!");
