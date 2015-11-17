@@ -7,6 +7,8 @@ import gameEngine.ScreenFactory;
 import gui.Button;
 import gui.Field;
 import gui.GridLayout;
+import gui.GuiElement;
+import gui.Label;
 import gui.Panel;
 import gui.ScrollPane;
 
@@ -27,7 +29,7 @@ public class WorldEditor extends Screen implements ActionListener {
 	ScrollPane world;
 	Point lastposition;
 	ArrayList<Button> tiles = new ArrayList<Button>(1);
-	ArrayList<Button> functions = new ArrayList<Button>(1);
+	ArrayList<GuiElement> functions = new ArrayList<GuiElement>(1);
 	int selected = -1;
 	int cursorSize = 1;
 
@@ -54,7 +56,7 @@ public class WorldEditor extends Screen implements ActionListener {
 		pTiles.setLayout(new GridLayout(3, 1, pTiles));
 
 		Panel pFunctions = new Panel(0, pTiles.getY() + pTiles.getHeight(), getW(), getH() - pTiles.getHeight() - 40, true);
-		pFunctions.setLayout(new GridLayout(5, 3, pFunctions));
+		pFunctions.setLayout(new GridLayout(3, 5, pFunctions));
 
 		//Tile initialization start
 
@@ -88,12 +90,13 @@ public class WorldEditor extends Screen implements ActionListener {
 		cursorSizePlus.addActionListener(this);
 		Button cursorSizeMinus = new Button("Cursorgroesse verkleinern");
 		cursorSizeMinus.addActionListener(this);
+		Label lblCursorSize = new Label("Aktuelle Cursor Groesse = " + cursorSize);
 
 		functions.add(cursorSizePlus);
 		functions.add(cursorSizeMinus);
+		functions.add(lblCursorSize);
 
 		for (int i = 0; i < functions.size(); i++) {
-			functions.get(i).addActionListener(this);
 			pFunctions.addElement(functions.get(i));
 		}
 
@@ -162,21 +165,32 @@ public class WorldEditor extends Screen implements ActionListener {
 		}
 		switch (e.getActionCommand()) { // name of the button
 		case "grass":
-			selected = 0;
+			selectTile(0);
 			break;
 		case "weg":
-			selected = 1;
+			selectTile(1);
 			break;
 		case "Cursorgroesse erhöhen":
 			cursorSize++;
+			((Label) functions.get(2)).setText("Aktuelle Cursor Groesse = " + cursorSize);
 			break;
 		case "Cursorgroesse verkleinern":
-			if (cursorSize != 0)
+			if (cursorSize != 1)
 				cursorSize--;
+			((Label) functions.get(2)).setText("Aktuelle Cursor Groesse = " + cursorSize);
 			break;
 		default:
 			System.out.println("Unknown ActionEvent: " + e.getActionCommand());
 			break;
 		}
+	}
+
+	public void selectTile(int selected) {
+		this.selected = selected;
+		for (int i = 0; i < tiles.size(); i++) {
+			tiles.get(i).setBorder(false);
+		}
+
+		tiles.get(selected).setBorder(true);
 	}
 }
