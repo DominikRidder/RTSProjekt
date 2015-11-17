@@ -7,6 +7,7 @@ import java.awt.image.BufferedImage;
 
 public class Field extends GuiElement {
 	private BufferedImage img;
+	private String tileID;
 
 	public Field(int x, int y) {
 		setX(x);
@@ -35,6 +36,14 @@ public class Field extends GuiElement {
 
 	public BufferedImage getImg() {
 		return img;
+	}
+
+	public void setTileID(String tileID) {
+		this.tileID = tileID;
+	}
+
+	public String getTileID() {
+		return tileID;
 	}
 
 }
