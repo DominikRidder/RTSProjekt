@@ -16,6 +16,7 @@ import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -32,6 +33,7 @@ public class WorldEditor extends Screen implements ActionListener {
 	ArrayList<GuiElement> functions = new ArrayList<GuiElement>(1);
 	int selected = -1;
 	int cursorSize = 1;
+	String tileID = "";
 
 	public WorldEditor(ScreenFactory screenFactory) {
 		super(screenFactory);
@@ -45,7 +47,6 @@ public class WorldEditor extends Screen implements ActionListener {
 		world = new ScrollPane(pWorld, getW() - 165, getH() - 200);
 		pWorld.setLayout(new GridLayout(width, height, pWorld));
 		addGuiElement(world);
-
 		for (int i = 0; i < width; i++) {
 			for (int j = 0; j < height; j++) {
 				pWorld.addElement(new Field(i * 16, j * 16));
@@ -90,11 +91,18 @@ public class WorldEditor extends Screen implements ActionListener {
 		cursorSizePlus.addActionListener(this);
 		Button cursorSizeMinus = new Button("Cursorgroesse verkleinern");
 		cursorSizeMinus.addActionListener(this);
+		Button save = new Button("Karte speichern");
+		save.addActionListener(this);
+		Button load = new Button("Karte laden");
+		load.addActionListener(this);
+
 		Label lblCursorSize = new Label("Aktuelle Cursor Groesse = " + cursorSize);
 
 		functions.add(cursorSizePlus);
 		functions.add(cursorSizeMinus);
 		functions.add(lblCursorSize);
+		functions.add(save);
+		functions.add(load);
 
 		for (int i = 0; i < functions.size(); i++) {
 			pFunctions.addElement(functions.get(i));
@@ -125,6 +133,7 @@ public class WorldEditor extends Screen implements ActionListener {
 							if (selected != -1) {
 								if (f.getImg() == null || !f.getImg().equals(tiles.get(selected).getImage())) {
 									f.setImg(tiles.get(selected).getImage());
+									f.setTileID(tileID);
 								}
 							}
 						}
@@ -143,6 +152,7 @@ public class WorldEditor extends Screen implements ActionListener {
 						if (selected != -1) {
 							if (f.getImg() == null || !f.getImg().equals(tiles.get(selected).getImage())) {
 								f.setImg(tiles.get(selected).getImage());
+								f.setTileID(tileID);
 							}
 						}
 					}
@@ -154,7 +164,6 @@ public class WorldEditor extends Screen implements ActionListener {
 
 	@Override
 	public ArrayList<AbstractEntity> getEntitys() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -166,9 +175,11 @@ public class WorldEditor extends Screen implements ActionListener {
 		switch (e.getActionCommand()) { // name of the button
 		case "grass":
 			selectTile(0);
+			tileID = "g";
 			break;
 		case "weg":
 			selectTile(1);
+			tileID = "s";
 			break;
 		case "Cursorgroesse erhöhen":
 			cursorSize++;
@@ -178,6 +189,18 @@ public class WorldEditor extends Screen implements ActionListener {
 			if (cursorSize != 1)
 				cursorSize--;
 			((Label) functions.get(2)).setText("Aktuelle Cursor Groesse = " + cursorSize);
+			break;
+		case "Karte speichern":
+			File f = new File("data/maptest.mpd");
+			try {
+				FileWriter writer = new FileWriter(f, true);
+				writer.write(mapToString());
+				writer.flush();
+				writer.close();
+			} catch (IOException exc) {
+				exc.printStackTrace();
+			}
+			System.out.println(mapToString());
 			break;
 		default:
 			System.out.println("Unknown ActionEvent: " + e.getActionCommand());
@@ -193,4 +216,20 @@ public class WorldEditor extends Screen implements ActionListener {
 
 		tiles.get(selected).setBorder(true);
 	}
+
+	public String mapToString() {
+		StringBuffer map = new StringBuffer(pWorld.getLayout().getRowSize() + ";" + pWorld.getLayout().getColumnSize() + ";");
+		for (int i = 0; i < pWorld.getLayout().getRowSize(); i++) {
+			for (int j = 0; j < pWorld.getLayout().getColumnSize(); j++) {
+				if (((Field) pWorld.getLayout().getElement(i, j)).getTileID() != null) {
+					map.append(((Field) pWorld.getLayout().getElement(i, j)).getTileID());
+				} else {
+					map.append("v");
+				}
+			}
+		}
+
+		return map.toString();
+	}
+
 }
