@@ -12,7 +12,6 @@ import gui.Label;
 import gui.Panel;
 import gui.ScrollPane;
 
-import java.awt.Color;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -60,7 +59,7 @@ public class WorldEditor extends Screen implements ActionListener {
 		Panel pFunctions = new Panel(0, pTiles.getY() + pTiles.getHeight(), getW(), getH() - pTiles.getHeight() - 40, true);
 		pFunctions.setLayout(new GridLayout(3, 5, pFunctions));
 
-		//Tile initialization start
+		// Tile initialization start
 
 		Button grass = null;
 		Button weg = null;
@@ -84,9 +83,9 @@ public class WorldEditor extends Screen implements ActionListener {
 			pTiles.addElement(tiles.get(i));
 		}
 
-		//Tile initialization end
+		// Tile initialization end
 
-		//Funktions start
+		// Funktions start
 
 		Button cursorSizePlus = new Button("Cursorgroesse erhöhen");
 		cursorSizePlus.addActionListener(this);
@@ -100,11 +99,11 @@ public class WorldEditor extends Screen implements ActionListener {
 		// ******** Zoom Buttons ********************
 		Button zoomin = new Button("+");
 		zoomin.addActionListener(this);
-		
+
 		Button zoomout = new Button("-");
 		zoomout.addActionListener(this);
 		// ********************************************
-		
+
 		Label lblCursorSize = new Label("Aktuelle Cursor Groesse = " + cursorSize);
 
 		functions.add(cursorSizePlus);
@@ -119,11 +118,11 @@ public class WorldEditor extends Screen implements ActionListener {
 			pFunctions.addElement(functions.get(i));
 		}
 
-		//Funktion end
+		// Funktion end
 
 		addGuiElement(pTiles);
 		addGuiElement(pFunctions);
-		
+
 	}
 
 	public void onUpdate() {
@@ -211,7 +210,6 @@ public class WorldEditor extends Screen implements ActionListener {
 			} catch (IOException exc) {
 				exc.printStackTrace();
 			}
-			System.out.println(mapToString());
 			break;
 		case "+":
 			System.out.println("test");
@@ -240,18 +238,31 @@ public class WorldEditor extends Screen implements ActionListener {
 	}
 
 	public String mapToString() {
-		StringBuffer map = new StringBuffer(pWorld.getLayout().getRowSize() + ";" + pWorld.getLayout().getColumnSize() + ";");
+		StringBuffer map = new StringBuffer();
 		for (int i = 0; i < pWorld.getLayout().getRowSize(); i++) {
 			for (int j = 0; j < pWorld.getLayout().getColumnSize(); j++) {
-				if (((Field) pWorld.getLayout().getElement(i, j)).getTileID() != null) {
-					map.append(((Field) pWorld.getLayout().getElement(i, j)).getTileID());
+				if (((Field) pWorld.getLayout().getElement(j, i)).getTileID() != null) {
+					map.append(((Field) pWorld.getLayout().getElement(j, i)).getTileID());
 				} else {
 					map.append("v");
 				}
 			}
 		}
 
+		String actTile = map.substring(0, 1);
+		int counter = 1;
+		StringBuffer tmp = new StringBuffer();
+		for (int i = 1; i < map.length(); i++) {
+			if (map.substring(i, i + 1).equals(actTile)) {
+				counter++;
+			} else {
+				System.out.println(counter + actTile);
+				tmp.append(counter + actTile);
+				actTile = map.substring(i, i + 1);
+				counter = 1;
+			}
+		}
+		map = new StringBuffer(pWorld.getLayout().getRowSize() + ";" + pWorld.getLayout().getColumnSize() + ";").append(tmp);
 		return map.toString();
 	}
-
 }
