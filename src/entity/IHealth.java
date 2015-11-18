@@ -11,4 +11,5 @@ public interface IHealth {
 	int getMinDmg();
 	int getRandDmg();
 	int getLife();
+	boolean attack(int opponentID);
 }
