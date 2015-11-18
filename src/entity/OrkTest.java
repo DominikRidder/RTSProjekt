@@ -1,33 +1,36 @@
-package gameScreens;
+package entity;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import entity.Unit;
 
 public class OrkTest extends Unit {
 
-	private BufferedImage img;
-	private final Rectangle rg;
-	private final Rectangle imgrg;
-	private final int breite = 12;//Hitboxsizes
-	private final int hoehe = 12;
+	//private static BufferedImage img;
+	//private final Rectangle rg;
+	//private final Rectangle imgrg;
+	private static final int breite = 12;//Hitboxsizes
+	private static final int hoehe = 12;
+	private static final String img_name = "Orc.png";
+	private static final int life = 8;
+	private static final int maxlife = 20;
+	private static final int mindmg = 1;
+	private static final int maxdmg = 3;
 
 	public OrkTest(int x, int y) {
-		super(x, y);
+		super(x, y, img_name);
 		rg = new Rectangle(getX(), getY(), breite, hoehe);
-		setMaxLife(10);
-		setLife(8);
-		setMinDmg(1);
-		setMaxDmg(3);
+		setMaxLife(maxlife);
+		setLife(life);
+		setMinDmg(mindmg);
+		setMaxDmg(maxdmg);
 		try {
-			img = ImageIO.read(new File("Orc.png"));
+			img = ImageIO.read(new File(img_name));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

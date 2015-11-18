@@ -21,8 +21,8 @@ public abstract class Unit extends AbstractEntity {
 	private int maxDmg;
 	private int lastAttack = 0;
 
-	public Unit(int x, int y) {
-		super(x, y);
+	public Unit(int x, int y, String img_name) {
+		super(x, y, img_name);
 	}
 
 	@Override
@@ -46,10 +46,13 @@ public abstract class Unit extends AbstractEntity {
 			if (marked == true) {
 				wayPoints.clear();
 				int i = 0;
-				for (i = 0; i < screen.getEntitys().size(); i++) {
-					if (screen.getEntitys().get(i).getImageBounds().contains(mpl.getX(), mpl.getY()) && this != screen.getEntitys().get(i)) {
+				for (i = 0; i < getEntities().size(); i++) {
+					if (!fight && getEntities().get(i).getImageBounds().contains(mpl.getX(), mpl.getY()) 
+							&& this.getEntityID() != getEntities().get(i).getEntityID()
+							&& this.getLife() > 0
+							&& getEntities().get(i).getLife() > 0) {
 						fight = true;
-						opponent = i;
+						opponent = getEntities().get(i).getEntityID();
 						break;
 					}
 					fight = false;
@@ -95,9 +98,11 @@ public abstract class Unit extends AbstractEntity {
 		if (getX() == next.getX() && getY() == next.getY() && wayPoints.size() > 0) {
 			wayPoints.remove(0);
 		}
-		if (fight == true && opponent != -1 && Math.abs(screen.getEntitys().get(opponent).getX() - getX()) < 64 && Math.abs(screen.getEntitys().get(opponent).getY() - getY()) < 64) {
+		if (fight == true ) {
 			if (lastAttack == 0) {
-				attack(opponent, screen);
+				fight = attack(opponent, screen);
+				if(!fight)
+					opponent = -1;//reset
 			} else {
 				lastAttack--;
 			}
@@ -128,33 +133,61 @@ public abstract class Unit extends AbstractEntity {
 
 	@Override
 	public void setLife(int life) {
-		if (life < 0) {
-			this.life = 0;
-			//this.finalize();
-		} else {
-			this.life = life;
-		}
+		this.life = life;
 	}
-
+	
+	@Override
+	public boolean checkDeath()
+	{
+		if(this.life <= 0)
+		{
+			this.die();
+			return true;
+		}
+		return false;
+	}
+	
+	/* HP Amor and Damage interface stuff*/
+	@Override
 	public int getMinDmg() {
 		return minDmg;
 	}
 
+	@Override
 	public void setMinDmg(int minDmg) {
 		this.minDmg = minDmg;
 	}
 
+	@Override
 	public int getMaxDmg() {
 		return maxDmg;
 	}
 
+	@Override
 	public void setMaxDmg(int maxDmg) {
 		this.maxDmg = maxDmg;
 	}
+	
+	@Override
+	public boolean takeDamage(int dmg)
+	{
+		if(this.getLife() < 0)
+			return false;
+		this.life-=dmg;
+		if(this.life < 0)
+			this.life = 0;
+		return true;
+	}
 
-	void attack(int opponent, Screen screen) {
-		int dmg = minDmg + ((int) (Math.random() * ((maxDmg - minDmg) + 1)));
-		screen.getEntitys().get(opponent).setLife(screen.getEntitys().get(opponent).getLife() - dmg);
+	boolean attack(int opponent, Screen screen) {
 		lastAttack = 50;
+		AbstractEntity e = getEntity(opponent);
+		if(opponent != -1 && e != null
+				&& opponent != this.getEntityID()
+				&& Math.abs(e.getX() - getX()) < 64 
+				&& Math.abs(e.getY() - getY()) < 64)
+			return e.takeDamage(getRandDmg());
+		return false;
+		
 	}
 }

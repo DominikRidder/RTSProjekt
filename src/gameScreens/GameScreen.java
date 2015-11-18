@@ -1,6 +1,7 @@
 package gameScreens;
 
 import entity.AbstractEntity;
+import entity.OrkTest;
 import gameEngine.MousepadListener;
 import gameEngine.Screen;
 import gameEngine.ScreenFactory;
@@ -46,9 +47,13 @@ public class GameScreen extends Screen implements ActionListener{
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
-		Collections.sort(AbstractEntity.getEntities());// In diese Zeile hab ich so viel hirnschmalz verbraten
-		for (AbstractEntity e : AbstractEntity.getEntities()) {//linkedList performance plus
-			e.update(this);
+		Collections.sort(getEntitys());// In diese Zeile hab ich so viel hirnschmalz verbraten
+		for (int i = 0; i < getEntitys().size(); i++) {//linkedList performance plus
+			getEntitys().get(i).update(this);
+		}
+		for (int i = 0; i < getEntitys().size(); i++) {//linkedList performance plus
+			if(getEntitys().get(i).checkDeath())//Toete tote
+				i--;//liste wird kleiner
 		}
 		for (Entry<AbstractEntity, Point> entry : entitysOnMap.entrySet()) {
 			AbstractEntity key = entry.getKey();
@@ -62,8 +67,8 @@ public class GameScreen extends Screen implements ActionListener{
 		/*for (AbstractEntity e : AbstractEntity.getEntities()) {//linkedList performance plus
 			e.draw(g2d);
 		}*/
-		for (int i = 0; i < AbstractEntity.getEntities().size(); i++) {
-			AbstractEntity.getEntities().get(i).draw(g2d);
+		for (int i = 0; i < getEntitys().size(); i++) {
+			getEntitys().get(i).draw(g2d);
 		}
 		MousepadListener mpl = this.getScreenFactory().getGame().getMousepadListener();
 		if (mpl.isDragging()) {
