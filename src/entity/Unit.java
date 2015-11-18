@@ -15,10 +15,6 @@ public abstract class Unit extends AbstractEntity {
 
 	private final ArrayList<Point> wayPoints = new ArrayList<Point>();
 	//private int w, h;
-	private int maxLife;
-	private int life;
-	private int minDmg;
-	private int maxDmg;
 	private int lastAttack = 0;
 
 	public Unit(int x, int y, String img_name) {
@@ -100,7 +96,7 @@ public abstract class Unit extends AbstractEntity {
 		}
 		if (fight == true ) {
 			if (lastAttack == 0) {
-				fight = attack(opponent, screen);
+				fight = attack(opponent);
 				if(!fight)
 					opponent = -1;//reset
 			} else {
@@ -117,69 +113,10 @@ public abstract class Unit extends AbstractEntity {
 	public void setMarked(boolean marked) {
 		this.marked = marked;
 	}
-
-	public int getMaxLife() {
-		return maxLife;
-	}
-
-	public void setMaxLife(int life) {
-		this.maxLife = life;
-	}
-
-	@Override
-	public int getLife() {
-		return life;
-	}
-
-	@Override
-	public void setLife(int life) {
-		this.life = life;
-	}
-	
-	@Override
-	public boolean checkDeath()
-	{
-		if(this.life <= 0)
-		{
-			this.die();
-			return true;
-		}
-		return false;
-	}
 	
 	/* HP Amor and Damage interface stuff*/
 	@Override
-	public int getMinDmg() {
-		return minDmg;
-	}
-
-	@Override
-	public void setMinDmg(int minDmg) {
-		this.minDmg = minDmg;
-	}
-
-	@Override
-	public int getMaxDmg() {
-		return maxDmg;
-	}
-
-	@Override
-	public void setMaxDmg(int maxDmg) {
-		this.maxDmg = maxDmg;
-	}
-	
-	@Override
-	public boolean takeDamage(int dmg)
-	{
-		if(this.getLife() < 0)
-			return false;
-		this.life-=dmg;
-		if(this.life < 0)
-			this.life = 0;
-		return true;
-	}
-
-	boolean attack(int opponent, Screen screen) {
+	public boolean attack(int opponent) {
 		lastAttack = 50;
 		AbstractEntity e = getEntity(opponent);
 		if(opponent != -1 && e != null

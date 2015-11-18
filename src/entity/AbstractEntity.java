@@ -1,5 +1,7 @@
 package entity;
 
+import java.awt.Color;
+import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -14,6 +16,11 @@ public abstract class AbstractEntity implements IEntity, Comparable<AbstractEnti
 	protected static BufferedImage img;
 	protected Rectangle rg;
 	protected Rectangle imgrg;
+	
+	protected int maxLife;
+	protected int life;
+	protected int minDmg;
+	protected int maxDmg;
 
 	public AbstractEntity(int x, int y, String img_name) {
 		this.x = x;
@@ -110,6 +117,24 @@ public abstract class AbstractEntity implements IEntity, Comparable<AbstractEnti
 		}
 		return null;
 	}
+	/*Drawing Stuff*/
+
+	@Override
+	public void draw(Graphics2D g2d) {
+		g2d.drawImage(img, getX(), getY(), null);
+		drawLifeBar(g2d);
+	}
+
+	public void drawLifeBar(Graphics2D g2d) {
+		g2d.setColor(Color.BLACK);
+		g2d.drawRect(getX(), getY() + img.getHeight() - 4, img.getWidth(), 4);
+		g2d.setColor(Color.GREEN);
+		g2d.fillRect(getX() + 1, getY() + img.getHeight() - 3, img.getWidth() - 1, 3);
+		g2d.setColor(Color.RED);
+		double lost = (getLife() * 1.) / getMaxLife() * img.getWidth();
+		g2d.fillRect(getX() + 1 + (int) lost, getY() + img.getHeight() - 3, img.getWidth() - 1 - (int) lost, 3);
+	}
+	
 	/*IHelath*/
 	
 	@Override
@@ -123,5 +148,65 @@ public abstract class AbstractEntity implements IEntity, Comparable<AbstractEnti
 		// TODO Auto-generated method stub
 		return getMinDmg() + ((int) (Math.random() * ((getMaxDmg() - getMinDmg()) + 1)));
 	}
+	
+	@Override
+	public int getMinDmg() {
+		return minDmg;
+	}
 
+	@Override
+	public void setMinDmg(int minDmg) {
+		this.minDmg = minDmg;
+	}
+
+	@Override
+	public int getMaxDmg() {
+		return maxDmg;
+	}
+
+	@Override
+	public void setMaxDmg(int maxDmg) {
+		this.maxDmg = maxDmg;
+	}
+	
+	public int getMaxLife() {
+		return maxLife;
+	}
+
+	public void setMaxLife(int life) {
+		this.maxLife = life;
+	}
+
+	@Override
+	public int getLife() {
+		return life;
+	}
+
+	@Override
+	public void setLife(int life) {
+		this.life = life;
+	}
+	
+	@Override
+	public boolean checkDeath()
+	{
+		if(this.life <= 0)
+		{
+			this.die();
+			return true;
+		}
+		return false;
+	}
+	
+
+	@Override
+	public boolean takeDamage(int dmg) {
+		// TODO Auto-generated method stub
+		if(this.getLife() <= 0)
+			return false;
+		this.life-=dmg;
+		if(this.life < 0)
+			this.life = 0;
+		return true;
+	}
 }
