@@ -1,16 +1,21 @@
 package entity;
 
 import java.awt.Rectangle;
-import java.util.LinkedList;
+import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 import java.util.List;
 
-public abstract class AbstractEntity implements IEntity, Comparable<AbstractEntity> {
+public abstract class AbstractEntity implements IEntity, Comparable<AbstractEntity>, IHealth {
 	private final int entityID;
 	private static int entityCounter = 0;
-	private static List<AbstractEntity> l_Entities = new LinkedList<AbstractEntity>();
+	private static List<AbstractEntity> l_Entities = new ArrayList<AbstractEntity>();
 	private int x, y;
+	
+	protected static BufferedImage img;
+	protected Rectangle rg;
+	protected Rectangle imgrg;
 
-	public AbstractEntity(int x, int y) {
+	public AbstractEntity(int x, int y, String img_name) {
 		this.x = x;
 		this.y = y;
 		entityID = entityCounter;
@@ -56,12 +61,12 @@ public abstract class AbstractEntity implements IEntity, Comparable<AbstractEnti
 	public abstract Rectangle getImageBounds();
 
 	public AbstractEntity hasCollision() {//sucht automatisch die naechste hitbox
-		for (AbstractEntity e : l_Entities) {
-			if (e.entityID == this.entityID) {
+		for (int i = 0; i < l_Entities.size(); i++) {
+			if (l_Entities.get(i).entityID == this.entityID) {
 				continue;
 			}
-			if (isCollision(e)) {
-				return e;
+			if (isCollision(l_Entities.get(i))) {
+				return l_Entities.get(i);
 			}
 		}
 		return null;
@@ -95,13 +100,28 @@ public abstract class AbstractEntity implements IEntity, Comparable<AbstractEnti
 		}
 		return this.getY() < o.getY() ? -1 : 1;
 	}
-
-	public int getLife() {
-		return 0;
+	
+	public AbstractEntity getEntity(int ID)
+	{
+		for(int i = 0; i < l_Entities.size(); i++)
+		{
+			if(l_Entities.get(i).getEntityID() == ID)
+				return l_Entities.get(i);
+		}
+		return null;
 	}
-
-	public void setLife(int life) {
-
+	/*IHelath*/
+	
+	@Override
+	public boolean die()
+	{
+		return l_Entities.remove(this);//This should be dead now!
+	}
+	
+	@Override
+	public int getRandDmg() {
+		// TODO Auto-generated method stub
+		return getMinDmg() + ((int) (Math.random() * ((getMaxDmg() - getMinDmg()) + 1)));
 	}
 
 }
