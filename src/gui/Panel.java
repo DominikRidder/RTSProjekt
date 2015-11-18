@@ -16,6 +16,14 @@ public class Panel extends GuiElement implements CoordinateMapping {
 		setWidth(width);
 	}
 
+	public Panel(int x, int y, int width, int height, boolean border) {
+		setX(x);
+		setY(y);
+		setHeight(height);
+		setWidth(width);
+		setBorder(border);
+	}
+
 	public void setLayout(ILayout layout) {
 		this.layout = layout;
 	}
@@ -30,6 +38,7 @@ public class Panel extends GuiElement implements CoordinateMapping {
 
 	public void onDraw(Graphics2D g2d) {
 		layout.onDraw(g2d);
+		drawBorder(g2d);
 	}
 
 	@Override
@@ -42,10 +51,13 @@ public class Panel extends GuiElement implements CoordinateMapping {
 			if (layout instanceof CoordinateMapping) {
 				return ((CoordinateMapping) layout).getCoordinate(x, y);
 			} else {
-				throw new RuntimeException(
-						"Layout don't support the CoordinateMapping!");
+				throw new RuntimeException("Layout don't support the CoordinateMapping!");
 			}
 		}
 		return null;
+	}
+
+	public GridLayout getLayout() {
+		return (GridLayout) layout;
 	}
 }
