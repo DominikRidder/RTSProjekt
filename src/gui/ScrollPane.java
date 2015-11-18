@@ -97,6 +97,9 @@ public class ScrollPane extends GuiElement implements CoordinateMapping {
 						getY() + getHeight(),
 						(int) (getWidth() * ((double) getWidth()) / scrollableclient
 								.getWidth()), 10);
+				if (bar.width > getWidth()){
+					bar.width = getWidth();
+				}
 			} else {
 				bar = new Rectangle(
 						getX() + getWidth(),
@@ -104,6 +107,9 @@ public class ScrollPane extends GuiElement implements CoordinateMapping {
 						10,
 						(int) (getHeight() * ((double) getHeight() / scrollableclient
 								.getHeight())));
+				if (bar.height > getHeight()){
+					bar.height = getHeight();
+				}
 			}
 		}
 

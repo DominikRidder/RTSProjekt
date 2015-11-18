@@ -14,7 +14,6 @@ public class Label extends GuiElement {
 	private Color textcolor = Color.WHITE, backgroundcolor = Color.BLACK;
 	private BufferedImage image;
 	private boolean ImageSet = false;
-	private boolean changed = true;
 
 	public Label(int x, int y, BufferedImage image) {
 		setX(x);
@@ -49,39 +48,16 @@ public class Label extends GuiElement {
 		ImageSet = true;
 	}
 
-	public void setX(int x) {
-		super.setX(x);
-		changed = true;
-	}
-
-	public void setY(int y) {
-		super.setY(y);
-		changed = true;
-	}
-
-	public void setHeight(int height) {
-		super.setHeight(height);
-		changed = true;
-	}
-
-	public void setWidth(int width) {
-		super.setWidth(width);
-		changed = true;
-	}
-
 	public void setText(String text) {
 		this.text = text;
-		changed = true;
 	}
 
 	public void setTextColor(Color c) {
 		textcolor = c;
-		changed = true;
 	}
 
 	public void setBackgroundColor(Color c) {
 		backgroundcolor = c;
-		changed = true;
 	}
 
 	public void onDraw(Graphics2D g2d) {
