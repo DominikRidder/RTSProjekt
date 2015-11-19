@@ -17,12 +17,14 @@ import gui.ScrollPane;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import javax.imageio.ImageIO;
+import javax.swing.JFileChooser;
 
 public class WorldEditor extends Screen implements ActionListener {
 	int scale = 1;
@@ -74,7 +76,7 @@ public class WorldEditor extends Screen implements ActionListener {
 		weg.setText("weg(gerade).png");
 		weg.setWidth(32);
 		weg.setHeight(32);
-			
+
 		tiles.add(grass);
 		tiles.add(weg);
 
@@ -201,15 +203,10 @@ public class WorldEditor extends Screen implements ActionListener {
 			((Label) functions.get(2)).setText("Aktuelle Cursor Groesse = " + cursorSize);
 			break;
 		case "Karte speichern":
-			File f = new File("data/maptest.mpd");
-			try {
-				FileWriter writer = new FileWriter(f, true);
-				writer.write(mapToString());
-				writer.flush();
-				writer.close();
-			} catch (IOException exc) {
-				exc.printStackTrace();
-			}
+			mapToString();
+			break;
+		case "Karte laden":
+			loadMap();
 			break;
 		case "+":
 			scale *= 2;
@@ -236,7 +233,7 @@ public class WorldEditor extends Screen implements ActionListener {
 		tiles.get(selected).setBorder(true);
 	}
 
-	public String mapToString() {
+	public void mapToString() {
 		StringBuffer map = new StringBuffer();
 		for (int i = 0; i < pWorld.getLayout().getRowSize(); i++) {
 			for (int j = 0; j < pWorld.getLayout().getColumnSize(); j++) {
@@ -255,13 +252,81 @@ public class WorldEditor extends Screen implements ActionListener {
 			if (map.substring(i, i + 1).equals(actTile)) {
 				counter++;
 			} else {
-				System.out.println(counter + actTile);
-				tmp.append(counter + actTile);
+				tmp.append(";" + counter + actTile);
 				actTile = map.substring(i, i + 1);
 				counter = 1;
 			}
 		}
-		map = new StringBuffer(pWorld.getLayout().getRowSize() + ";" + pWorld.getLayout().getColumnSize() + ";").append(tmp);
-		return map.toString();
+		map = new StringBuffer(pWorld.getLayout().getRowSize() + ";" + pWorld.getLayout().getColumnSize()).append(tmp);
+
+		JFileChooser chooser = new JFileChooser();
+		chooser.setCurrentDirectory(new File(".//data//map//"));
+		int retrival = chooser.showSaveDialog(null);
+		if (retrival == JFileChooser.APPROVE_OPTION) {
+			try {
+				FileWriter fw = new FileWriter(chooser.getSelectedFile() + ".mpd");
+				fw.write(map.toString());
+				fw.flush();
+				fw.close();
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+		}
+	}
+
+	public void loadMap() {
+		File fMap;
+		JFileChooser chooser = new JFileChooser();
+		chooser.setCurrentDirectory(new File(".//data//map//"));
+		int retrival = chooser.showSaveDialog(null);
+		if (retrival == JFileChooser.APPROVE_OPTION) {
+			fMap = new File(chooser.getSelectedFile().getAbsolutePath());
+			try (BufferedReader bf = new BufferedReader(new FileReader(fMap))) {
+				String line = bf.readLine();
+				String[] data = line.split(";");
+				height = Integer.parseInt(data[0]);
+				width = Integer.parseInt(data[1]);
+				pWorld = new LayerPanel(150, 0, width * 16, height * 16);
+				pWorld.addLayout(new GridLayout(width, height, pWorld));
+				for (int i = 0; i < height; i++) {
+					for (int j = 0; j < width; j++) {
+						pWorld.addElement(new Field(i * 16, j * 16));
+					}
+				}
+				world = new ScrollPane(pWorld, getW() - 165, getH() - 200);
+				addGuiElement(world);
+				int containerI = -1;
+				int containerJ = 0;
+				for (int i = 2; i < data.length; i++) {
+					String pair = data[i];
+					String imgname = null;
+					switch (pair.charAt(pair.length() - 1)) {
+					case 'g':
+						imgname = "grass.png";
+						break;
+					case 's':
+						imgname = "weg(gerade).png";
+						break;
+					default:
+						imgname = "";
+						break;
+					}
+					for (int j = Integer.parseInt(pair.split("[a-z]")[0]); j > 0; j--) {
+						if (containerI < height - 1) {
+							containerI++;
+						} else {
+							containerJ++;
+							containerI = 0;
+						}
+						((Field) pWorld.getLayout().getElement(containerI, containerJ)).setImg(imgname);
+					}
+				}
+
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
+		}
+
 	}
 }
