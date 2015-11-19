@@ -1,12 +1,12 @@
 package gameScreens;
 
 import entity.AbstractEntity;
+import gameEngine.Game;
 import gameEngine.Screen;
 import gameEngine.ScreenFactory;
 import gui.Button;
 import gui.GridLayout;
 import gui.Panel;
-import gui.ScrollPane;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -22,9 +22,10 @@ public class MainScreen extends Screen implements ActionListener {
 
 	@Override
 	public void onCreate() {
+
 		String adding[] = { "Einzelspieler", "Spiel Laden", "Archievments", "Highscore", "Einstellungen", "WorldEditor", "Exit" };
 
-		Panel p = new Panel(250, 100, 250, 50 * adding.length);
+		Panel p = new Panel(345, 175, 150, 40 * adding.length);
 		p.setLayout(new GridLayout(adding.length, 1, p));
 		for (String toadd : adding) {
 			Button newb = new Button(toadd);
@@ -33,10 +34,12 @@ public class MainScreen extends Screen implements ActionListener {
 			newb.addActionListener(this);
 			p.addElement(newb);
 		}
+		Button placeholder = new Button(0, 0, Game.getImageLoader().getImage("Hauptmenue.png"));
+		placeholder.setWidth(getScreenFactory().getGame().getWindow().getWidth());
+		placeholder.setHeight(getScreenFactory().getGame().getWindow().getHeight());
+		addGuiElement(placeholder);
 
-		ScrollPane scroller = new ScrollPane(p, 250, 50 * adding.length);
-		addGuiElement(scroller);
-		// addGuiElement(p);
+		addGuiElement(p);
 	}
 
 	@Override
