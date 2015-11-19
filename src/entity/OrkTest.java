@@ -2,10 +2,6 @@ package entity;
 
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-
-import javax.imageio.ImageIO;
 
 
 public class OrkTest extends Unit {
@@ -29,7 +25,6 @@ public class OrkTest extends Unit {
 		setLife(life);
 		setMinDmg(mindmg);
 		setMaxDmg(maxdmg);
-
 		imgrg = new Rectangle(getX(), getY(), img.getWidth(), img.getHeight());
 	}
 
@@ -50,24 +45,5 @@ public class OrkTest extends Unit {
 		imgrg.x = this.getX();
 		imgrg.y = this.getY();
 		return imgrg;
-	}
-
-	@Override
-	BufferedImage getImg() {
-		// TODO Auto-generated method stub
-		return img;
-	}
-
-	@Override
-	void setImg(String imgName) {
-		if(img == null)
-		{
-			try {
-				img = ImageIO.read(new File(img_name));
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			
-		}
 	}
 }

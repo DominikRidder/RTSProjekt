@@ -1,5 +1,7 @@
 package entity;
 
+import gameEngine.Game;
+
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
@@ -21,13 +23,14 @@ public abstract class AbstractEntity implements IEntity, Comparable<AbstractEnti
 	protected int life;
 	protected int minDmg;
 	protected int maxDmg;
+	protected String img_name;
 
-	public AbstractEntity(int x, int y, String img_name) {
+	public AbstractEntity(int x, int y, String imgname) {
 		this.x = x;
 		this.y = y;
 		entityID = entityCounter;
 		entityCounter++;
-		setImg(img_name);
+		img_name = imgname;
 		l_Entities.add(this);
 	}
 
@@ -119,8 +122,11 @@ public abstract class AbstractEntity implements IEntity, Comparable<AbstractEnti
 		return null;
 	}
 	/*Drawing Stuff*/
-	abstract BufferedImage getImg();
-	abstract void setImg(String imgName);
+	BufferedImage getImg()
+	{
+		return Game.getImageLoader().getImage(img_name);
+	}
+	
 	@Override
 	public void draw(Graphics2D g2d) {
 		g2d.drawImage(getImg(), getX(), getY(), null);
@@ -129,6 +135,9 @@ public abstract class AbstractEntity implements IEntity, Comparable<AbstractEnti
 
 	public void drawLifeBar(Graphics2D g2d) {
 		BufferedImage img = getImg();
+		if (img == null){ // Sometime the images aren't loaded until here...
+			return;
+		}
 		g2d.setColor(Color.BLACK);
 		g2d.drawRect(getX(), getY() + img.getHeight() - 4, img.getWidth(), 4);
 		g2d.setColor(Color.GREEN);
