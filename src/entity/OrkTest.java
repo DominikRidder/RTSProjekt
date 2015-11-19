@@ -23,7 +23,6 @@ public class OrkTest extends Unit {
 		setLife(life);
 		setMinDmg(mindmg);
 		setMaxDmg(maxdmg);
-		imgrg = new Rectangle(getX(), getY(), getImg().getWidth(), getImg().getHeight());
 	}
 
 	@Override

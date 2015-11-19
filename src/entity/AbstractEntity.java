@@ -31,6 +31,7 @@ public abstract class AbstractEntity implements IEntity, Comparable<AbstractEnti
 		entityID = entityCounter;
 		entityCounter++;
 		img_name = imgname;
+		imgrg = new Rectangle(getX(), getY(), getImg().getWidth(), getImg().getHeight());
 		l_Entities.add(this);
 	}
 
