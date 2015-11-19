@@ -33,6 +33,10 @@ public class LayerPanel extends APanel implements CoordinateMapping {
 	public void addLayout(ILayout layout) {
 		this.layouts.add(layout);
 	}
+	
+	public void removeAllLayouts(){
+		layouts = new ArrayList<ILayout>();
+	}
 
 	public void addElement(GuiElement element) {
 		layouts.get(actuallayer).addElement(element);

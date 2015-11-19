@@ -286,15 +286,18 @@ public class WorldEditor extends Screen implements ActionListener {
 				String[] data = line.split(";");
 				height = Integer.parseInt(data[0]);
 				width = Integer.parseInt(data[1]);
-				pWorld = new LayerPanel(150, 0, width * 16, height * 16);
+//				pWorld = new LayerPanel(150, 0, width * 16, height * 16);
+				pWorld.removeAllLayouts();
+				pWorld.setWidth(width*16);
+				pWorld.setHeight(height*16);
 				pWorld.addLayout(new GridLayout(width, height, pWorld));
 				for (int i = 0; i < height; i++) {
 					for (int j = 0; j < width; j++) {
 						pWorld.addElement(new Field(i * 16, j * 16));
 					}
 				}
-				world = new ScrollPane(pWorld, getW() - 165, getH() - 200);
-				addGuiElement(world);
+//				world = new ScrollPane(pWorld, getW() - 165, getH() - 200);
+//				addGuiElement(world);
 				int containerI = -1;
 				int containerJ = 0;
 				for (int i = 2; i < data.length; i++) {
@@ -318,7 +321,9 @@ public class WorldEditor extends Screen implements ActionListener {
 							containerJ++;
 							containerI = 0;
 						}
-						((Field) pWorld.getLayout().getElement(containerI, containerJ)).setImg(imgname);
+						if (imgname != ""){
+							((Field) pWorld.getLayout().getElement(containerI, containerJ)).setImg(imgname);
+						}
 					}
 				}
 
@@ -327,6 +332,5 @@ public class WorldEditor extends Screen implements ActionListener {
 			}
 
 		}
-
 	}
 }
