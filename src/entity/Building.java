@@ -2,9 +2,7 @@ package entity;
 
 import gameEngine.Screen;
 
-import java.awt.Rectangle;
-
-public class Building extends AbstractEntity {
+public abstract class Building extends AbstractEntity {
 
 	public Building(int x, int y, String img_name) {
 		super(x, y, img_name);
@@ -24,21 +22,8 @@ public class Building extends AbstractEntity {
 	}
 
 	@Override
-	public Rectangle getBounds() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Rectangle getImageBounds() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public boolean attack(int opponentID) {
 		// TODO Auto-generated method stub
 		return false;//wow, this is automated right, a NORMAL building should not attack
 	}
-
 }

@@ -13,7 +13,7 @@ public abstract class AbstractEntity implements IEntity, Comparable<AbstractEnti
 	private static List<AbstractEntity> l_Entities = new ArrayList<AbstractEntity>();
 	private int x, y;
 	
-	protected static BufferedImage img;
+	//static BufferedImage img;
 	protected Rectangle rg;
 	protected Rectangle imgrg;
 	
@@ -27,6 +27,7 @@ public abstract class AbstractEntity implements IEntity, Comparable<AbstractEnti
 		this.y = y;
 		entityID = entityCounter;
 		entityCounter++;
+		setImg(img_name);
 		l_Entities.add(this);
 	}
 
@@ -118,14 +119,16 @@ public abstract class AbstractEntity implements IEntity, Comparable<AbstractEnti
 		return null;
 	}
 	/*Drawing Stuff*/
-
+	abstract BufferedImage getImg();
+	abstract void setImg(String imgName);
 	@Override
 	public void draw(Graphics2D g2d) {
-		g2d.drawImage(img, getX(), getY(), null);
+		g2d.drawImage(getImg(), getX(), getY(), null);
 		drawLifeBar(g2d);
 	}
 
 	public void drawLifeBar(Graphics2D g2d) {
+		BufferedImage img = getImg();
 		g2d.setColor(Color.BLACK);
 		g2d.drawRect(getX(), getY() + img.getHeight() - 4, img.getWidth(), 4);
 		g2d.setColor(Color.GREEN);
