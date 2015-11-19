@@ -1,5 +1,7 @@
 package entity;
 
+import gameEngine.Game;
+
 import java.awt.Rectangle;
 import java.io.File;
 import java.io.IOException;
@@ -27,11 +29,8 @@ public class OrkTest extends Unit {
 		setLife(life);
 		setMinDmg(mindmg);
 		setMaxDmg(maxdmg);
-		try {
-			img = ImageIO.read(new File(img_name));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		
+		img = Game.getImageLoader().getImage(img_name);
 
 		imgrg = new Rectangle(getX(), getY(), img.getWidth(), img.getHeight());
 	}

@@ -20,7 +20,7 @@ public class MusikThread extends JPanel implements Runnable {
 	public void run() {
 		while (true) {
 			try {
-				File f = new File("hauptmenue_v1.wav");
+				File f = new File("data/Music/hauptmenue_v1.wav");
 				InputStream in = new FileInputStream(f);
 				audioStream = new AudioStream(in);
 			} catch (IOException ex) {

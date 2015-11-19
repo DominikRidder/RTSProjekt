@@ -49,6 +49,10 @@ public class Button extends GuiElement {
 		setHeight(image.getHeight());
 	}
 
+	public String getText(){
+		return text;
+	}
+	
 	public void setImage(BufferedImage img) {
 		this.image = img;
 		ImageSet = true;

@@ -1,13 +1,17 @@
 package gui;
 
+import gameEngine.Game;
 import gameEngine.Screen;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
+import data.ImageLoader;
+
 public class Field extends GuiElement {
 	private BufferedImage img;
+	private String imgname;
 	private String tileID;
 
 	public Field(int x, int y) {
@@ -29,24 +33,28 @@ public class Field extends GuiElement {
 	@Override
 	public void onUpdate(Screen screen) {
 		if (this.needUpdate()){
-			if (img != null){
-				try {
-					img = GuiElement.getScaledImage(img, getWidth(), getHeight());
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+			if (imgname != null){
+				img = Game.getImageLoader().getImage(imgname, getWidth(), getHeight());
 			}
 			this.setUpdate(false);
 		}
 	}
 
+	public void setImg(String imgname) {
+		img = Game.getImageLoader().getImage(imgname, getWidth(), getHeight());
+		this.imgname = imgname;
+	}
+	
+	@Deprecated
 	public void setImg(BufferedImage img) {
-		try {
-			this.img = GuiElement.getScaledImage(img, getWidth(), getHeight());
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		if (img.getWidth() != getWidth() || img.getHeight() != getHeight()){
+			try {
+				this.img = ImageLoader.getScaledImage(img, getWidth(), getHeight());
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}else{
+			this.img = img;
 		}
 	}
 

@@ -126,6 +126,10 @@ public abstract class AbstractEntity implements IEntity, Comparable<AbstractEnti
 	}
 
 	public void drawLifeBar(Graphics2D g2d) {
+		if (img == null){ // Sometime the images aren't loaded until here...
+			return;
+		}
+		
 		g2d.setColor(Color.BLACK);
 		g2d.drawRect(getX(), getY() + img.getHeight() - 4, img.getWidth(), 4);
 		g2d.setColor(Color.GREEN);
