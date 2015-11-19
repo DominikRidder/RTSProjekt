@@ -1,5 +1,6 @@
 #mwinkens: ignorierte dateien:
 bin/
+data/
 .classpath
 .settings/
 .*~
