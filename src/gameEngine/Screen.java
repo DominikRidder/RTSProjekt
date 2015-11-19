@@ -25,12 +25,9 @@ public abstract class Screen {
 
 	public void onUpdate() {
 		if (guiElemens.size() != 0) {
-			for (int i = 0; i < guiElemens.size(); i++) {
-				guiElemens.get(i).onUpdate(this);
+			for (GuiElement guiElem : guiElemens) {
+				guiElem.onUpdate(this);
 			}
-			//			for (GuiElement guiElem : guiElemens) {
-			//				guiElem.onUpdate(this);
-			//			}
 		}
 	}
 
