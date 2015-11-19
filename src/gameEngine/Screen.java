@@ -25,9 +25,12 @@ public abstract class Screen {
 
 	public void onUpdate() {
 		if (guiElemens.size() != 0) {
-			for (GuiElement guiElem : guiElemens) {
-				guiElem.onUpdate(this);
+			for (int i = 0; i < guiElemens.size(); i++) {
+				guiElemens.get(i).onUpdate(this);
 			}
+			//			for (GuiElement guiElem : guiElemens) {
+			//				guiElem.onUpdate(this);
+			//			}
 		}
 	}
 
@@ -94,8 +97,8 @@ public abstract class Screen {
 		guiElemens.add(guielem);
 		updateGuiElementOrder();
 	}
-	
-	public void updateGuiElementOrder(){
+
+	public void updateGuiElementOrder() {
 		Collections.sort(guiElemens);
 	}
 }
