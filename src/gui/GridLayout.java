@@ -10,9 +10,9 @@ public class GridLayout implements ILayout, CoordinateMapping {
 
 	private GuiElement[][] container;
 
-	private Panel parent;
+	private APanel parent;
 
-	public GridLayout(int rows, int columns, Panel parent) {
+	public GridLayout(int rows, int columns, APanel parent) {
 		container = new GuiElement[rows][columns];
 		this.parent = parent;
 	}

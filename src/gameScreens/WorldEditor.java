@@ -10,6 +10,7 @@ import gui.Field;
 import gui.GridLayout;
 import gui.GuiElement;
 import gui.Label;
+import gui.LayerPanel;
 import gui.Panel;
 import gui.ScrollPane;
 
@@ -27,7 +28,7 @@ public class WorldEditor extends Screen implements ActionListener {
 	int scale = 1;
 	int width = 50;
 	int height = 50;
-	Panel pWorld;
+	LayerPanel pWorld;
 	ScrollPane world;
 	Point lastposition;
 	ArrayList<Button> tiles = new ArrayList<Button>(1);
@@ -44,9 +45,9 @@ public class WorldEditor extends Screen implements ActionListener {
 	public void onCreate() {
 		setW(this.getScreenFactory().getGame().getWindow().getWidth());
 		setH(this.getScreenFactory().getGame().getWindow().getHeight());
-		pWorld = new Panel(150, 0, width * 16, height * 16);
+		pWorld = new LayerPanel(150, 0, width * 16, height * 16);
 		world = new ScrollPane(pWorld, getW() - 165, getH() - 200);
-		pWorld.setLayout(new GridLayout(width, height, pWorld));
+		pWorld.addLayout(new GridLayout(width, height, pWorld));
 		addGuiElement(world);
 		for (int i = 0; i < width; i++) {
 			for (int j = 0; j < height; j++) {

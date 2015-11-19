@@ -5,7 +5,7 @@ import gameEngine.Screen;
 import java.awt.Graphics2D;
 import java.awt.Point;
 
-public class Panel extends GuiElement implements CoordinateMapping {
+public class Panel extends APanel implements CoordinateMapping {
 
 	private ILayout layout;
 
