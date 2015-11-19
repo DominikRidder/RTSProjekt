@@ -1,6 +1,7 @@
 package gameScreens;
 
 import entity.AbstractEntity;
+import gameEngine.Game;
 import gameEngine.MousepadListener;
 import gameEngine.Screen;
 import gameEngine.ScreenFactory;
@@ -63,18 +64,16 @@ public class WorldEditor extends Screen implements ActionListener {
 
 		Button grass = null;
 		Button weg = null;
-		try {
-			grass = new Button(0, 0, ImageIO.read(new File("data/grass.png")));
-			grass.setText("grass");
-			grass.setWidth(32);
-			grass.setHeight(32);
-			weg = new Button(0, 0, ImageIO.read(new File("data/weg(gerade).png")));
-			weg.setText("weg");
-			weg.setWidth(32);
-			weg.setHeight(32);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+
+		grass = new Button(0, 0, Game.getImageLoader().getImage("grass.png"));
+		grass.setText("grass.png");
+		grass.setWidth(32);
+		grass.setHeight(32);
+		weg = new Button(0, 0, Game.getImageLoader().getImage("weg(gerade).png"));
+		weg.setText("weg(gerade).png");
+		weg.setWidth(32);
+		weg.setHeight(32);
+			
 		tiles.add(grass);
 		tiles.add(weg);
 
@@ -87,7 +86,7 @@ public class WorldEditor extends Screen implements ActionListener {
 
 		// Funktions start
 
-		Button cursorSizePlus = new Button("Cursorgroesse erhöhen");
+		Button cursorSizePlus = new Button("Cursorgroesse erhoehen");
 		cursorSizePlus.addActionListener(this);
 		Button cursorSizeMinus = new Button("Cursorgroesse verkleinern");
 		cursorSizeMinus.addActionListener(this);
@@ -142,7 +141,7 @@ public class WorldEditor extends Screen implements ActionListener {
 							f = (Field) pWorld.getLayout().getElement((int) lastposition.getX() + i, (int) lastposition.getY() + j);
 							if (selected != -1) {
 								if (f.getImg() == null || !f.getImg().equals(tiles.get(selected).getImage())) {
-									f.setImg(tiles.get(selected).getImage());
+									f.setImg(tiles.get(selected).getText());
 									f.setTileID(tileID);
 								}
 							}
@@ -161,7 +160,7 @@ public class WorldEditor extends Screen implements ActionListener {
 						f = (Field) pWorld.getLayout().getElement((int) lastposition.getX() + i, (int) lastposition.getY() + j);
 						if (selected != -1) {
 							if (f.getImg() == null || !f.getImg().equals(tiles.get(selected).getImage())) {
-								f.setImg(tiles.get(selected).getImage());
+								f.setImg(tiles.get(selected).getText());
 								f.setTileID(tileID);
 							}
 						}
@@ -183,15 +182,15 @@ public class WorldEditor extends Screen implements ActionListener {
 			return;
 		}
 		switch (e.getActionCommand()) { // name of the button
-		case "grass":
+		case "grass.png":
 			selectTile(0);
 			tileID = "g";
 			break;
-		case "weg":
+		case "weg(gerade).png":
 			selectTile(1);
 			tileID = "s";
 			break;
-		case "Cursorgroesse erhöhen":
+		case "Cursorgroesse erhoehen":
 			cursorSize++;
 			((Label) functions.get(2)).setText("Aktuelle Cursor Groesse = " + cursorSize);
 			break;
@@ -212,7 +211,6 @@ public class WorldEditor extends Screen implements ActionListener {
 			}
 			break;
 		case "+":
-			System.out.println("test");
 			scale *= 2;
 			pWorld.setSize(scale * 16 * width, scale * 16 * height);
 			break;

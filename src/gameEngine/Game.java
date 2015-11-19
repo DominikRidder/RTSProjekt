@@ -5,6 +5,8 @@ import java.awt.image.BufferStrategy;
 
 import javax.swing.JFrame;
 
+import data.ImageLoader;
+
 public class Game {
 	private BufferStrategy strat;
 	private final JFrame window = new JFrame();
@@ -13,6 +15,7 @@ public class Game {
 	private MusikThread musikThread;
 	private KeyboardListener keyboardListener;
 	private MousepadListener mousepadListener;
+	private static ImageLoader imageloader;
 
 	public Game(int windowX, int windowY, String title) {
 		window.setSize(windowX, windowY);
@@ -37,6 +40,8 @@ public class Game {
 		window.setFocusable(true);
 		window.setLocationRelativeTo(null);
 
+		imageloader = new ImageLoader();
+		
 		screenFactory = new ScreenFactory(this);
 		gameThread = new GameThread(this);
 		musikThread = new MusikThread();
@@ -67,6 +72,10 @@ public class Game {
 
 	public JFrame getWindow() {
 		return window;
+	}
+	
+	public static ImageLoader getImageLoader(){
+		return imageloader;
 	}
 
 }
