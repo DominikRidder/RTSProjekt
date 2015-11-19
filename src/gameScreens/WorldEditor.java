@@ -58,7 +58,7 @@ public class WorldEditor extends Screen implements ActionListener {
 		pTiles.setLayout(new GridLayout(3, 1, pTiles));
 
 		Panel pFunctions = new Panel(0, pTiles.getY() + pTiles.getHeight(), getW(), getH() - pTiles.getHeight() - 40, true);
-		pFunctions.setLayout(new GridLayout(3, 5, pFunctions));
+		pFunctions.setLayout(new GridLayout(5, 3, pFunctions));
 
 		// Tile initialization start
 
