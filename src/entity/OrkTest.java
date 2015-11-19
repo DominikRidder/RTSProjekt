@@ -1,7 +1,6 @@
 package entity;
 
 import java.awt.Rectangle;
-import java.awt.image.BufferedImage;
 
 
 public class OrkTest extends Unit {
@@ -16,7 +15,6 @@ public class OrkTest extends Unit {
 	private static final int maxlife = 20;
 	private static final int mindmg = 1;
 	private static final int maxdmg = 3;
-	private static BufferedImage img;
 
 	public OrkTest(int x, int y) {
 		super(x, y, img_name);
@@ -25,7 +23,7 @@ public class OrkTest extends Unit {
 		setLife(life);
 		setMinDmg(mindmg);
 		setMaxDmg(maxdmg);
-		imgrg = new Rectangle(getX(), getY(), img.getWidth(), img.getHeight());
+		imgrg = new Rectangle(getX(), getY(), getImg().getWidth(), getImg().getHeight());
 	}
 
 	@Override
