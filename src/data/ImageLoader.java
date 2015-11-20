@@ -25,13 +25,13 @@ public class ImageLoader {
 	public ImageLoader() {
 		data = new HashMap<String, BufferedImage>();
 		
-		try {
-			imgNotFound = ImageIO.read(new File(""));
-		} catch (IOException e) {
-			//e.printStackTrace();
-		}
-		
 		loadRelativNames();
+		
+		try {
+			imgNotFound = ImageIO.read(new File(relativNames.get("NotFound.png")));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public BufferedImage getImage(String imgname) {
@@ -40,6 +40,7 @@ public class ImageLoader {
 		if (path == null) { // Image Name not found in datadir
 			System.out
 					.println("Image not found. Please make sure, that you dont use any Path Information!");
+			data.put(path, imgNotFound);
 			return imgNotFound;
 		}
 
@@ -54,6 +55,7 @@ public class ImageLoader {
 
 			if (img == null) { // Loading failed
 				System.out.println("Loading the Image failed!");
+				data.put(path, imgNotFound);
 				return imgNotFound;
 			} else {
 				data.put(path, img); // Add Image to data HashMap
