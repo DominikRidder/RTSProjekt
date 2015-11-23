@@ -24,6 +24,11 @@ public abstract class AbstractEntity implements IEntity, Comparable<AbstractEnti
 	protected int minDmg;
 	protected int maxDmg;
 	protected String img_name;
+	
+	private final Aura aura = new Aura();
+	
+	private final int owner = 5;
+	static int counter = 0;
 
 	public AbstractEntity(int x, int y, String imgname) {
 		this.x = x;
@@ -130,6 +135,7 @@ public abstract class AbstractEntity implements IEntity, Comparable<AbstractEnti
 	
 	@Override
 	public void draw(Graphics2D g2d) {
+		aura.drawAura(g2d, getX(), getY(), 0, 1, getEntityID());
 		g2d.drawImage(getImg(), getX(), getY(), null);
 		drawLifeBar(g2d);
 	}
