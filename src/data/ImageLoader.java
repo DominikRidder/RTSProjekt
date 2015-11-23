@@ -5,6 +5,7 @@ import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Stack;
 
@@ -17,16 +18,14 @@ public class ImageLoader {
 
 	private String datadir = "data";
 	private String[] datatypes = { ".png" };
-	
+
 	private BufferedImage imgNotFound;
 
-	
-	
 	public ImageLoader() {
 		data = new HashMap<String, BufferedImage>();
-		
+
 		loadRelativNames();
-		
+
 		try {
 			imgNotFound = ImageIO.read(new File(relativNames.get("NotFound.png")));
 		} catch (IOException e) {
@@ -38,8 +37,7 @@ public class ImageLoader {
 		String path = relativNames.get(imgname);
 
 		if (path == null) { // Image Name not found in datadir
-			System.out
-					.println("Image not found. Please make sure, that you dont use any Path Information!");
+			System.out.println("Image not found. Please make sure, that you dont use any Path Information!");
 			data.put(path, imgNotFound);
 			return imgNotFound;
 		}
@@ -63,6 +61,16 @@ public class ImageLoader {
 		}
 
 		return img;
+	}
+
+	public ArrayList<String> getImages(String inDir) {
+		ArrayList<String> imgs = new ArrayList<String>();
+		for (HashMap.Entry<String, String> entry : relativNames.entrySet()) {
+			if (entry.getValue().contains(inDir)) {
+				imgs.add(entry.getKey());
+			}
+		}
+		return imgs;
 	}
 
 	public BufferedImage getImage(String imgname, int width, int height) {
@@ -133,20 +141,16 @@ public class ImageLoader {
 		}
 	}
 
-	public static BufferedImage getScaledImage(BufferedImage image, int width,
-			int height) throws IOException {
+	public static BufferedImage getScaledImage(BufferedImage image, int width, int height) throws IOException {
 		int imageWidth = image.getWidth();
 		int imageHeight = image.getHeight();
 
 		double scaleX = (double) width / imageWidth;
 		double scaleY = (double) height / imageHeight;
-		AffineTransform scaleTransform = AffineTransform.getScaleInstance(
-				scaleX, scaleY);
-		AffineTransformOp bilinearScaleOp = new AffineTransformOp(
-				scaleTransform, AffineTransformOp.TYPE_BILINEAR);
+		AffineTransform scaleTransform = AffineTransform.getScaleInstance(scaleX, scaleY);
+		AffineTransformOp bilinearScaleOp = new AffineTransformOp(scaleTransform, AffineTransformOp.TYPE_BILINEAR);
 
-		return bilinearScaleOp.filter(image, new BufferedImage(width, height,
-				image.getType()));
+		return bilinearScaleOp.filter(image, new BufferedImage(width, height, image.getType()));
 	}
 
 }
