@@ -25,14 +25,15 @@ public abstract class AbstractEntity implements IEntity, Comparable<AbstractEnti
 	protected int maxDmg;
 	protected String img_name;
 	
-	private final Aura aura = new Aura();
+	private final static Aura aura = new Aura();
 	
-	private final int owner = 5;
+	protected int owner;
 	static int counter = 0;
 
-	public AbstractEntity(int x, int y, String imgname) {
+	public AbstractEntity(int x, int y, String imgname, int ownr) {
 		this.x = x;
 		this.y = y;
+		owner = ownr;
 		entityID = entityCounter;
 		entityCounter++;
 		img_name = imgname;
@@ -135,7 +136,7 @@ public abstract class AbstractEntity implements IEntity, Comparable<AbstractEnti
 	
 	@Override
 	public void draw(Graphics2D g2d) {
-		aura.drawAura(g2d, getX(), getY(), 0, 1, getEntityID());
+		aura.drawAura(g2d, getX(), getY(), 0, owner, getEntityID());
 		g2d.drawImage(getImg(), getX(), getY(), null);
 		drawLifeBar(g2d);
 	}
@@ -152,6 +153,23 @@ public abstract class AbstractEntity implements IEntity, Comparable<AbstractEnti
 		g2d.setColor(Color.RED);
 		double lost = (getLife() * 1.) / getMaxLife() * img.getWidth();
 		g2d.fillRect(getX() + 1 + (int) lost, getY() + img.getHeight() - 3, img.getWidth() - 1 - (int) lost, 3);
+	}
+	
+	public static void updateAura()
+	{
+		aura.update();
+	}
+	
+	public static Color getOwnerColor(int owner)
+	{
+		switch(owner)
+		{
+			case 0:return Color.red; 
+			case 1:return Color.blue; 
+			case 2:return Color.green; 
+			case 3:return Color.black; 
+			default:return Color.gray;
+		}
 	}
 	
 	/*IHelath*/

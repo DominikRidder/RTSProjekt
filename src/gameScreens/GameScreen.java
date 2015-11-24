@@ -34,7 +34,7 @@ public class GameScreen extends Screen implements ActionListener{
 		System.out.println("Main Creating!");
 		List<AbstractEntity> entitys = AbstractEntity.getEntities();
 		for (int i = 0; i < 10; i++) {
-			entitys.add(new OrkTest(rnd.nextInt(700) + 40, rnd.nextInt(500) + 40));//TODO get(i) funktion vermeiden, weil LinkedList
+			entitys.add(new OrkTest(rnd.nextInt(700) + 40, rnd.nextInt(500) + 40, rnd.nextInt(5)));//TODO get(i) funktion vermeiden, weil LinkedList
 			entitysOnMap.put(entitys.get(i), pointToMapConst(entitys.get(i).getX(), entitys.get(i).getY()));
 		}
 		Button exit = new Button(this.getScreenFactory().getGame().getWindow().getWidth()-50, 0, 50, 50, "X");
@@ -47,11 +47,12 @@ public class GameScreen extends Screen implements ActionListener{
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
+		AbstractEntity.updateAura();//Updates the aura
 		Collections.sort(getEntitys());// In diese Zeile hab ich so viel hirnschmalz verbraten
-		for (int i = 0; i < getEntitys().size(); i++) {//linkedList performance plus
+		for (int i = 0; i < getEntitys().size(); i++) {
 			getEntitys().get(i).update(this);
 		}
-		for (int i = 0; i < getEntitys().size(); i++) {//linkedList performance plus
+		for (int i = 0; i < getEntitys().size(); i++) {
 			if(getEntitys().get(i).checkDeath())//Toete tote
 				i--;//liste wird kleiner
 		}

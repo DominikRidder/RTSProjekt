@@ -16,8 +16,8 @@ public class OrkTest extends Unit {
 	private static final int mindmg = 1;
 	private static final int maxdmg = 3;
 
-	public OrkTest(int x, int y) {
-		super(x, y, img_name);
+	public OrkTest(int x, int y, int owner) {
+		super(x, y, img_name, owner);
 		rg = new Rectangle(getX(), getY(), breite, hoehe);
 		setMaxLife(maxlife);
 		setLife(life);

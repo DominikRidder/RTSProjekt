@@ -17,8 +17,8 @@ public abstract class Unit extends AbstractEntity {
 	//private int w, h;
 	private int lastAttack = 0;
 
-	public Unit(int x, int y, String img_name) {
-		super(x, y, img_name);
+	public Unit(int x, int y, String img_name, int owner) {
+		super(x, y, img_name, owner);
 	}
 
 	@Override

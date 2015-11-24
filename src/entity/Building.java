@@ -4,8 +4,8 @@ import gameEngine.Screen;
 
 public abstract class Building extends AbstractEntity {
 
-	public Building(int x, int y, String img_name) {
-		super(x, y, img_name);
+	public Building(int x, int y, String img_name, int owner) {
+		super(x, y, img_name, owner);
 		// TODO Auto-generated constructor stub
 	}
 

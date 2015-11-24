@@ -1,5 +1,6 @@
 package data;
 
+import java.awt.Color;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
@@ -11,13 +12,15 @@ import java.util.Stack;
 
 import javax.imageio.ImageIO;
 
+import entity.AbstractEntity;
+
 public class ImageLoader {
 
-	private HashMap<String, BufferedImage> data;
+	private final HashMap<String, BufferedImage> data;
 	private HashMap<String, String> relativNames;
 
-	private String datadir = "data";
-	private String[] datatypes = { ".png" };
+	private final String datadir = "data";
+	private final String[] datatypes = { ".png" };
 
 	private BufferedImage imgNotFound;
 
@@ -61,6 +64,36 @@ public class ImageLoader {
 		}
 
 		return img;
+	}
+	
+	public BufferedImage getImage(String imgname, int owner)
+	{
+		BufferedImage img = getImage(imgname);
+		if(img == imgNotFound)
+			return img;
+		String path = relativNames.get(imgname);
+		String colpath = path+"col"+owner;
+		BufferedImage img2 = data.get(colpath);
+		System.out.println(colpath);
+		
+		if(img2 == null)
+		{
+			System.out.println("This happens with owner"+owner);
+			Color c = AbstractEntity.getOwnerColor(owner);
+			img2 = img;
+			for(int i = 0; i < img2.getHeight(); i++)
+			{
+				for(int j = 0; j < img2.getWidth(); j++)
+				{
+					int alpha = Math.abs((img.getRGB(j,i) & 0xff000000) >> 24);
+					img2.setRGB(j, i, new Color(c.getRed(), c.getBlue(), c.getBlue(), alpha).getRGB());
+				}
+			}
+			data.put(colpath, img2);
+			data.toString();
+		}
+		return img2;
+		
 	}
 
 	public ArrayList<String> getImages(String inDir) {
