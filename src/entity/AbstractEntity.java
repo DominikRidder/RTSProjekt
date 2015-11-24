@@ -146,9 +146,15 @@ public abstract class AbstractEntity implements IEntity, Comparable<AbstractEnti
 	@Override
 	public void draw(Graphics2D g2d) {
 		getImageBounds();//Update the image position
-		aura.drawAura(g2d, imgrg.x, imgrg.y, 0, owner, getEntityID());
+		
 		g2d.drawImage(getImg(), imgrg.x, imgrg.y, null);
+		
 		drawLifeBar(g2d);
+	}
+	
+	public void markOwn(Graphics2D g2d)
+	{
+		aura.drawAura(g2d, imgrg.x, imgrg.y, img_name, owner, getEntityID());
 	}
 
 	public void drawLifeBar(Graphics2D g2d) {
@@ -163,11 +169,6 @@ public abstract class AbstractEntity implements IEntity, Comparable<AbstractEnti
 		g2d.setColor(Color.RED);
 		double lost = (getLife() * 1.) / getMaxLife() * img.getWidth();
 		g2d.fillRect(imgrg.x + 1 + (int) lost, imgrg.y + img.getHeight() - 3, img.getWidth() - 1 - (int) lost, 3);
-	}
-	
-	public static void updateAura()
-	{
-		aura.update();
 	}
 	
 	public static Color getOwnerColor(int owner)

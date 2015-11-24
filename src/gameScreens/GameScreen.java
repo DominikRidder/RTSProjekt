@@ -49,7 +49,6 @@ public class GameScreen extends Screen implements ActionListener{
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
-		AbstractEntity.updateAura();//Updates the aura
 		Collections.sort(getEntitys());// In diese Zeile hab ich so viel hirnschmalz verbraten
 		for (int i = 0; i < getEntitys().size(); i++) {
 			getEntitys().get(i).update(this);
@@ -72,6 +71,9 @@ public class GameScreen extends Screen implements ActionListener{
 		}*/
 		for (int i = 0; i < getEntitys().size(); i++) {
 			getEntitys().get(i).draw(g2d);
+		}
+		for (int i = 0; i < getEntitys().size(); i++) {
+			getEntitys().get(i).markOwn(g2d);
 		}
 		MousepadListener mpl = this.getScreenFactory().getGame().getMousepadListener();
 		if (mpl.isDragging()) {

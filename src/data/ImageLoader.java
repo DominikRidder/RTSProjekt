@@ -12,8 +12,6 @@ import java.util.Stack;
 
 import javax.imageio.ImageIO;
 
-import entity.AbstractEntity;
-
 public class ImageLoader {
 
 	private final HashMap<String, BufferedImage> data;
@@ -79,16 +77,40 @@ public class ImageLoader {
 		if(img2 == null)
 		{
 			//System.out.println("This happens with owner"+owner);
-			Color c = AbstractEntity.getOwnerColor(owner);
-			img2 = img;
+			img2 = new BufferedImage(img.getWidth(), img.getHeight(), BufferedImage.TYPE_4BYTE_ABGR);
+			for(int i = 1; i < img2.getHeight()-1; i++)
+			{
+				for(int j = 1; j < img2.getWidth()-1; j++)
+				{
+					int alpha = Math.abs((img.getRGB(j,i) & 0xff000000) >> 24);
+					if(alpha == 0)
+					{
+						img2.setRGB(j, i, 0);
+						continue;
+					}
+					img2.setRGB(j+1, i+1, Color.GREEN.getRGB());
+					img2.setRGB(j-1, i-1, Color.GREEN.getRGB());
+					img2.setRGB(j+1, i-1, Color.GREEN.getRGB());
+					img2.setRGB(j-1, i+1, Color.GREEN.getRGB());
+					
+					img2.setRGB(j+1, i, Color.GREEN.getRGB());
+					img2.setRGB(j, i+1, Color.GREEN.getRGB());
+					img2.setRGB(j-1, i, Color.GREEN.getRGB());
+					img2.setRGB(j, i-1, Color.GREEN.getRGB());
+					
+				}
+			}
 			for(int i = 0; i < img2.getHeight(); i++)
 			{
 				for(int j = 0; j < img2.getWidth(); j++)
 				{
 					int alpha = Math.abs((img.getRGB(j,i) & 0xff000000) >> 24);
-					img2.setRGB(j, i, new Color(c.getRed(), c.getBlue(), c.getBlue(), alpha).getRGB());
+					if(alpha == 0)
+						continue;
+					img2.setRGB(j, i, 0);
 				}
 			}
+			
 			data.put(colpath, img2);
 			data.toString();
 		}
