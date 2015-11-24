@@ -14,30 +14,31 @@ public abstract class AbstractEntity implements IEntity, Comparable<AbstractEnti
 	private static int entityCounter = 0;
 	private static List<AbstractEntity> l_Entities = new ArrayList<AbstractEntity>();
 	private int x, y;
+	protected int rad;
 	
 	//static BufferedImage img;
-	protected Rectangle rg;
 	protected Rectangle imgrg;
 	
-	protected int maxLife;
-	protected int life;
-	protected int minDmg;
-	protected int maxDmg;
-	protected String img_name;
+	protected int maxLife = 1;//default value
+	protected int life = 1;//default value
+	protected int minDmg = 0;//default value
+	protected int maxDmg = 0;//default value
+	protected String img_name;//will maybe set, or imgnotfound.png
 	
 	private final static Aura aura = new Aura();
 	
 	protected int owner;
 	static int counter = 0;
 
-	public AbstractEntity(int x, int y, String imgname, int ownr) {
+	public AbstractEntity(int x, int y, int rad, String imgname, int ownr) {
 		this.x = x;
 		this.y = y;
+		this.rad = rad;
 		owner = ownr;
 		entityID = entityCounter;
 		entityCounter++;
 		img_name = imgname;
-		imgrg = new Rectangle(getX(), getY(), getImg().getWidth(), getImg().getHeight());
+		imgrg = new Rectangle(getX()-getImg().getWidth()/2, getY()-getImg().getHeight(), getImg().getWidth(), getImg().getHeight());
 		l_Entities.add(this);
 	}
 
@@ -74,9 +75,17 @@ public abstract class AbstractEntity implements IEntity, Comparable<AbstractEnti
 		return l_Entities;
 	}
 
-	public abstract Rectangle getBounds();
+	public Rectangle getBounds() {
+		Rectangle rg = new Rectangle(getX()-rad/2, getY()-rad/2, rad, rad);
+		return rg;
+	}
+	
 
-	public abstract Rectangle getImageBounds();
+	public Rectangle getImageBounds() {
+		imgrg.x = this.getX()-getImg().getWidth()/2;
+		imgrg.y = this.getY()-getImg().getHeight();
+		return imgrg;
+	}
 
 	public AbstractEntity hasCollision() {//sucht automatisch die naechste hitbox
 		for (int i = 0; i < l_Entities.size(); i++) {
@@ -91,7 +100,7 @@ public abstract class AbstractEntity implements IEntity, Comparable<AbstractEnti
 	}
 
 	public boolean isCollision(AbstractEntity e) {
-		return e.getBounds().intersects(getBounds());
+		return e.rad+this.rad > distance(e);
 		/*Rectangle rg1 = e.getBounds();
 		Rectangle rg2 = this.getBounds();
 		if ((Math.abs(e.getX() - this.getX()) < (rg1.getWidth() + rg2.getWidth())) && (Math.abs(e.getY() - this.getY()) < (rg1.getHeight() + rg2.getHeight()))) {
@@ -136,8 +145,9 @@ public abstract class AbstractEntity implements IEntity, Comparable<AbstractEnti
 	
 	@Override
 	public void draw(Graphics2D g2d) {
-		aura.drawAura(g2d, getX(), getY(), 0, owner, getEntityID());
-		g2d.drawImage(getImg(), getX(), getY(), null);
+		getImageBounds();//Update the image position
+		aura.drawAura(g2d, imgrg.x, imgrg.y, 0, owner, getEntityID());
+		g2d.drawImage(getImg(), imgrg.x, imgrg.y, null);
 		drawLifeBar(g2d);
 	}
 
@@ -147,12 +157,12 @@ public abstract class AbstractEntity implements IEntity, Comparable<AbstractEnti
 			return;
 		}
 		g2d.setColor(Color.BLACK);
-		g2d.drawRect(getX(), getY() + img.getHeight() - 4, img.getWidth(), 4);
+		g2d.drawRect(imgrg.x, imgrg.y + img.getHeight() - 4, img.getWidth(), 4);
 		g2d.setColor(Color.GREEN);
-		g2d.fillRect(getX() + 1, getY() + img.getHeight() - 3, img.getWidth() - 1, 3);
+		g2d.fillRect(imgrg.x + 1, imgrg.y + img.getHeight() - 3, img.getWidth() - 1, 3);
 		g2d.setColor(Color.RED);
 		double lost = (getLife() * 1.) / getMaxLife() * img.getWidth();
-		g2d.fillRect(getX() + 1 + (int) lost, getY() + img.getHeight() - 3, img.getWidth() - 1 - (int) lost, 3);
+		g2d.fillRect(imgrg.x + 1 + (int) lost, imgrg.y + img.getHeight() - 3, img.getWidth() - 1 - (int) lost, 3);
 	}
 	
 	public static void updateAura()

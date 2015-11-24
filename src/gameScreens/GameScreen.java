@@ -2,6 +2,7 @@ package gameScreens;
 
 import entity.AbstractEntity;
 import entity.OrkTest;
+import entity.Tree;
 import gameEngine.MousepadListener;
 import gameEngine.Screen;
 import gameEngine.ScreenFactory;
@@ -35,6 +36,7 @@ public class GameScreen extends Screen implements ActionListener{
 		List<AbstractEntity> entitys = AbstractEntity.getEntities();
 		for (int i = 0; i < 10; i++) {
 			entitys.add(new OrkTest(rnd.nextInt(700) + 40, rnd.nextInt(500) + 40, rnd.nextInt(5)));//TODO get(i) funktion vermeiden, weil LinkedList
+			entitys.add(new Tree(rnd.nextInt(700) + 40, rnd.nextInt(500) + 40, rnd.nextInt(2)));
 			entitysOnMap.put(entitys.get(i), pointToMapConst(entitys.get(i).getX(), entitys.get(i).getY()));
 		}
 		Button exit = new Button(this.getScreenFactory().getGame().getWindow().getWidth()-50, 0, 50, 50, "X");

@@ -74,11 +74,11 @@ public class ImageLoader {
 		String path = relativNames.get(imgname);
 		String colpath = path+"col"+owner;
 		BufferedImage img2 = data.get(colpath);
-		System.out.println(colpath);
+		//System.out.println(colpath);
 		
 		if(img2 == null)
 		{
-			System.out.println("This happens with owner"+owner);
+			//System.out.println("This happens with owner"+owner);
 			Color c = AbstractEntity.getOwnerColor(owner);
 			img2 = img;
 			for(int i = 0; i < img2.getHeight(); i++)
