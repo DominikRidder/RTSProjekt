@@ -1,6 +1,5 @@
 package data;
 
-import java.awt.Color;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
@@ -11,6 +10,8 @@ import java.util.HashMap;
 import java.util.Stack;
 
 import javax.imageio.ImageIO;
+
+import entity.AbstractEntity;
 
 public class ImageLoader {
 
@@ -77,6 +78,8 @@ public class ImageLoader {
 		if(img2 == null)
 		{
 			//System.out.println("This happens with owner"+owner);
+			int color = AbstractEntity.getOwnerColor(owner).getRGB();
+			
 			img2 = new BufferedImage(img.getWidth(), img.getHeight(), BufferedImage.TYPE_4BYTE_ABGR);
 			for(int i = 1; i < img2.getHeight()-1; i++)
 			{
@@ -88,15 +91,15 @@ public class ImageLoader {
 						img2.setRGB(j, i, 0);
 						continue;
 					}
-					img2.setRGB(j+1, i+1, Color.GREEN.getRGB());
-					img2.setRGB(j-1, i-1, Color.GREEN.getRGB());
-					img2.setRGB(j+1, i-1, Color.GREEN.getRGB());
-					img2.setRGB(j-1, i+1, Color.GREEN.getRGB());
+					img2.setRGB(j+1, i+1, color);
+					img2.setRGB(j-1, i-1, color);
+					img2.setRGB(j+1, i-1, color);
+					img2.setRGB(j-1, i+1, color);
 					
-					img2.setRGB(j+1, i, Color.GREEN.getRGB());
-					img2.setRGB(j, i+1, Color.GREEN.getRGB());
-					img2.setRGB(j-1, i, Color.GREEN.getRGB());
-					img2.setRGB(j, i-1, Color.GREEN.getRGB());
+					img2.setRGB(j+1, i, color);
+					img2.setRGB(j, i+1, color);
+					img2.setRGB(j-1, i, color);
+					img2.setRGB(j, i-1, color);
 					
 				}
 			}

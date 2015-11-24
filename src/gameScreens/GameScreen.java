@@ -35,7 +35,7 @@ public class GameScreen extends Screen implements ActionListener{
 		System.out.println("Main Creating!");
 		List<AbstractEntity> entitys = AbstractEntity.getEntities();
 		for (int i = 0; i < 10; i++) {
-			entitys.add(new OrkTest(rnd.nextInt(700) + 40, rnd.nextInt(500) + 40, rnd.nextInt(5)));//TODO get(i) funktion vermeiden, weil LinkedList
+			entitys.add(new OrkTest(rnd.nextInt(700) + 40, rnd.nextInt(500) + 40, i%8));//TODO get(i) funktion vermeiden, weil LinkedList
 			entitys.add(new Tree(rnd.nextInt(700) + 40, rnd.nextInt(500) + 40, rnd.nextInt(2)));
 			entitysOnMap.put(entitys.get(i), pointToMapConst(entitys.get(i).getX(), entitys.get(i).getY()));
 		}
