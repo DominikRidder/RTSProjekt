@@ -17,8 +17,8 @@ public abstract class Unit extends AbstractEntity {
 	//private int w, h;
 	private int lastAttack = 0;
 
-	public Unit(int x, int y, String img_name) {
-		super(x, y, img_name);
+	public Unit(int x, int y, int rad, String img_name, int owner) {
+		super(x, y, rad, img_name, owner);
 	}
 
 	@Override
@@ -43,6 +43,7 @@ public abstract class Unit extends AbstractEntity {
 				wayPoints.clear();
 				int i = 0;
 				for (i = 0; i < getEntities().size(); i++) {
+					
 					if (!fight && getEntities().get(i).getImageBounds().contains(mpl.getX(), mpl.getY()) 
 							&& this.getEntityID() != getEntities().get(i).getEntityID()
 							&& this.getLife() > 0

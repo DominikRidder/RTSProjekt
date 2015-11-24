@@ -5,28 +5,29 @@ import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Stack;
 
 import javax.imageio.ImageIO;
 
+import entity.AbstractEntity;
+
 public class ImageLoader {
 
-	private HashMap<String, BufferedImage> data;
+	private final HashMap<String, BufferedImage> data;
 	private HashMap<String, String> relativNames;
 
-	private String datadir = "data";
-	private String[] datatypes = { ".png" };
-	
+	private final String datadir = "data";
+	private final String[] datatypes = { ".png" };
+
 	private BufferedImage imgNotFound;
 
-	
-	
 	public ImageLoader() {
 		data = new HashMap<String, BufferedImage>();
-		
+
 		loadRelativNames();
-		
+
 		try {
 			imgNotFound = ImageIO.read(new File(relativNames.get("NotFound.png")));
 		} catch (IOException e) {
@@ -38,8 +39,7 @@ public class ImageLoader {
 		String path = relativNames.get(imgname);
 
 		if (path == null) { // Image Name not found in datadir
-			System.out
-					.println("Image not found. Please make sure, that you dont use any Path Information!");
+			System.out.println("Image not found. Please make sure, that you dont use any Path Information!");
 			data.put(path, imgNotFound);
 			return imgNotFound;
 		}
@@ -62,6 +62,72 @@ public class ImageLoader {
 		}
 
 		return img;
+	}
+	
+	public BufferedImage getImage(String imgname, int owner)
+	{
+		BufferedImage img = getImage(imgname);
+		if(img == imgNotFound)
+			return img;
+		String path = relativNames.get(imgname);
+		String colpath = path+"col"+owner;
+		BufferedImage img2 = data.get(colpath);
+		//System.out.println(colpath);
+		
+		if(img2 == null)
+		{
+			//System.out.println("This happens with owner"+owner);
+			int color = AbstractEntity.getOwnerColor(owner).getRGB();
+			
+			img2 = new BufferedImage(img.getWidth(), img.getHeight(), BufferedImage.TYPE_4BYTE_ABGR);
+			for(int i = 1; i < img2.getHeight()-1; i++)
+			{
+				for(int j = 1; j < img2.getWidth()-1; j++)
+				{
+					int alpha = Math.abs((img.getRGB(j,i) & 0xff000000) >> 24);
+					if(alpha == 0)
+					{
+						img2.setRGB(j, i, 0);
+						continue;
+					}
+					img2.setRGB(j+1, i+1, color);
+					img2.setRGB(j-1, i-1, color);
+					img2.setRGB(j+1, i-1, color);
+					img2.setRGB(j-1, i+1, color);
+					
+					img2.setRGB(j+1, i, color);
+					img2.setRGB(j, i+1, color);
+					img2.setRGB(j-1, i, color);
+					img2.setRGB(j, i-1, color);
+					
+				}
+			}
+			for(int i = 0; i < img2.getHeight(); i++)
+			{
+				for(int j = 0; j < img2.getWidth(); j++)
+				{
+					int alpha = Math.abs((img.getRGB(j,i) & 0xff000000) >> 24);
+					if(alpha == 0)
+						continue;
+					img2.setRGB(j, i, 0);
+				}
+			}
+			
+			data.put(colpath, img2);
+			data.toString();
+		}
+		return img2;
+		
+	}
+
+	public ArrayList<String> getImages(String inDir) {
+		ArrayList<String> imgs = new ArrayList<String>();
+		for (HashMap.Entry<String, String> entry : relativNames.entrySet()) {
+			if (entry.getValue().contains(inDir)) {
+				imgs.add(entry.getKey());
+			}
+		}
+		return imgs;
 	}
 
 	public BufferedImage getImage(String imgname, int width, int height) {
@@ -133,20 +199,16 @@ public class ImageLoader {
 		}
 	}
 
-	public static BufferedImage getScaledImage(BufferedImage image, int width,
-			int height) throws IOException {
+	public static BufferedImage getScaledImage(BufferedImage image, int width, int height) throws IOException {
 		int imageWidth = image.getWidth();
 		int imageHeight = image.getHeight();
 
 		double scaleX = (double) width / imageWidth;
 		double scaleY = (double) height / imageHeight;
-		AffineTransform scaleTransform = AffineTransform.getScaleInstance(
-				scaleX, scaleY);
-		AffineTransformOp bilinearScaleOp = new AffineTransformOp(
-				scaleTransform, AffineTransformOp.TYPE_BILINEAR);
+		AffineTransform scaleTransform = AffineTransform.getScaleInstance(scaleX, scaleY);
+		AffineTransformOp bilinearScaleOp = new AffineTransformOp(scaleTransform, AffineTransformOp.TYPE_BILINEAR);
 
-		return bilinearScaleOp.filter(image, new BufferedImage(width, height,
-				image.getType()));
+		return bilinearScaleOp.filter(image, new BufferedImage(width, height, image.getType()));
 	}
 
 }

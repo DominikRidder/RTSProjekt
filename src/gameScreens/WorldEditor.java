@@ -39,6 +39,8 @@ public class WorldEditor extends Screen implements ActionListener {
 	int selected = -1;
 	int cursorSize = 1;
 	String tileID = "";
+	Label lblLayer = new Label("Aktivierter Layer = L1");
+	Panel pTiles;
 
 	public WorldEditor(ScreenFactory screenFactory) {
 		super(screenFactory);
@@ -48,45 +50,56 @@ public class WorldEditor extends Screen implements ActionListener {
 	public void onCreate() {
 		setW(this.getScreenFactory().getGame().getWindow().getWidth());
 		setH(this.getScreenFactory().getGame().getWindow().getHeight());
-		pWorld = new LayerPanel(150, 0, width * 16, height * 16);
+		pWorld = new LayerPanel(150, 40, width * 16, height * 16);
 		world = new ScrollPane(pWorld, getW() - 165, getH() - 200);
 		pWorld.addLayout(new GridLayout(width, height, pWorld));
+		pWorld.addLayout(new GridLayout(width, height, pWorld));
+		pWorld.addLayout(new GridLayout(width, height, pWorld));
+		pWorld.addLayout(new GridLayout(width, height, pWorld));
 		addGuiElement(world);
-		for (int i = 0; i < width; i++) {
-			for (int j = 0; j < height; j++) {
-				pWorld.addElement(new Field(i * 16, j * 16));
+		for (int l = 0; l < pWorld.numberOfLayouts(); l++) {
+			pWorld.setActualLayer(l);
+			for (int i = 0; i < width; i++) {
+				for (int j = 0; j < height; j++) {
+					pWorld.addElement(new Field(i * 16, j * 16));
+				}
 			}
 		}
+		pWorld.setActualLayer(0);
 
-		Panel pTiles = new Panel(0, 0, 145, getH() - 185, true);
+		Panel pMenue = new Panel(0, 0, getW(), 25);
+		pMenue.setLayout(new GridLayout(1, 5, pMenue));
+
+		pTiles = new Panel(0, 40, 145, getH() - 185, true);
 		pTiles.setLayout(new GridLayout(3, 1, pTiles));
 
-		Panel pFunctions = new Panel(0, pTiles.getY() + pTiles.getHeight(), getW(), getH() - pTiles.getHeight() - 40, true);
+		Panel pFunctions = new Panel(0, pTiles.getY() + pTiles.getHeight(), getW(), getH() - pTiles.getHeight() - 80, true);
 		pFunctions.setLayout(new GridLayout(5, 3, pFunctions));
 
-		// Tile initialization start
+		// Menue Start
 
-		Button grass = null;
-		Button weg = null;
+		Button btnL1 = null;
+		Button btnL2 = null;
+		Button btnL3 = null;
+		Button btnL4 = null;
 
-		grass = new Button(0, 0, Game.getImageLoader().getImage("grass.png"));
-		grass.setText("grass.png");
-		grass.setWidth(32);
-		grass.setHeight(32);
-		weg = new Button(0, 0, Game.getImageLoader().getImage("weg(gerade).png"));
-		weg.setText("weg(gerade).png");
-		weg.setWidth(32);
-		weg.setHeight(32);
+		btnL1 = new Button("L1");
+		btnL2 = new Button("L2");
+		btnL3 = new Button("L3");
+		btnL4 = new Button("L4");
 
-		tiles.add(grass);
-		tiles.add(weg);
+		btnL1.addActionListener(this);
+		btnL2.addActionListener(this);
+		btnL3.addActionListener(this);
+		btnL4.addActionListener(this);
 
-		for (int i = 0; i < tiles.size(); i++) {
-			tiles.get(i).addActionListener(this);
-			pTiles.addElement(tiles.get(i));
-		}
+		pMenue.addElement(btnL1);
+		pMenue.addElement(btnL2);
+		pMenue.addElement(btnL3);
+		pMenue.addElement(btnL4);
+		pMenue.addElement(lblLayer);
 
-		// Tile initialization end
+		// Menue End
 
 		// Funktions start
 
@@ -124,8 +137,11 @@ public class WorldEditor extends Screen implements ActionListener {
 
 		// Funktion end
 
+		addGuiElement(pMenue);
 		addGuiElement(pTiles);
 		addGuiElement(pFunctions);
+
+		loadTiles("L1", this);
 
 	}
 
@@ -144,7 +160,7 @@ public class WorldEditor extends Screen implements ActionListener {
 					for (int i = 0; i <= till && i + lastposition.getX() < pWorld.getLayout().getRowSize(); i++) {
 						for (int j = 0; j <= till && j + lastposition.getY() < pWorld.getLayout().getColumnSize(); j++) {
 							f = (Field) pWorld.getLayout().getElement((int) lastposition.getX() + i, (int) lastposition.getY() + j);
-							if (selected != -1) {
+							if (selected != -1 && selected < tiles.size()) {
 								if (f.getImg() == null || !f.getImg().equals(tiles.get(selected).getImage())) {
 									f.setImg(tiles.get(selected).getText());
 									f.setTileID(tileID);
@@ -163,7 +179,7 @@ public class WorldEditor extends Screen implements ActionListener {
 				for (int i = 0; i <= till && i + lastposition.getX() < pWorld.getLayout().getRowSize(); i++) {
 					for (int j = 0; j <= till && j + lastposition.getY() < pWorld.getLayout().getColumnSize(); j++) {
 						f = (Field) pWorld.getLayout().getElement((int) lastposition.getX() + i, (int) lastposition.getY() + j);
-						if (selected != -1) {
+						if (selected != -1 && selected < tiles.size()) {
 							if (f.getImg() == null || !f.getImg().equals(tiles.get(selected).getImage())) {
 								f.setImg(tiles.get(selected).getText());
 								f.setTileID(tileID);
@@ -187,13 +203,25 @@ public class WorldEditor extends Screen implements ActionListener {
 			return;
 		}
 		switch (e.getActionCommand()) { // name of the button
-		case "grass.png":
-			selectTile(0);
-			tileID = "g";
+		case "L1":
+			lblLayer.setText("Aktivierter Layer = " + e.getActionCommand());
+			pWorld.setActualLayer(0);
+			loadTiles(e.getActionCommand(), this);
 			break;
-		case "weg(gerade).png":
-			selectTile(1);
-			tileID = "s";
+		case "L2":
+			lblLayer.setText("Aktivierter Layer = " + e.getActionCommand());
+			pWorld.setActualLayer(1);
+			loadTiles(e.getActionCommand(), this);
+			break;
+		case "L3":
+			lblLayer.setText("Aktivierter Layer = " + e.getActionCommand());
+			pWorld.setActualLayer(2);
+			loadTiles(e.getActionCommand(), this);
+			break;
+		case "L4":
+			lblLayer.setText("Aktivierter Layer = " + e.getActionCommand());
+			pWorld.setActualLayer(3);
+			loadTiles(e.getActionCommand(), this);
 			break;
 		case "Cursorgroesse erhoehen":
 			cursorSize++;
@@ -221,9 +249,25 @@ public class WorldEditor extends Screen implements ActionListener {
 			}
 			break;
 		default:
-			System.out.println("Unknown ActionEvent: " + e.getActionCommand());
+			int tile = isInTiles(e.getActionCommand());
+			if (tile != -1) {
+				selectTile(tile);
+				tileID = e.getActionCommand();
+			} else {
+				System.out.println("Unknown ActionEvent: " + e.getActionCommand());
+			}
 			break;
 		}
+	}
+
+	public int isInTiles(String tile) {
+		for (int i = 0; i < tiles.size(); i++) {
+			if (tiles.get(i).getText().equals(tile)) {
+				return i;
+			}
+		}
+
+		return -1;
 	}
 
 	public void selectTile(int selected) {
@@ -236,30 +280,34 @@ public class WorldEditor extends Screen implements ActionListener {
 	}
 
 	public void mapToString() {
-		StringBuffer map = new StringBuffer();
-		for (int i = 0; i < pWorld.getLayout().getRowSize(); i++) {
-			for (int j = 0; j < pWorld.getLayout().getColumnSize(); j++) {
-				if (((Field) pWorld.getLayout().getElement(j, i)).getTileID() != null) {
-					map.append(((Field) pWorld.getLayout().getElement(j, i)).getTileID());
-				} else {
-					map.append("v");
+		StringBuffer allLayers = new StringBuffer(pWorld.getLayout().getRowSize() + ";" + pWorld.getLayout().getColumnSize());
+		for (int i = 0; i < pWorld.numberOfLayouts(); i++) {
+			pWorld.setActualLayer(i);
+			StringBuffer map = new StringBuffer();
+			for (int j = 0; j < pWorld.getLayout().getRowSize(); j++) {
+				for (int k = 0; k < pWorld.getLayout().getColumnSize(); k++) {
+					if (((Field) pWorld.getLayout().getElement(k, j)).getTileID() != null) {
+						map.append("(" + ((Field) pWorld.getLayout().getElement(k, j)).getTileID() + ")");
+					} else {
+						map.append("(v)");
+					}
 				}
 			}
-		}
-
-		String actTile = map.substring(0, 1);
-		int counter = 1;
-		StringBuffer tmp = new StringBuffer();
-		for (int i = 1; i < map.length(); i++) {
-			if (map.substring(i, i + 1).equals(actTile)) {
-				counter++;
-			} else {
-				tmp.append(";" + counter + actTile);
-				actTile = map.substring(i, i + 1);
-				counter = 1;
+			String actTile = map.substring(0, nextTileInString(0, map.toString()));
+			int counter = 1;
+			StringBuffer tmp = new StringBuffer();
+			for (int j = actTile.length(); j < map.length() - 1; j += actTile.length()) {
+				if (map.substring(j, nextTileInString(j, map.toString())).equals(actTile)) {
+					counter++;
+				} else {
+					tmp.append(counter + actTile + ";");
+					actTile = map.substring(j, nextTileInString(j, map.toString()));
+					counter = 1;
+				}
 			}
+			tmp.append(counter + actTile);
+			allLayers.append("\n" + tmp);
 		}
-		map = new StringBuffer(pWorld.getLayout().getRowSize() + ";" + pWorld.getLayout().getColumnSize()).append(tmp);
 
 		JFileChooser chooser = new JFileChooser();
 		chooser.setCurrentDirectory(new File("data/"));
@@ -267,7 +315,7 @@ public class WorldEditor extends Screen implements ActionListener {
 		if (retrival == JFileChooser.APPROVE_OPTION) {
 			try {
 				FileWriter fw = new FileWriter(chooser.getSelectedFile() + ".mpd");
-				fw.write(map.toString());
+				fw.write(allLayers.toString());
 				fw.flush();
 				fw.close();
 			} catch (Exception ex) {
@@ -291,45 +339,77 @@ public class WorldEditor extends Screen implements ActionListener {
 				pWorld.removeAllLayouts();
 				pWorld.setWidth(width * 16);
 				pWorld.setHeight(height * 16);
-				pWorld.addLayout(new GridLayout(width, height, pWorld));
-				for (int i = 0; i < height; i++) {
-					for (int j = 0; j < width; j++) {
-						pWorld.addElement(new Field(i * 16, j * 16));
-					}
-				}
-				int containerI = -1;
-				int containerJ = 0;
-				for (int i = 2; i < data.length; i++) {
-					String pair = data[i];
-					String imgname = null;
-					switch (pair.charAt(pair.length() - 1)) {
-					case 'g':
-						imgname = "grass.png";
-						break;
-					case 's':
-						imgname = "weg(gerade).png";
-						break;
-					default:
-						imgname = "";
-						break;
-					}
-					for (int j = Integer.parseInt(pair.split("[a-z]")[0]); j > 0; j--) {
-						if (containerI < height - 1) {
-							containerI++;
-						} else {
-							containerJ++;
-							containerI = 0;
-						}
-						if (imgname != "") {
-							((Field) pWorld.getLayout().getElement(containerI, containerJ)).setImg(imgname);
+				int layouts = 0;
+				while ((line = bf.readLine()) != null) {
+					pWorld.addLayout(new GridLayout(width, height, pWorld));
+					pWorld.setActualLayer(layouts);
+					for (int i = 0; i < height; i++) {
+						for (int j = 0; j < width; j++) {
+							pWorld.addElement(new Field(i * 16, j * 16));
 						}
 					}
+					int containerI = -1;
+					int containerJ = 0;
+					//					int offset = nextTileInString(0, line);
+					String tiles[] = line.split(";");
+					for (int i = 0; i < tiles.length; i++) {
+						//						String tile = line.substring(i, nextTileInString(i, line));
+						data = tiles[i].split("\\(", 2);
+						int quantity = Integer.parseInt(data[0]);
+						String imgname = data[1].substring(0, data[1].length() - 1);
+						for (int j = quantity; j > 0; j--) {
+							if (containerI < height - 1) {
+								containerI++;
+							} else {
+								containerJ++;
+								containerI = 0;
+							}
+							if (!imgname.equals("v")) {
+								((Field) pWorld.getLayout().getElement(containerI, containerJ)).setImg(imgname);
+							}
+						}
+					}
+					layouts++;
 				}
-
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 
+		}
+	}
+
+	public int nextTileInString(int start, String searchString) {
+		int count = 0;
+		int i = start;
+		boolean first = false;
+		for (i = start; i < searchString.length(); i++) {
+			if (searchString.charAt(i) == '(') {
+				first = true;
+				count++;
+			} else if (searchString.charAt(i) == ')') {
+				count--;
+			}
+			if (count == 0 && first) {
+				return i + 1;
+			}
+		}
+
+		return -1;
+	}
+
+	public void loadTiles(String layer, ActionListener action) {
+		tiles.clear();
+		ArrayList<String> imgs = Game.getImageLoader().getImages(layer);
+		pTiles.setLayout(new GridLayout(imgs.size() / 3 + 2, imgs.size() / 3 + 1, pTiles));
+		for (int i = 0; i < imgs.size(); i++) {
+			Button tile = null;
+			tile = new Button(0, 0, Game.getImageLoader().getImage(imgs.get(i)));
+			tile.setText(imgs.get(i));
+			tile.setWidth(16);
+			tile.setHeight(16);
+			tile.addActionListener(action);
+			pTiles.addElement(tile);
+			tiles.add(tile);
 		}
 	}
 }

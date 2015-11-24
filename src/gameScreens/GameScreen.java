@@ -2,6 +2,7 @@ package gameScreens;
 
 import entity.AbstractEntity;
 import entity.OrkTest;
+import entity.Tree;
 import gameEngine.MousepadListener;
 import gameEngine.Screen;
 import gameEngine.ScreenFactory;
@@ -34,7 +35,8 @@ public class GameScreen extends Screen implements ActionListener{
 		System.out.println("Main Creating!");
 		List<AbstractEntity> entitys = AbstractEntity.getEntities();
 		for (int i = 0; i < 10; i++) {
-			entitys.add(new OrkTest(rnd.nextInt(700) + 40, rnd.nextInt(500) + 40));//TODO get(i) funktion vermeiden, weil LinkedList
+			entitys.add(new OrkTest(rnd.nextInt(700) + 40, rnd.nextInt(500) + 40, i%8));//TODO get(i) funktion vermeiden, weil LinkedList
+			entitys.add(new Tree(rnd.nextInt(700) + 40, rnd.nextInt(500) + 40, rnd.nextInt(2)));
 			entitysOnMap.put(entitys.get(i), pointToMapConst(entitys.get(i).getX(), entitys.get(i).getY()));
 		}
 		Button exit = new Button(this.getScreenFactory().getGame().getWindow().getWidth()-50, 0, 50, 50, "X");
@@ -48,10 +50,10 @@ public class GameScreen extends Screen implements ActionListener{
 	public void onUpdate() {
 		super.onUpdate();
 		Collections.sort(getEntitys());// In diese Zeile hab ich so viel hirnschmalz verbraten
-		for (int i = 0; i < getEntitys().size(); i++) {//linkedList performance plus
+		for (int i = 0; i < getEntitys().size(); i++) {
 			getEntitys().get(i).update(this);
 		}
-		for (int i = 0; i < getEntitys().size(); i++) {//linkedList performance plus
+		for (int i = 0; i < getEntitys().size(); i++) {
 			if(getEntitys().get(i).checkDeath())//Toete tote
 				i--;//liste wird kleiner
 		}
@@ -69,6 +71,9 @@ public class GameScreen extends Screen implements ActionListener{
 		}*/
 		for (int i = 0; i < getEntitys().size(); i++) {
 			getEntitys().get(i).draw(g2d);
+		}
+		for (int i = 0; i < getEntitys().size(); i++) {
+			getEntitys().get(i).markOwn(g2d);
 		}
 		MousepadListener mpl = this.getScreenFactory().getGame().getMousepadListener();
 		if (mpl.isDragging()) {

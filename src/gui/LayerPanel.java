@@ -5,7 +5,6 @@ import gameEngine.Screen;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.util.ArrayList;
-import java.util.Collections;
 
 public class LayerPanel extends APanel implements CoordinateMapping {
 
@@ -33,8 +32,8 @@ public class LayerPanel extends APanel implements CoordinateMapping {
 	public void addLayout(ILayout layout) {
 		this.layouts.add(layout);
 	}
-	
-	public void removeAllLayouts(){
+
+	public void removeAllLayouts() {
 		layouts = new ArrayList<ILayout>();
 	}
 
@@ -66,8 +65,7 @@ public class LayerPanel extends APanel implements CoordinateMapping {
 			if (layout instanceof CoordinateMapping) {
 				return ((CoordinateMapping) layout).getCoordinate(x, y);
 			} else {
-				throw new RuntimeException(
-						"Layout don't support the CoordinateMapping!");
+				throw new RuntimeException("Layout don't support the CoordinateMapping!");
 			}
 		}
 		return null;
@@ -80,8 +78,12 @@ public class LayerPanel extends APanel implements CoordinateMapping {
 	public void setActualLayer(int i) {
 		actuallayer = i;
 	}
-	
-	public int getActualLayer(int i){
+
+	public int getActualLayer(int i) {
 		return actuallayer;
+	}
+
+	public int numberOfLayouts() {
+		return layouts.size();
 	}
 }
