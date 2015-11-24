@@ -203,18 +203,22 @@ public class WorldEditor extends Screen implements ActionListener {
 		switch (e.getActionCommand()) { // name of the button
 		case "L1":
 			lblLayer.setText("Aktivierter Layer = " + e.getActionCommand());
+			pWorld.setActualLayer(0);
 			loadTiles(e.getActionCommand(), this);
 			break;
 		case "L2":
 			lblLayer.setText("Aktivierter Layer = " + e.getActionCommand());
+			pWorld.setActualLayer(1);
 			loadTiles(e.getActionCommand(), this);
 			break;
 		case "L3":
 			lblLayer.setText("Aktivierter Layer = " + e.getActionCommand());
+			pWorld.setActualLayer(2);
 			loadTiles(e.getActionCommand(), this);
 			break;
 		case "L4":
 			lblLayer.setText("Aktivierter Layer = " + e.getActionCommand());
+			pWorld.setActualLayer(3);
 			loadTiles(e.getActionCommand(), this);
 			break;
 		case "Cursorgroesse erhoehen":
@@ -287,20 +291,19 @@ public class WorldEditor extends Screen implements ActionListener {
 					}
 				}
 			}
-			String actTile = map.substring(0, nextTileInString(0, map.toString()) + 1);
-
+			String actTile = map.substring(0, nextTileInString(0, map.toString()));
 			int counter = 1;
 			StringBuffer tmp = new StringBuffer();
 			for (int j = actTile.length(); j < map.length() - 1; j += actTile.length()) {
-				if (map.substring(j, nextTileInString(j, map.toString()) + 1).equals(actTile)) {
+				if (map.substring(j, nextTileInString(j, map.toString())).equals(actTile)) {
 					counter++;
 				} else {
 					tmp.append(counter + actTile + ";");
-					actTile = map.substring(i, nextTileInString(j, map.toString()) + 1);
+					actTile = map.substring(j, nextTileInString(j, map.toString()));
 					counter = 1;
 				}
 			}
-
+			tmp.append(counter + actTile);
 			allLayers.append("\n" + tmp);
 		}
 
@@ -334,41 +337,38 @@ public class WorldEditor extends Screen implements ActionListener {
 				pWorld.removeAllLayouts();
 				pWorld.setWidth(width * 16);
 				pWorld.setHeight(height * 16);
-				pWorld.addLayout(new GridLayout(width, height, pWorld));
-				for (int i = 0; i < height; i++) {
-					for (int j = 0; j < width; j++) {
-						pWorld.addElement(new Field(i * 16, j * 16));
-					}
-				}
-				int containerI = -1;
-				int containerJ = 0;
-				for (int i = 2; i < data.length; i++) {
-					String pair = data[i];
-					String imgname = null;
-					switch (pair.charAt(pair.length() - 1)) {
-					case 'g':
-						imgname = "grass.png";
-						break;
-					case 's':
-						imgname = "weg(gerade).png";
-						break;
-					default:
-						imgname = "";
-						break;
-					}
-					for (int j = Integer.parseInt(pair.split("[a-z]")[0]); j > 0; j--) {
-						if (containerI < height - 1) {
-							containerI++;
-						} else {
-							containerJ++;
-							containerI = 0;
-						}
-						if (imgname != "") {
-							((Field) pWorld.getLayout().getElement(containerI, containerJ)).setImg(imgname);
+				int layouts = 0;
+				while ((line = bf.readLine()) != null) {
+					pWorld.addLayout(new GridLayout(width, height, pWorld));
+					pWorld.setActualLayer(layouts);
+					for (int i = 0; i < height; i++) {
+						for (int j = 0; j < width; j++) {
+							pWorld.addElement(new Field(i * 16, j * 16));
 						}
 					}
+					int containerI = -1;
+					int containerJ = 0;
+					//					int offset = nextTileInString(0, line);
+					String tiles[] = line.split(";");
+					for (int i = 0; i < tiles.length; i++) {
+						//						String tile = line.substring(i, nextTileInString(i, line));
+						data = tiles[i].split("\\(", 2);
+						int quantity = Integer.parseInt(data[0]);
+						String imgname = data[1].substring(0, data[1].length() - 1);
+						for (int j = quantity; j > 0; j--) {
+							if (containerI < height - 1) {
+								containerI++;
+							} else {
+								containerJ++;
+								containerI = 0;
+							}
+							if (!imgname.equals("v")) {
+								((Field) pWorld.getLayout().getElement(containerI, containerJ)).setImg(imgname);
+							}
+						}
+					}
+					layouts++;
 				}
-
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -379,23 +379,26 @@ public class WorldEditor extends Screen implements ActionListener {
 	public int nextTileInString(int start, String searchString) {
 		int count = 0;
 		int i = start;
+		boolean first = false;
 		for (i = start; i < searchString.length(); i++) {
 			if (searchString.charAt(i) == '(') {
+				first = true;
 				count++;
 			} else if (searchString.charAt(i) == ')') {
 				count--;
 			}
-			if (count == 0) {
-				break;
+			if (count == 0 && first) {
+				return i + 1;
 			}
 		}
-		return i;
+
+		return -1;
 	}
 
 	public void loadTiles(String layer, ActionListener action) {
 		tiles.clear();
 		ArrayList<String> imgs = Game.getImageLoader().getImages(layer);
-		pTiles.setLayout(new GridLayout(imgs.size() / 3 + 1, 3, pTiles));
+		pTiles.setLayout(new GridLayout(imgs.size() / 3 + 2, imgs.size() / 3 + 1, pTiles));
 		for (int i = 0; i < imgs.size(); i++) {
 			Button tile = null;
 			tile = new Button(0, 0, Game.getImageLoader().getImage(imgs.get(i)));
