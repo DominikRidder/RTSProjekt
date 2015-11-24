@@ -62,7 +62,7 @@ public class Game {
 		return mousepadListener;
 	}
 
-	public KeyListener getKeyboardListener() {
+	public KeyboardListener getKeyboardListener() {
 		return keyboardListener;
 	}
 

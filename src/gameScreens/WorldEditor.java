@@ -13,6 +13,7 @@ import gui.Label;
 import gui.LayerPanel;
 import gui.Panel;
 import gui.ScrollPane;
+import gui.TextField;
 
 import java.awt.Point;
 import java.awt.event.ActionEvent;
@@ -27,7 +28,7 @@ import java.util.ArrayList;
 import javax.swing.JFileChooser;
 
 public class WorldEditor extends Screen implements ActionListener {
-	int scale = 1;
+	int scale = 16;
 	int width = 50;
 	int height = 50;
 	LayerPanel pWorld;
@@ -115,6 +116,7 @@ public class WorldEditor extends Screen implements ActionListener {
 		functions.add(load);
 		functions.add(zoomin);
 		functions.add(zoomout);
+		functions.add(new TextField(0,0,0,0));
 
 		for (int i = 0; i < functions.size(); i++) {
 			pFunctions.addElement(functions.get(i));
@@ -210,12 +212,12 @@ public class WorldEditor extends Screen implements ActionListener {
 			break;
 		case "+":
 			scale *= 2;
-			pWorld.setSize(scale * 16 * width, scale * 16 * height);
+			pWorld.setSize(scale * width, scale * height);
 			break;
 		case "-":
 			if (scale != 1) {
 				scale /= 2;
-				pWorld.setSize(scale * 16 * width, scale * 16 * height);
+				pWorld.setSize(scale * width, scale * height);
 			}
 			break;
 		default:
@@ -260,7 +262,7 @@ public class WorldEditor extends Screen implements ActionListener {
 		map = new StringBuffer(pWorld.getLayout().getRowSize() + ";" + pWorld.getLayout().getColumnSize()).append(tmp);
 
 		JFileChooser chooser = new JFileChooser();
-		chooser.setCurrentDirectory(new File(".//data//map//"));
+		chooser.setCurrentDirectory(new File("data/"));
 		int retrival = chooser.showSaveDialog(null);
 		if (retrival == JFileChooser.APPROVE_OPTION) {
 			try {
@@ -277,8 +279,8 @@ public class WorldEditor extends Screen implements ActionListener {
 	public void loadMap() {
 		File fMap;
 		JFileChooser chooser = new JFileChooser();
-		chooser.setCurrentDirectory(new File(".//data//map//"));
-		int retrival = chooser.showSaveDialog(null);
+		chooser.setCurrentDirectory(new File("./data/"));
+		int retrival = chooser.showOpenDialog(null);
 		if (retrival == JFileChooser.APPROVE_OPTION) {
 			fMap = new File(chooser.getSelectedFile().getAbsolutePath());
 			try (BufferedReader bf = new BufferedReader(new FileReader(fMap))) {

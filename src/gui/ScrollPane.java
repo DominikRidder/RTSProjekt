@@ -51,17 +51,17 @@ public class ScrollPane extends GuiElement implements CoordinateMapping {
 		MousepadListener mpl = screen.getScreenFactory().getGame()
 				.getMousepadListener();
 
-		if (this.needUpdate()){
-			scrollx = new ScrollBar(ScrollBar.X_ORIENTATION);
-			scrolly = new ScrollBar(ScrollBar.Y_ORIENTATION);
+		if (this.needUpdate()) {
+			scrollx.resizeBar();
+			scrolly.resizeBar();
 			this.setUpdate(false);
 		}
-		
-		if (scrollableclient.needUpdate()){
+
+		if (scrollableclient.needUpdate()) {
 			setX(scrollableclient.getX());
 			setY(scrollableclient.getY());
 		}
-		
+
 		scrollx.onUpdate(screen);
 		scrolly.onUpdate(screen);
 
@@ -97,7 +97,7 @@ public class ScrollPane extends GuiElement implements CoordinateMapping {
 						getY() + getHeight(),
 						(int) (getWidth() * ((double) getWidth()) / scrollableclient
 								.getWidth()), 10);
-				if (bar.width > getWidth()){
+				if (bar.width > getWidth()) {
 					bar.width = getWidth();
 				}
 			} else {
@@ -107,7 +107,7 @@ public class ScrollPane extends GuiElement implements CoordinateMapping {
 						10,
 						(int) (getHeight() * ((double) getHeight() / scrollableclient
 								.getHeight())));
-				if (bar.height > getHeight()){
+				if (bar.height > getHeight()) {
 					bar.height = getHeight();
 				}
 			}
@@ -183,6 +183,26 @@ public class ScrollPane extends GuiElement implements CoordinateMapping {
 			g2d.setColor(Color.RED);
 			g2d.fill3DRect(bar.x, bar.y, bar.width, bar.height, false);
 		}
+
+		public void resizeBar() {
+			if (orientation == X_ORIENTATION) {
+				bar.width = (int) (getWidth() * ((double) getWidth()) / scrollableclient
+						.getWidth());
+				bar.x = rx * (getWidth() - bar.width)
+						/ (scrollableclient.getWidth() - getWidth()) + getX();
+				if (bar.width > getWidth()) {
+					bar.width = getWidth();
+				}
+			} else {
+				bar.height = (int) (getHeight() * ((double) getHeight() / scrollableclient
+						.getHeight()));
+				bar.y = ry * (getHeight() - bar.height)
+						/ (scrollableclient.getHeight() - getHeight()) + getY();
+				if (bar.height > getHeight()) {
+					bar.height = getHeight();
+				}
+			}
+		}
 	}
 
 	public Point getCoordinate(int x, int y) {
@@ -190,8 +210,9 @@ public class ScrollPane extends GuiElement implements CoordinateMapping {
 			if (scrollableclient instanceof CoordinateMapping) {
 				return ((CoordinateMapping) scrollableclient).getCoordinate(x
 						+ rx, y + ry);
-			}else{
-				throw new RuntimeException("scrollableclient don't support the CoordinateMapping!");
+			} else {
+				throw new RuntimeException(
+						"scrollableclient don't support the CoordinateMapping!");
 			}
 		}
 		return null;

@@ -55,8 +55,7 @@ public class ImageLoader {
 
 			if (img == null) { // Loading failed
 				System.out.println("Loading the Image failed!");
-				data.put(path, imgNotFound);
-				return imgNotFound;
+				img = imgNotFound;
 			} else {
 				data.put(path, img); // Add Image to data HashMap
 			}
@@ -80,6 +79,7 @@ public class ImageLoader {
 			BufferedImage toscale = getImage(imgname);
 
 			if (toscale == null) {
+				data.put(key, imgNotFound);
 				return imgNotFound;
 			}
 
@@ -89,7 +89,7 @@ public class ImageLoader {
 				} catch (IOException e) {
 					e.printStackTrace();
 
-					return imgNotFound;
+					img = imgNotFound;
 				}
 
 				data.put(key, img);

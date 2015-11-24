@@ -83,33 +83,6 @@ public class Button extends GuiElement {
 		changed = true;
 	}
 
-	// private void drawImage() {
-	// int width = getWidth();
-	// int height = getHeight();
-	//
-	// if (!ImageSet) { // not working
-	// // image = new BufferedImage(width, height,
-	// // BufferedImage.TYPE_3BYTE_BGR);
-	// // Graphics2D g2d = image.createGraphics();
-	// // g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-	// // RenderingHints.VALUE_ANTIALIAS_ON);
-	// // int stringwidth = g2d.getFontMetrics().stringWidth(text);
-	// // int stringheight = g2d.getFontMetrics().getHeight();
-	// // // g2d.setFont(new Font("Arial",Font.BOLD, 20));
-	// // g2d.setColor(backgroundcolor);
-	// // g2d.fill3DRect(getX(), getY(), width, height, true);
-	// // g2d.setColor(textcolor);
-	// // g2d.drawString(text, getX() + width / 2 - stringwidth / 2, getY()
-	// // + height / 2 + stringheight / 2);
-	// } else {
-	// try {
-	// image = getScaledImage(image, getWidth(), getHeight());
-	// } catch (IOException e) {
-	// System.out.println("Error while scaling Button Image.");
-	// }
-	// }
-	// }
-
 	public void setTextColor(Color c) {
 		textcolor = c;
 		changed = true;
@@ -123,12 +96,7 @@ public class Button extends GuiElement {
 	public void onDraw(Graphics2D g2d) {
 		int width = getWidth();
 		int height = getHeight();
-
-		// if (changed) {
-		// changed = false;
-		// drawImage();
-		// }
-
+		
 		if (ImageSet) {
 			g2d.drawImage(image, getX(), getY(), width, height, null);
 		} else {
