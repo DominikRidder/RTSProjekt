@@ -44,6 +44,7 @@ public class Panel extends APanel implements CoordinateMapping {
 	@Override
 	public void onUpdate(Screen screen) {
 		layout.onUpdate(screen);
+		this.setUpdate(false); // Udpating the layouts should be finished here
 	}
 
 	public Point getCoordinate(int x, int y) {

@@ -41,7 +41,6 @@ public class GridLayout implements ILayout, CoordinateMapping {
 
 		if (parent.needUpdate()) {
 			resizeElements();
-			parent.setUpdate(false);
 		}
 
 		for (int i = 0; i < container.length; i++) {
