@@ -129,7 +129,7 @@ public class WorldEditor extends Screen implements ActionListener {
 		functions.add(load);
 		functions.add(zoomin);
 		functions.add(zoomout);
-		functions.add(new TextField(0,0,0,0));
+//		functions.add(new TextField(0,0,0,0));
 
 		for (int i = 0; i < functions.size(); i++) {
 			pFunctions.addElement(functions.get(i));
