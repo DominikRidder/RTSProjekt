@@ -37,12 +37,18 @@ public class Panel extends APanel implements CoordinateMapping {
 	}
 
 	public void onDraw(Graphics2D g2d) {
+		if (!this.isVisible()){
+			return;
+		}
 		layout.onDraw(g2d);
 		drawBorder(g2d);
 	}
 
 	@Override
 	public void onUpdate(Screen screen) {
+		if (!this.isVisible()){
+			return;
+		}
 		layout.onUpdate(screen);
 		this.setUpdate(false); // Udpating the layouts should be finished here
 	}

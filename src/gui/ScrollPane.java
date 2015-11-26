@@ -33,6 +33,9 @@ public class ScrollPane extends GuiElement implements CoordinateMapping {
 	}
 
 	public void onDraw(Graphics2D g2d) {
+		if (!this.isVisible()){
+			return;
+		}
 		AffineTransform saveAT = g2d.getTransform();
 		AffineTransform transform = new AffineTransform();
 		transform.translate(-rx, -ry);
@@ -48,6 +51,9 @@ public class ScrollPane extends GuiElement implements CoordinateMapping {
 	}
 
 	public void onUpdate(Screen screen) {
+		if (!this.isVisible()){
+			return;
+		}
 		MousepadListener mpl = screen.getScreenFactory().getGame()
 				.getMousepadListener();
 
