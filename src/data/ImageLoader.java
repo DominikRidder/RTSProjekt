@@ -66,17 +66,15 @@ public class ImageLoader {
 	
 	public BufferedImage getImage(String imgname, int owner)
 	{
-		BufferedImage img = getImage(imgname);
-		if(img == imgNotFound)
-			return img;
 		String path = relativNames.get(imgname);
 		String colpath = path+"col"+owner;
 		BufferedImage img2 = data.get(colpath);
-		//System.out.println(colpath);
 		
 		if(img2 == null)
 		{
-			//System.out.println("This happens with owner"+owner);
+			BufferedImage img = getImage(imgname);//nach unten verschoben, sollte nicht immer passieren!
+			if(img == imgNotFound)
+				return img;
 			int color = AbstractEntity.getOwnerColor(owner).getRGB();
 			
 			img2 = new BufferedImage(img.getWidth(), img.getHeight(), BufferedImage.TYPE_4BYTE_ABGR);
@@ -117,7 +115,6 @@ public class ImageLoader {
 			data.toString();
 		}
 		return img2;
-		
 	}
 
 	public ArrayList<String> getImages(String inDir) {
