@@ -19,10 +19,18 @@ public abstract class GuiElement implements Comparable<GuiElement> {
 	private Rectangle bounds = new Rectangle(0,0,0,0);
 	private boolean update;
 	private boolean border = false;
-	
+	private boolean visible = true;
 	
 	public Rectangle getBounds(){
 		return bounds;
+	}
+	
+	public void setVisible(boolean visible){
+		this.visible = visible;
+	}
+	
+	public boolean isVisible(){
+		return visible;
 	}
 	
 	public void setSize(int width, int height){

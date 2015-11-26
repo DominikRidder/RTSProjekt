@@ -39,8 +39,8 @@ public class ImageLoader {
 		String path = relativNames.get(imgname);
 
 		if (path == null) { // Image Name not found in datadir
+			relativNames.put(imgname, relativNames.get("NotFound.png"));
 			System.out.println("Image not found. Please make sure, that you dont use any Path Information!");
-			data.put(path, imgNotFound);
 			return imgNotFound;
 		}
 

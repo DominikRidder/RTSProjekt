@@ -94,6 +94,9 @@ public class Button extends GuiElement {
 	}
 
 	public void onDraw(Graphics2D g2d) {
+		if (!this.isVisible()){
+			return;
+		}
 		int width = getWidth();
 		int height = getHeight();
 		
@@ -111,6 +114,9 @@ public class Button extends GuiElement {
 	}
 
 	public void onUpdate(Screen screen) {
+		if (!this.isVisible()){
+			return;
+		}
 		MousepadListener mpl = screen.getScreenFactory().getGame().getMousepadListener();
 
 		if (mpl.isLeftClicked()) {
