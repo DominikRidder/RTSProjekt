@@ -3,6 +3,8 @@ package data;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
+import java.awt.image.ColorModel;
+import java.awt.image.WritableRaster;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -20,6 +22,7 @@ public class ImageLoader {
 
 	private final String datadir = "data";
 	private final String[] datatypes = { ".png" };
+	private final int m_resColor = (98 << 24)+(255<<8);//50 transparenzy, but light green
 
 	private BufferedImage imgNotFound;
 
@@ -67,12 +70,41 @@ public class ImageLoader {
 	public BufferedImage getImage(String imgname, int owner)
 	{
 		String path = relativNames.get(imgname);
-		String colpath = path+"col"+owner;
+		String colpath = path+"c"+owner;
+		BufferedImage img2 = data.get(colpath);
+		
+		//System.out.println(owner+" "+colpath);
+		if(img2 == null)
+		{
+			BufferedImage img = getImage(imgname);//
+			if(img == imgNotFound)
+				return img;
+			img2 = deepCopy(img);
+			int color = AbstractEntity.getOwnerColor(owner).getRGB();
+			for(int i = 0; i < img2.getHeight(); i++)
+			{
+				for(int j = 0; j < img2.getWidth(); j++)
+				{
+					if(img.getRGB(j, i) == m_resColor)
+						img2.setRGB(j, i, color);//color in teamcolor
+				}
+			}
+			
+			data.put(colpath, img2);
+			
+		}
+		return img2;
+	}
+	
+	public BufferedImage getImageAura(String imgname, int owner)
+	{
+		String path = relativNames.get(imgname);
+		String colpath = path+"aura"+owner;
 		BufferedImage img2 = data.get(colpath);
 		
 		if(img2 == null)
 		{
-			BufferedImage img = getImage(imgname);//nach unten verschoben, sollte nicht immer passieren!
+			BufferedImage img = getImage(imgname);//
 			if(img == imgNotFound)
 				return img;
 			int color = AbstractEntity.getOwnerColor(owner).getRGB();
@@ -82,7 +114,7 @@ public class ImageLoader {
 			{
 				for(int j = 1; j < img2.getWidth()-1; j++)
 				{
-					int alpha = Math.abs((img.getRGB(j,i) & 0xff000000) >> 24);
+					int alpha = (img.getRGB(j,i) >> 24) & 0xff;
 					if(alpha == 0)
 					{
 						img2.setRGB(j, i, 0);
@@ -104,17 +136,27 @@ public class ImageLoader {
 			{
 				for(int j = 0; j < img2.getWidth(); j++)
 				{
-					int alpha = Math.abs((img.getRGB(j,i) & 0xff000000) >> 24);
-					if(alpha == 0)
+					int alpha = (img.getRGB(j,i) >> 24) & 0xff;
+					if(alpha <= 5)//do a bit tollerance
 						continue;
 					img2.setRGB(j, i, 0);
 				}
 			}
 			
 			data.put(colpath, img2);
-			data.toString();
 		}
 		return img2;
+	}
+	
+	/**
+	 * Makes a deep copy of a BufferedImage (return type is  BufferedImage.TYPE_4BYTE_ABGR)
+	 * @param bi
+	 * @return
+	 */
+	static BufferedImage deepCopy(BufferedImage bi) {
+		 ColorModel cm = bi.getColorModel();
+		 WritableRaster raster = bi.copyData(null);
+		 return new BufferedImage(cm, raster, true, null);
 	}
 
 	public ArrayList<String> getImages(String inDir) {
