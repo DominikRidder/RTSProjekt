@@ -12,6 +12,7 @@ import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class StoryScreen extends Screen implements ActionListener {
@@ -37,7 +38,7 @@ public class StoryScreen extends Screen implements ActionListener {
 
 	private Button background;
 
-	private int progress[] = { 6, 1, 3, 5 };
+	private int progress[] = { 0,0,0,0 };
 
 	private boolean finishedCreating;
 
@@ -47,10 +48,11 @@ public class StoryScreen extends Screen implements ActionListener {
 
 	@Override
 	public void onCreate() {
-		/**Test**/
-		System.out.print("Test ... reading from story.inf: Missions = ");
-		System.out.println(Game.getInfoLoader().getInfo("story.inf").get("Missions"));
-		/********/
+		HashMap<String, String> info = Game.getInfoLoader().getInfo("story.inf");
+		progress[RACE_HUMAN] = Integer.parseInt(info.get("HUMAN_PROGRESS"));
+		progress[RACE_SHADOW] = Integer.parseInt(info.get("SHADOW_PROGRESS"));
+		progress[RACE_ANCIENT] = Integer.parseInt(info.get("ANCIENT1_PROGRESS"));
+		progress[RACE_ANCIENT+1] = Integer.parseInt(info.get("ANCIENT2_PROGRESS"));
 		
 		background = new Button(0, 0, Game.getImageLoader().getImage(imglocation[actual]));
 		background.setWidth(getScreenFactory().getGame().getWindow().getWidth());
@@ -177,7 +179,7 @@ public class StoryScreen extends Screen implements ActionListener {
 			actual = races.length - 1;
 		}
 
-		if (actual == RACE_ANCIENT && !(progress[RACE_HUMAN] == humm.size() - 1 || progress[RACE_SHADOW] == sham.size() - 1)) {
+		if (actual == RACE_ANCIENT && !(progress[RACE_HUMAN] == humm.size() || progress[RACE_SHADOW] == sham.size())) {
 			changeActual(i);
 			return;
 		}
