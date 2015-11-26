@@ -1,12 +1,5 @@
 package gameScreens;
 
-import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.List;
-
 import entity.AbstractEntity;
 import gameEngine.Game;
 import gameEngine.Screen;
@@ -14,12 +7,18 @@ import gameEngine.ScreenFactory;
 import gui.Button;
 import gui.Label;
 
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
+
 public class StoryScreen extends Screen implements ActionListener {
 
-	private static final int RACE_HUMAN = 0, RACE_SHADOW = 1, RACE_ACIENT = 2;
+	private static final int RACE_HUMAN = 0, RACE_SHADOW = 1, RACE_ANCIENT = 2;
 
-	private String imglocation[] = { "story_hum.png", "story_sha.png",
-			"story_aci.png" };
+	private String imglocation[] = { "story_hum.png", "story_sha.png", "story_aci.png" };
 
 	private String humMission[] = { "a", "b", "c" };
 	private String shaMission[] = { "a", "b" };
@@ -29,7 +28,7 @@ public class StoryScreen extends Screen implements ActionListener {
 	private ArrayList<Button> humm;
 	private ArrayList<Button> sham;
 
-	private String races[] = { "Human", "Shadow", "Acient" };
+	private String races[] = { "Human", "Shadow", "Ancient" };
 
 	private int actual = RACE_HUMAN;
 
@@ -37,7 +36,7 @@ public class StoryScreen extends Screen implements ActionListener {
 	private Label finished;
 
 	private Button background;
-	
+
 	private int progress[] = { 6, 1, 3, 5 };
 
 	private boolean finishedCreating;
@@ -48,18 +47,16 @@ public class StoryScreen extends Screen implements ActionListener {
 
 	@Override
 	public void onCreate() {
-		background = new Button(0,0,Game.getImageLoader().getImage(imglocation[actual]));
+		background = new Button(0, 0, Game.getImageLoader().getImage(imglocation[actual]));
 		background.setWidth(getScreenFactory().getGame().getWindow().getWidth());
 		background.setHeight(getScreenFactory().getGame().getWindow().getHeight());
 		addGuiElement(background);
-		
+
 		/*********************** MISSIONS ******************/
-		int maxunique = humMission.length > shaMission.length ? humMission.length
-				: shaMission.length;
+		int maxunique = humMission.length > shaMission.length ? humMission.length : shaMission.length;
 
 		int misheight = maxunique + bothMission.length;
-		int relHeight = getScreenFactory().getGame().getWindow().getHeight()
-				/ (misheight + 2);
+		int relHeight = getScreenFactory().getGame().getWindow().getHeight() / (misheight + 2);
 		int width = getScreenFactory().getGame().getWindow().getWidth();
 
 		bothm = new ArrayList<Button>();
@@ -67,28 +64,19 @@ public class StoryScreen extends Screen implements ActionListener {
 		sham = new ArrayList<Button>();
 
 		for (int i = 0; i < bothMission.length; i++) {
-			Button b = new Button(width / 2 - 50, relHeight
-					* (bothMission.length - i), 100, relHeight / 2, "Both " + i);
+			Button b = new Button(width / 2 - 50, relHeight * (bothMission.length - i), 100, relHeight / 2, "Both " + i);
 			this.addGuiElement(b);
 			bothm.add(b);
 		}
 
 		for (int i = 0; i < humMission.length; i++) {
-			Button b = new Button((int) (width / 4 - 50 + width / 4
-					* (((double) i) / (humMission.length))), (int) (relHeight
-					* (bothMission.length) + relHeight * maxunique
-					* ((double) humMission.length - i) / (humMission.length)),
-					100, relHeight / 2, "Human " + i);
+			Button b = new Button((int) (width / 4 - 50 + width / 4 * (((double) i) / (humMission.length))), (int) (relHeight * (bothMission.length) + relHeight * maxunique * ((double) humMission.length - i) / (humMission.length)), 100, relHeight / 2, "Human " + i);
 			this.addGuiElement(b);
 			humm.add(b);
 		}
 
 		for (int i = 0; i < shaMission.length; i++) {
-			Button b = new Button((int) (width / 4 * 3 - 50 - width / 4
-					* (((double) i) / (shaMission.length))), (int) (relHeight
-					* (bothMission.length) + relHeight * maxunique
-					* ((double) shaMission.length - i) / (shaMission.length)),
-					100, relHeight / 2, "shadow " + i);
+			Button b = new Button((int) (width / 4 * 3 - 50 - width / 4 * (((double) i) / (shaMission.length))), (int) (relHeight * (bothMission.length) + relHeight * maxunique * ((double) shaMission.length - i) / (shaMission.length)), 100, relHeight / 2, "shadow " + i);
 			this.addGuiElement(b);
 			sham.add(b);
 		}
@@ -99,7 +87,7 @@ public class StoryScreen extends Screen implements ActionListener {
 		Button arrowright = new Button(150, 50, 20, 50, "->");
 		arrowright.addActionListener(this);
 		spRace = new Label(50, 50, 100, 50, "Human");
-		finished = new Label(width-150, 50, 100, 50, "Finished: " + progress[actual]);
+		finished = new Label(width - 150, 50, 100, 50, "Finished: " + progress[actual]);
 
 		addGuiElement(arrowleft);
 		addGuiElement(arrowright);
@@ -125,7 +113,7 @@ public class StoryScreen extends Screen implements ActionListener {
 
 		g2d.setColor(Color.black);
 
-		if (actual == RACE_HUMAN || actual == RACE_ACIENT) {
+		if (actual == RACE_HUMAN || actual == RACE_ANCIENT) {
 			b1 = humm.get(0);
 			for (int i = 1; i < humm.size(); i++) { // Human Lines
 				b2 = humm.get(i);
@@ -136,7 +124,7 @@ public class StoryScreen extends Screen implements ActionListener {
 			drawLine(b1, b2, g2d);
 		}
 
-		if (actual == RACE_SHADOW || actual == RACE_ACIENT) {
+		if (actual == RACE_SHADOW || actual == RACE_ANCIENT) {
 			b1 = sham.get(0);
 			for (int i = 1; i < sham.size(); i++) { // Shadow Lines
 				b2 = sham.get(i);
@@ -159,8 +147,7 @@ public class StoryScreen extends Screen implements ActionListener {
 
 	public void drawLine(Button b1, Button b2, Graphics2D g2d) {
 		if (b1.isVisible() && b2.isVisible()) {
-			g2d.drawLine(b1.getX() + b1.getWidth() / 2, b1.getY(), b2.getX()
-					+ b2.getWidth() / 2, b2.getY());
+			g2d.drawLine(b1.getX() + b1.getWidth() / 2, b1.getY(), b2.getX() + b2.getWidth() / 2, b2.getY());
 		}
 	}
 
@@ -185,9 +172,7 @@ public class StoryScreen extends Screen implements ActionListener {
 			actual = races.length - 1;
 		}
 
-		if (actual == RACE_ACIENT
-				&& !(progress[RACE_HUMAN] == humm.size() - 1 || progress[RACE_SHADOW] == sham
-						.size() - 1)) {
+		if (actual == RACE_ANCIENT && !(progress[RACE_HUMAN] == humm.size() - 1 || progress[RACE_SHADOW] == sham.size() - 1)) {
 			changeActual(i);
 			return;
 		}
@@ -195,15 +180,15 @@ public class StoryScreen extends Screen implements ActionListener {
 		spRace.setText(races[actual]);
 
 		int fin = progress[actual];
-		if (actual == RACE_ACIENT) {
-			fin = fin > progress[RACE_ACIENT+1] ? fin : progress[RACE_ACIENT+1];
+		if (actual == RACE_ANCIENT) {
+			fin = fin > progress[RACE_ANCIENT + 1] ? fin : progress[RACE_ANCIENT + 1];
 			if (fin >= bothm.size()) {
 				fin = bothm.size();
-				int next = progress[RACE_ACIENT] - bothm.size();
+				int next = progress[RACE_ANCIENT] - bothm.size();
 				if (next > 0) {
 					fin += next;
 				}
-				next = progress[RACE_ACIENT + 1] - bothm.size();
+				next = progress[RACE_ANCIENT + 1] - bothm.size();
 				if (next > 0) {
 					fin += next;
 				}
@@ -212,7 +197,7 @@ public class StoryScreen extends Screen implements ActionListener {
 		finished.setText("Finished: " + fin);
 
 		background.setImage(Game.getImageLoader().getImage(imglocation[actual]));
-		
+
 		handleMissionVisibility();
 	}
 
@@ -239,7 +224,7 @@ public class StoryScreen extends Screen implements ActionListener {
 				visible.add(b);
 			}
 
-		} else if (actual == RACE_ACIENT) {
+		} else if (actual == RACE_ANCIENT) {
 			AcientVisibility();
 			return;
 		}
@@ -258,8 +243,8 @@ public class StoryScreen extends Screen implements ActionListener {
 	}
 
 	private void AcientVisibility() {
-		int humprog = progress[RACE_ACIENT];
-		int shaprog = progress[RACE_ACIENT + 1];
+		int humprog = progress[RACE_ANCIENT];
+		int shaprog = progress[RACE_ANCIENT + 1];
 		int bothprog = humprog > shaprog ? humprog : shaprog;
 
 		for (int i = bothm.size() - 1; i >= 0; i--) {
