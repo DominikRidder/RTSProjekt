@@ -23,9 +23,9 @@ public class MainScreen extends Screen implements ActionListener {
 	@Override
 	public void onCreate() {
 
-		String adding[] = { "Einzelspieler", "Spiel Laden", "Archievments", "Highscore", "Einstellungen", "WorldEditor", "Exit" };
+		String adding[] = { "Einzelspieler","Quick Start", "Spiel Laden", "Archievments", "Highscore", "Einstellungen", "WorldEditor", "Exit" };
 
-		Panel p = new Panel(345, 175, 150, 40 * adding.length);
+		Panel p = new Panel(345, 175, 150, 280/*40 * adding.length*/);
 		p.setLayout(new GridLayout(adding.length, 1, p));
 		for (String toadd : adding) {
 			Button newb = new Button(toadd);
@@ -64,8 +64,10 @@ public class MainScreen extends Screen implements ActionListener {
 		}
 		switch (e.getActionCommand()) { // name of the button
 		case "Einzelspieler":
+			this.getScreenFactory().showScreen(new StoryScreen(this.getScreenFactory()));
+			break;
+		case "Quick Start":
 			this.getScreenFactory().showScreen(new GameScreen(this.getScreenFactory()));
-//			this.getScreenFactory().showScreen(new StoryScreen(this.getScreenFactory()));
 			break;
 		case "WorldEditor":
 			this.getScreenFactory().showScreen(new WorldEditor(this.getScreenFactory()));
