@@ -121,4 +121,8 @@ public class GridLayout implements ILayout, CoordinateMapping {
 		return container.length;
 	}
 
+	public void setElement(GuiElement elem, int x, int y) {
+		container[y][x] = elem;
+	}
+
 }

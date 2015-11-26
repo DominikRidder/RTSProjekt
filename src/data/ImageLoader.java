@@ -22,7 +22,7 @@ public class ImageLoader {
 
 	private final String datadir = "data";
 	private final String[] datatypes = { ".png" };
-	private final int m_resColor = (98 << 24)+(255<<8);//50 transparenzy, but light green
+	private final int m_resColor = (98 << 24) + (255 << 8);//50 transparenzy, but light green
 
 	private BufferedImage imgNotFound;
 
@@ -66,97 +66,88 @@ public class ImageLoader {
 
 		return img;
 	}
-	
-	public BufferedImage getImage(String imgname, int owner)
-	{
+
+	public BufferedImage getImage(String imgname, int owner) {
 		String path = relativNames.get(imgname);
-		String colpath = path+"c"+owner;
+		String colpath = path + "c" + owner;
 		BufferedImage img2 = data.get(colpath);
-		
+
 		//System.out.println(owner+" "+colpath);
-		if(img2 == null)
-		{
+		if (img2 == null) {
 			BufferedImage img = getImage(imgname);//
-			if(img == imgNotFound)
+			if (img == imgNotFound)
 				return img;
 			img2 = deepCopy(img);
 			int color = AbstractEntity.getOwnerColor(owner).getRGB();
-			for(int i = 0; i < img2.getHeight(); i++)
-			{
-				for(int j = 0; j < img2.getWidth(); j++)
-				{
-					if(img.getRGB(j, i) == m_resColor)
+			for (int i = 0; i < img2.getHeight(); i++) {
+				for (int j = 0; j < img2.getWidth(); j++) {
+					if (img.getRGB(j, i) == m_resColor)
 						img2.setRGB(j, i, color);//color in teamcolor
 				}
 			}
-			
+
 			data.put(colpath, img2);
-			
+
 		}
 		return img2;
 	}
-	
-	public BufferedImage getImageAura(String imgname, int owner)
-	{
+
+	public BufferedImage getImageAura(String imgname, int owner) {
 		String path = relativNames.get(imgname);
-		String colpath = path+"aura"+owner;
+		String colpath = path + "aura" + owner;
 		BufferedImage img2 = data.get(colpath);
-		
-		if(img2 == null)
-		{
+
+		if (img2 == null) {
 			BufferedImage img = getImage(imgname);//
-			if(img == imgNotFound)
+			if (img == imgNotFound)
 				return img;
 			int color = AbstractEntity.getOwnerColor(owner).getRGB();
-			
+
 			img2 = new BufferedImage(img.getWidth(), img.getHeight(), BufferedImage.TYPE_4BYTE_ABGR);
-			for(int i = 1; i < img2.getHeight()-1; i++)
-			{
-				for(int j = 1; j < img2.getWidth()-1; j++)
-				{
-					int alpha = (img.getRGB(j,i) >> 24) & 0xff;
-					if(alpha == 0)
-					{
+			for (int i = 1; i < img2.getHeight() - 1; i++) {
+				for (int j = 1; j < img2.getWidth() - 1; j++) {
+					int alpha = (img.getRGB(j, i) >> 24) & 0xff;
+					if (alpha == 0) {
 						img2.setRGB(j, i, 0);
 						continue;
 					}
-					img2.setRGB(j+1, i+1, color);
-					img2.setRGB(j-1, i-1, color);
-					img2.setRGB(j+1, i-1, color);
-					img2.setRGB(j-1, i+1, color);
-					
-					img2.setRGB(j+1, i, color);
-					img2.setRGB(j, i+1, color);
-					img2.setRGB(j-1, i, color);
-					img2.setRGB(j, i-1, color);
-					
+					img2.setRGB(j + 1, i + 1, color);
+					img2.setRGB(j - 1, i - 1, color);
+					img2.setRGB(j + 1, i - 1, color);
+					img2.setRGB(j - 1, i + 1, color);
+
+					img2.setRGB(j + 1, i, color);
+					img2.setRGB(j, i + 1, color);
+					img2.setRGB(j - 1, i, color);
+					img2.setRGB(j, i - 1, color);
+
 				}
 			}
-			for(int i = 0; i < img2.getHeight(); i++)
-			{
-				for(int j = 0; j < img2.getWidth(); j++)
-				{
-					int alpha = (img.getRGB(j,i) >> 24) & 0xff;
-					if(alpha <= 5)//do a bit tollerance
+			for (int i = 0; i < img2.getHeight(); i++) {
+				for (int j = 0; j < img2.getWidth(); j++) {
+					int alpha = (img.getRGB(j, i) >> 24) & 0xff;
+					if (alpha <= 5)//do a bit tollerance
 						continue;
 					img2.setRGB(j, i, 0);
 				}
 			}
-			
+
 			data.put(colpath, img2);
 		}
 		return img2;
 	}
-	
+
 	/**
-	 * Makes a deep copy of a BufferedImage (return type is  BufferedImage.TYPE_4BYTE_ABGR)
+	 * Makes a deep copy of a BufferedImage (return type is
+	 * BufferedImage.TYPE_4BYTE_ABGR)
+	 * 
 	 * @param bi
 	 * @return
 	 */
 	static BufferedImage deepCopy(BufferedImage bi) {
-		 ColorModel cm = bi.getColorModel();
-		 WritableRaster raster = bi.copyData(null);
-		 return new BufferedImage(cm, raster, true, null);
+		ColorModel cm = bi.getColorModel();
+		WritableRaster raster = bi.copyData(null);
+		return new BufferedImage(cm, raster, true, null);
 	}
 
 	public ArrayList<String> getImages(String inDir) {
@@ -248,6 +239,15 @@ public class ImageLoader {
 		AffineTransformOp bilinearScaleOp = new AffineTransformOp(scaleTransform, AffineTransformOp.TYPE_BILINEAR);
 
 		return bilinearScaleOp.filter(image, new BufferedImage(width, height, image.getType()));
+	}
+
+	public void addImage(String key, BufferedImage value) {
+		if (data.containsKey(key)) {
+			data.replace(key, value);
+		} else {
+			data.put(key, value);
+		}
+
 	}
 
 }

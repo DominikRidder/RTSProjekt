@@ -13,7 +13,6 @@ import gui.Label;
 import gui.LayerPanel;
 import gui.Panel;
 import gui.ScrollPane;
-import gui.TextField;
 
 import java.awt.Point;
 import java.awt.event.ActionEvent;
@@ -129,7 +128,7 @@ public class WorldEditor extends Screen implements ActionListener {
 		functions.add(load);
 		functions.add(zoomin);
 		functions.add(zoomout);
-//		functions.add(new TextField(0,0,0,0));
+		//		functions.add(new TextField(0,0,0,0));
 
 		for (int i = 0; i < functions.size(); i++) {
 			pFunctions.addElement(functions.get(i));
@@ -148,7 +147,7 @@ public class WorldEditor extends Screen implements ActionListener {
 	public void onUpdate() {
 		super.onUpdate();
 		MousepadListener mpl = getScreenFactory().getGame().getMousepadListener();
-		Field f;
+		Field f = new Field(mpl.getX(), mpl.getY());
 		int till = cursorSize - 1;
 		if (till < 0) {
 			till = 0;
@@ -159,11 +158,62 @@ public class WorldEditor extends Screen implements ActionListener {
 				if (lastposition != null) { // click was im ScrollPane
 					for (int i = 0; i <= till && i + lastposition.getX() < pWorld.getLayout().getRowSize(); i++) {
 						for (int j = 0; j <= till && j + lastposition.getY() < pWorld.getLayout().getColumnSize(); j++) {
-							f = (Field) pWorld.getLayout().getElement((int) lastposition.getX() + i, (int) lastposition.getY() + j);
-							if (selected != -1 && selected < tiles.size()) {
+							if (pWorld.getLayout().getElement((int) lastposition.getX() + i, (int) lastposition.getY() + j) instanceof Field) {
+								f = (Field) pWorld.getLayout().getElement((int) lastposition.getX() + i, (int) lastposition.getY() + j);
+								if (selected != -1 && selected < tiles.size()) {
+									if (f.getImg() == null || !f.getImg().equals(tiles.get(selected).getImage())) {
+										f.setImg(tiles.get(selected).getText());
+										f.setTileID(tileID);
+									}
+								}
+							}
+						}
+					}
+				}
+			} else {
+				lastposition = world.getCoordinate(mpl.getX(), mpl.getY());
+				if (lastposition != null) { // click was im ScrollPane
+					for (int i = 0; i <= till && i + lastposition.getX() < pWorld.getLayout().getRowSize(); i++) {
+						for (int j = 0; j <= till && j + lastposition.getY() < pWorld.getLayout().getColumnSize(); j++) {
+							boolean update = true;
+							if (pWorld.getLayout().getElement((int) lastposition.getX() + i, (int) lastposition.getY() + j) instanceof Field) {
+								f = (Field) pWorld.getLayout().getElement((int) lastposition.getX() + i, (int) lastposition.getY() + j);
 								if (f.getImg() == null || !f.getImg().equals(tiles.get(selected).getImage())) {
-									f.setImg(tiles.get(selected).getText());
-									f.setTileID(tileID);
+									update = true;
+								} else {
+									update = false;
+								}
+							}
+							if (selected != -1 && selected < tiles.size()) {
+								if (update) {
+									if ((Game.getImageLoader().getImage(tiles.get(selected).getText()).getWidth() > 16 || Game.getImageLoader().getImage(tiles.get(selected).getText()).getHeight() > 16) && (Game.getImageLoader().getImage(tiles.get(selected).getText()).getWidth() / 16 + lastposition.getX() < pWorld.getLayout().getRowSize() && Game.getImageLoader().getImage(tiles.get(selected).getText()).getHeight() / 16 + lastposition.getY() < pWorld.getLayout().getColumnSize())) {
+										//										Field[][] fields = new Field[Game.getImageLoader().getImage(tiles.get(selected).getText()).getWidth() / 16][Game.getImageLoader().getImage(tiles.get(selected).getText()).getHeight() / 16];
+										//										for (int k = 0; k < Game.getImageLoader().getImage(tiles.get(selected).getText()).getWidth() / 16; k++) {
+										//											for (int l = 0; l < Game.getImageLoader().getImage(tiles.get(selected).getText()).getHeight() / 16; l++) {
+										//												if (pWorld.getLayout().getElement((int) lastposition.getX() + k, (int) lastposition.getY() + l) instanceof Carrier) {
+										//													Carrier g = (Carrier) pWorld.getLayout().getElement((int) lastposition.getX() + k, (int) lastposition.getY() + l);
+										//													g.delete();
+										//												} else {
+										//													f = (Field) pWorld.getLayout().getElement((int) lastposition.getX() + k, (int) lastposition.getY() + l);
+										//													Game.getImageLoader().addImage(tiles.get(selected).getText() + k + l + ";16;16", Game.getImageLoader().getImage(tiles.get(selected).getText()).getSubimage(0 + k * 16, 0 + l * 16, 16, 16));
+										//													f.setImg(tiles.get(selected).getText() + k + l);
+										//
+										//												}
+										//												fields[k][l] = f;
+										//											}
+										//										}
+										//
+										//										GuiElement carry = new Carrier(fields, (int) lastposition.getX(), (int) lastposition.getY());
+										//										//										for (int k = 0; k < Game.getImageLoader().getImage(tiles.get(selected).getText()).getWidth() / 16; k++) {
+										//										//											for (int l = 0; l < Game.getImageLoader().getImage(tiles.get(selected).getText()).getHeight() / 16; l++) {
+										//										pWorld.getLayout().setElement(carry, (int) lastposition.getX(), (int) lastposition.getY());
+										//										//											}
+										//										//										}
+
+									} else {
+										f.setImg(tiles.get(selected).getText());
+										f.setTileID(tileID);
+									}
 								}
 							}
 						}
@@ -174,20 +224,7 @@ public class WorldEditor extends Screen implements ActionListener {
 		} else if (!mpl.isLeftClicked() && lastposition != null) {
 			lastposition = null;
 		} else {
-			lastposition = world.getCoordinate(mpl.getX(), mpl.getY());
-			if (lastposition != null) { // click was im ScrollPane
-				for (int i = 0; i <= till && i + lastposition.getX() < pWorld.getLayout().getRowSize(); i++) {
-					for (int j = 0; j <= till && j + lastposition.getY() < pWorld.getLayout().getColumnSize(); j++) {
-						f = (Field) pWorld.getLayout().getElement((int) lastposition.getX() + i, (int) lastposition.getY() + j);
-						if (selected != -1 && selected < tiles.size()) {
-							if (f.getImg() == null || !f.getImg().equals(tiles.get(selected).getImage())) {
-								f.setImg(tiles.get(selected).getText());
-								f.setTileID(tileID);
-							}
-						}
-					}
-				}
-			}
+
 		}
 		lastposition = null;
 	}
