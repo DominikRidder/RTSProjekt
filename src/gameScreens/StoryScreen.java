@@ -47,6 +47,11 @@ public class StoryScreen extends Screen implements ActionListener {
 
 	@Override
 	public void onCreate() {
+		/**Test**/
+		System.out.print("Test ... reading from story.inf: Missions = ");
+		System.out.println(Game.getInfoLoader().getInfo("story.inf").get("Missions"));
+		/********/
+		
 		background = new Button(0, 0, Game.getImageLoader().getImage(imglocation[actual]));
 		background.setWidth(getScreenFactory().getGame().getWindow().getWidth());
 		background.setHeight(getScreenFactory().getGame().getWindow().getHeight());

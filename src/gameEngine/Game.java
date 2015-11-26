@@ -6,6 +6,7 @@ import java.awt.image.BufferStrategy;
 import javax.swing.JFrame;
 
 import data.ImageLoader;
+import data.InfoLoader;
 
 public class Game {
 	private BufferStrategy strat;
@@ -15,8 +16,10 @@ public class Game {
 	private MusikThread musikThread;
 	private KeyboardListener keyboardListener;
 	private MousepadListener mousepadListener;
+	
 	private static ImageLoader imageloader;
-
+	private static InfoLoader infoloader;
+	
 	public Game(int windowX, int windowY, String title) {
 		window.setSize(windowX, windowY);
 		window.setTitle(title);
@@ -41,6 +44,7 @@ public class Game {
 		window.setLocationRelativeTo(null);
 
 		imageloader = new ImageLoader();
+		infoloader = new InfoLoader();
 		
 		screenFactory = new ScreenFactory(this);
 		gameThread = new GameThread(this);
@@ -78,4 +82,7 @@ public class Game {
 		return imageloader;
 	}
 
+	public static InfoLoader getInfoLoader(){
+		return infoloader;
+	}
 }
