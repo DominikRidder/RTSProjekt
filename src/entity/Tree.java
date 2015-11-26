@@ -2,9 +2,12 @@ package entity;
 
 import gameEngine.Screen;
 
+import java.awt.Graphics2D;
+
 public class Tree extends AbstractEntity {
 
 	private final int m_type;
+	private float m_hit;
 	
 	private static final int rad = 16;//Hitboxsizes
 	
@@ -30,11 +33,33 @@ public class Tree extends AbstractEntity {
 		return m_type;
 	}
 	
+	@Override
+	public void drawLifeBar(Graphics2D g2d)
+	{
+		if(getMaxLife() != getLife())
+			super.drawLifeBar(g2d);
+	}
+	
+	@Override
+	public void drawImage(Graphics2D g2d)
+	{
+		g2d.drawImage(getImg(), imgrg.x+(int)m_hit, imgrg.y, null);
+		if(m_hit >= 0)
+		{
+			m_hit-=0.1f;
+		}
+	}
+	
+	@Override
+	public boolean takeDamage(int dmg) {
+		if(m_hit <= 0)
+			m_hit+=4;
+		return super.takeDamage(dmg);
+	}
 	
 	@Override
 	public void update() {
-		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override

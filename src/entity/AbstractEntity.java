@@ -25,8 +25,6 @@ public abstract class AbstractEntity implements IEntity, Comparable<AbstractEnti
 	protected int maxDmg = 0;//default value
 	protected String img_name;//will maybe set, or imgnotfound.png
 	
-	private final static Aura aura = new Aura();
-	
 	protected int owner;
 	static int counter = 0;
 
@@ -146,29 +144,41 @@ public abstract class AbstractEntity implements IEntity, Comparable<AbstractEnti
 	@Override
 	public void draw(Graphics2D g2d) {
 		getImageBounds();//Update the image position
-		
-		g2d.drawImage(getImg(), imgrg.x, imgrg.y, null);
-		
+		drawImage(g2d);
 		drawLifeBar(g2d);
+	}
+	
+	public void drawImage(Graphics2D g2d)
+	{
+		//this may gets overwritten in some classes (like tree)
+		g2d.drawImage(getImg(), imgrg.x, imgrg.y, null);
 	}
 	
 	public void markOwn(Graphics2D g2d)
 	{
-		aura.drawAura(g2d, imgrg.x, imgrg.y, img_name, owner, getEntityID());
+		getImageBounds();//Update the image position, just in case
+		drawAura(g2d, imgrg.x, imgrg.y, img_name, owner);
 	}
-
+	
 	public void drawLifeBar(Graphics2D g2d) {
 		BufferedImage img = getImg();
 		if (img == null){ // Sometime the images aren't loaded until here...
 			return;
 		}
 		g2d.setColor(Color.BLACK);
-		g2d.drawRect(imgrg.x, imgrg.y + img.getHeight() - 4, img.getWidth(), 4);
+		g2d.drawRect(imgrg.x, imgrg.y + img.getHeight() + 3, img.getWidth(), 4);
 		g2d.setColor(Color.GREEN);
-		g2d.fillRect(imgrg.x + 1, imgrg.y + img.getHeight() - 3, img.getWidth() - 1, 3);
+		g2d.fillRect(imgrg.x + 1, imgrg.y + img.getHeight() + 4, img.getWidth() - 1, 3);
 		g2d.setColor(Color.RED);
 		double lost = (getLife() * 1.) / getMaxLife() * img.getWidth();
-		g2d.fillRect(imgrg.x + 1 + (int) lost, imgrg.y + img.getHeight() - 3, img.getWidth() - 1 - (int) lost, 3);
+		g2d.fillRect(imgrg.x + 1 + (int) lost, imgrg.y + img.getHeight() + 4, img.getWidth() - 1 - (int) lost, 3);
+	}
+	
+	public static void drawAura(Graphics2D g2d, int x, int y, String imgname, int owner)
+	{
+		if(owner == -1)//no owner? has no aura
+			return;
+		g2d.drawImage(Game.getImageLoader().getImage(imgname, owner), x, y, null);
 	}
 	
 	public static Color getOwnerColor(int owner)
