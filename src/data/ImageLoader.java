@@ -22,7 +22,8 @@ public class ImageLoader {
 
 	private final String datadir = "data";
 	private final String[] datatypes = { ".png" };
-	private final int m_resColor = (98 << 24) + (255 << 8);//50 transparenzy, but light green
+	private final int m_resColor = (98 << 24) + (255 << 8);// 50 transparenzy,
+															// but light green
 
 	private BufferedImage imgNotFound;
 
@@ -32,7 +33,8 @@ public class ImageLoader {
 		loadRelativNames();
 
 		try {
-			imgNotFound = ImageIO.read(new File(relativNames.get("NotFound.png")));
+			imgNotFound = ImageIO.read(new File(relativNames
+					.get("NotFound.png")));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -43,7 +45,8 @@ public class ImageLoader {
 
 		if (path == null) { // Image Name not found in datadir
 			relativNames.put(imgname, relativNames.get("NotFound.png"));
-			System.out.println("Image not found. Please make sure, that you dont use any Path Information!");
+			System.out
+					.println("Image not found. Please make sure, that you dont use any Path Information!");
 			return imgNotFound;
 		}
 
@@ -72,7 +75,7 @@ public class ImageLoader {
 		String colpath = path + "c" + owner;
 		BufferedImage img2 = data.get(colpath);
 
-		//System.out.println(owner+" "+colpath);
+		// System.out.println(owner+" "+colpath);
 		if (img2 == null) {
 			BufferedImage img = getImage(imgname);//
 			if (img == imgNotFound)
@@ -82,7 +85,7 @@ public class ImageLoader {
 			for (int i = 0; i < img2.getHeight(); i++) {
 				for (int j = 0; j < img2.getWidth(); j++) {
 					if (img.getRGB(j, i) == m_resColor)
-						img2.setRGB(j, i, color);//color in teamcolor
+						img2.setRGB(j, i, color);// color in teamcolor
 				}
 			}
 
@@ -103,7 +106,8 @@ public class ImageLoader {
 				return img;
 			int color = AbstractEntity.getOwnerColor(owner).getRGB();
 
-			img2 = new BufferedImage(img.getWidth(), img.getHeight(), BufferedImage.TYPE_4BYTE_ABGR);
+			img2 = new BufferedImage(img.getWidth(), img.getHeight(),
+					BufferedImage.TYPE_4BYTE_ABGR);
 			for (int i = 1; i < img2.getHeight() - 1; i++) {
 				for (int j = 1; j < img2.getWidth() - 1; j++) {
 					int alpha = (img.getRGB(j, i) >> 24) & 0xff;
@@ -126,7 +130,7 @@ public class ImageLoader {
 			for (int i = 0; i < img2.getHeight(); i++) {
 				for (int j = 0; j < img2.getWidth(); j++) {
 					int alpha = (img.getRGB(j, i) >> 24) & 0xff;
-					if (alpha <= 5)//do a bit tollerance
+					if (alpha <= 5)// do a bit tollerance
 						continue;
 					img2.setRGB(j, i, 0);
 				}
@@ -229,16 +233,29 @@ public class ImageLoader {
 		}
 	}
 
-	public static BufferedImage getScaledImage(BufferedImage image, int width, int height) throws IOException {
-		int imageWidth = image.getWidth();
-		int imageHeight = image.getHeight();
+	public static BufferedImage getScaledImage(BufferedImage image, int width,
+			int height) throws IOException {
+		// int imageWidth = image.getWidth();
+		// int imageHeight = image.getHeight();
+		//
+		// double scaleX = (double) width / imageWidth;
+		// double scaleY = (double) height / imageHeight;
+		// AffineTransform scaleTransform =
+		// AffineTransform.getScaleInstance(scaleX, scaleY);
+		// AffineTransformOp bilinearScaleOp = new
+		// AffineTransformOp(scaleTransform, AffineTransformOp.TYPE_BILINEAR);
+		//
+		// return bilinearScaleOp.filter(image, new BufferedImage(width, height,
+		// image.getType()));
 
-		double scaleX = (double) width / imageWidth;
-		double scaleY = (double) height / imageHeight;
-		AffineTransform scaleTransform = AffineTransform.getScaleInstance(scaleX, scaleY);
-		AffineTransformOp bilinearScaleOp = new AffineTransformOp(scaleTransform, AffineTransformOp.TYPE_BILINEAR);
-
-		return bilinearScaleOp.filter(image, new BufferedImage(width, height, image.getType()));
+		BufferedImage target = new BufferedImage(width, height, image.getType());
+		java.awt.Graphics gr = target.getGraphics();
+		gr.drawImage(image.getScaledInstance(target.getWidth(),
+				target.getHeight(), BufferedImage.SCALE_FAST), 0, 0, null); // converting
+																			// Image
+																			// ->
+																			// BufferedImage
+		return target;
 	}
 
 	public void addImage(String key, BufferedImage value) {
