@@ -48,13 +48,13 @@ public class StoryScreen extends Screen implements ActionListener {
 
 	@Override
 	public void onCreate() {
-		HashMap<String, String> info = Game.getInfoLoader().getInfo("story.inf");
+		HashMap<String, String> info = Game.getInfoManager().getInfo("story.inf");
 		progress[RACE_HUMAN] = Integer.parseInt(info.get("HUMAN_PROGRESS"));
 		progress[RACE_SHADOW] = Integer.parseInt(info.get("SHADOW_PROGRESS"));
 		progress[RACE_ANCIENT] = Integer.parseInt(info.get("ANCIENT1_PROGRESS"));
 		progress[RACE_ANCIENT+1] = Integer.parseInt(info.get("ANCIENT2_PROGRESS"));
 		
-		background = new Button(0, 0, Game.getImageLoader().getImage(imglocation[actual]));
+		background = new Button(0, 0, Game.getImageManager().getImage(imglocation[actual]));
 		background.setWidth(getScreenFactory().getGame().getWindow().getWidth());
 		background.setHeight(getScreenFactory().getGame().getWindow().getHeight());
 		addGuiElement(background);
@@ -91,15 +91,17 @@ public class StoryScreen extends Screen implements ActionListener {
 
 		Button arrowleft = new Button(30, 50, 20, 50, "<-");
 		arrowleft.addActionListener(this);
+		arrowleft.setImage(Game.getImageManager().getImage("ArrowLeft.png"));
 		Button arrowright = new Button(150, 50, 20, 50, "->");
 		arrowright.addActionListener(this);
+		arrowright.setImage(Game.getImageManager().getImage("ArrowRight.png"));
 		spRace = new Label(50, 50, 100, 50, "Human");
 		finished = new Label(width - 150, 50, 100, 50, "Finished: " + progress[actual]);
 
 		addGuiElement(arrowleft);
 		addGuiElement(arrowright);
 		addGuiElement(spRace);
-		addGuiElement(finished);
+//		addGuiElement(finished);
 
 		handleMissionVisibility();
 		finishedCreating = true;
@@ -114,6 +116,8 @@ public class StoryScreen extends Screen implements ActionListener {
 		if (!finishedCreating) {
 			return;
 		}
+		
+		super.onDraw(g2d);
 
 		Button b1 = null;
 		Button b2 = null;
@@ -148,13 +152,11 @@ public class StoryScreen extends Screen implements ActionListener {
 			drawLine(b1, b2, g2d);
 			b1 = b2;
 		}
-
-		super.onDraw(g2d);
 	}
 
 	public void drawLine(Button b1, Button b2, Graphics2D g2d) {
 		if (b1.isVisible() && b2.isVisible()) {
-			g2d.drawLine(b1.getX() + b1.getWidth() / 2, b1.getY(), b2.getX() + b2.getWidth() / 2, b2.getY());
+			g2d.drawLine(b1.getX() + b1.getWidth() / 2, b1.getY(), b2.getX() + b2.getWidth() / 2 - (b2.getX()-b1.getX())/2, b2.getY()+b2.getHeight());
 		}
 	}
 
@@ -203,7 +205,7 @@ public class StoryScreen extends Screen implements ActionListener {
 		}
 		finished.setText("Finished: " + fin);
 
-		background.setImage(Game.getImageLoader().getImage(imglocation[actual]));
+		background.setImage(Game.getImageManager().getImage(imglocation[actual]));
 
 		handleMissionVisibility();
 	}

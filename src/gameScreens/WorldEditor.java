@@ -186,7 +186,7 @@ public class WorldEditor extends Screen implements ActionListener {
 							}
 							if (selected != -1 && selected < tiles.size()) {
 								if (update) {
-									if ((Game.getImageLoader().getImage(tiles.get(selected).getText()).getWidth() > 16 || Game.getImageLoader().getImage(tiles.get(selected).getText()).getHeight() > 16) && (Game.getImageLoader().getImage(tiles.get(selected).getText()).getWidth() / 16 + lastposition.getX() < pWorld.getLayout().getRowSize() && Game.getImageLoader().getImage(tiles.get(selected).getText()).getHeight() / 16 + lastposition.getY() < pWorld.getLayout().getColumnSize())) {
+									if ((Game.getImageManager().getImage(tiles.get(selected).getText()).getWidth() > 16 || Game.getImageManager().getImage(tiles.get(selected).getText()).getHeight() > 16) && (Game.getImageManager().getImage(tiles.get(selected).getText()).getWidth() / 16 + lastposition.getX() < pWorld.getLayout().getRowSize() && Game.getImageManager().getImage(tiles.get(selected).getText()).getHeight() / 16 + lastposition.getY() < pWorld.getLayout().getColumnSize())) {
 										//										Field[][] fields = new Field[Game.getImageLoader().getImage(tiles.get(selected).getText()).getWidth() / 16][Game.getImageLoader().getImage(tiles.get(selected).getText()).getHeight() / 16];
 										//										for (int k = 0; k < Game.getImageLoader().getImage(tiles.get(selected).getText()).getWidth() / 16; k++) {
 										//											for (int l = 0; l < Game.getImageLoader().getImage(tiles.get(selected).getText()).getHeight() / 16; l++) {
@@ -436,11 +436,11 @@ public class WorldEditor extends Screen implements ActionListener {
 
 	public void loadTiles(String layer, ActionListener action) {
 		tiles.clear();
-		ArrayList<String> imgs = Game.getImageLoader().getImages(layer);
+		ArrayList<String> imgs = Game.getImageManager().getImages(layer);
 		pTiles.setLayout(new GridLayout(imgs.size() / 3 + 2, imgs.size() / 3 + 1, pTiles));
 		for (int i = 0; i < imgs.size(); i++) {
 			Button tile = null;
-			tile = new Button(0, 0, Game.getImageLoader().getImage(imgs.get(i)));
+			tile = new Button(0, 0, Game.getImageManager().getImage(imgs.get(i)));
 			tile.setText(imgs.get(i));
 			tile.setWidth(16);
 			tile.setHeight(16);

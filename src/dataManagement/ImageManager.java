@@ -1,4 +1,4 @@
-package data;
+package dataManagement;
 
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
@@ -15,7 +15,7 @@ import javax.imageio.ImageIO;
 
 import entity.AbstractEntity;
 
-public class ImageLoader {
+public class ImageManager {
 
 	private final HashMap<String, BufferedImage> data;
 	private HashMap<String, String> relativNames;
@@ -26,7 +26,7 @@ public class ImageLoader {
 
 	private BufferedImage imgNotFound;
 
-	public ImageLoader() {
+	public ImageManager() {
 		data = new HashMap<String, BufferedImage>();
 
 		loadRelativNames();
@@ -181,7 +181,7 @@ public class ImageLoader {
 
 			if (toscale.getWidth() != width || toscale.getHeight() != height) {
 				try {
-					img = ImageLoader.getScaledImage(toscale, width, height);
+					img = ImageManager.getScaledImage(toscale, width, height);
 				} catch (IOException e) {
 					e.printStackTrace();
 

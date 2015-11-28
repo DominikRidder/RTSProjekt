@@ -1,4 +1,4 @@
-package data;
+package dataManagement;
  
 import java.io.BufferedReader;
 import java.io.File;
@@ -8,14 +8,14 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Stack;
 
-public class InfoLoader {
+public class InfoManager {
 	private final HashMap<String, HashMap<String, String>> data;
 	private HashMap<String, String> relativNames;
 
 	private final String datadir = "data";
 	private final String[] datatypes = { ".inf" };
 
-	public InfoLoader() {
+	public InfoManager() {
 		data = new HashMap<String, HashMap<String, String>>();
 
 		loadRelativNames();

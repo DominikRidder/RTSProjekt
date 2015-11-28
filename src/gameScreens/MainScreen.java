@@ -34,7 +34,7 @@ public class MainScreen extends Screen implements ActionListener {
 			newb.addActionListener(this);
 			p.addElement(newb);
 		}
-		Button placeholder = new Button(0, 0, Game.getImageLoader().getImage("Hauptmenue.png"));
+		Button placeholder = new Button(0, 0, Game.getImageManager().getImage("Hauptmenue.png"));
 		placeholder.setWidth(getScreenFactory().getGame().getWindow().getWidth());
 		placeholder.setHeight(getScreenFactory().getGame().getWindow().getHeight());
 		addGuiElement(placeholder);

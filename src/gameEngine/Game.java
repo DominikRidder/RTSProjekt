@@ -5,8 +5,8 @@ import java.awt.image.BufferStrategy;
 
 import javax.swing.JFrame;
 
-import data.ImageLoader;
-import data.InfoLoader;
+import dataManagement.ImageManager;
+import dataManagement.InfoManager;
 
 public class Game {
 	private BufferStrategy strat;
@@ -17,8 +17,8 @@ public class Game {
 	private KeyboardListener keyboardListener;
 	private MousepadListener mousepadListener;
 	
-	private static ImageLoader imageloader;
-	private static InfoLoader infoloader;
+	private static ImageManager imagemanager;
+	private static InfoManager infomanager;
 	
 	public Game(int windowX, int windowY, String title) {
 		window.setSize(windowX, windowY);
@@ -43,8 +43,8 @@ public class Game {
 		window.setFocusable(true);
 		window.setLocationRelativeTo(null);
 
-		imageloader = new ImageLoader();
-		infoloader = new InfoLoader();
+		imagemanager = new ImageManager();
+		infomanager = new InfoManager();
 		
 		screenFactory = new ScreenFactory(this);
 		gameThread = new GameThread(this);
@@ -78,11 +78,11 @@ public class Game {
 		return window;
 	}
 	
-	public static ImageLoader getImageLoader(){
-		return imageloader;
+	public static ImageManager getImageManager(){
+		return imagemanager;
 	}
 
-	public static InfoLoader getInfoLoader(){
-		return infoloader;
+	public static InfoManager getInfoManager(){
+		return infomanager;
 	}
 }

@@ -138,7 +138,7 @@ public abstract class AbstractEntity implements IEntity, Comparable<AbstractEnti
 	/*Drawing Stuff*/
 	BufferedImage getImg()
 	{
-		return Game.getImageLoader().getImage(img_name, owner);
+		return Game.getImageManager().getImage(img_name, owner);
 	}
 	
 	@Override
@@ -178,7 +178,7 @@ public abstract class AbstractEntity implements IEntity, Comparable<AbstractEnti
 	{
 		if(owner == -1)//no owner? has no aura
 			return;
-		g2d.drawImage(Game.getImageLoader().getImageAura(imgname, owner), x, y, null);
+		g2d.drawImage(Game.getImageManager().getImageAura(imgname, owner), x, y, null);
 	}
 	
 	public static Color getOwnerColor(int owner)
