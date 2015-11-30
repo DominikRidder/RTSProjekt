@@ -316,51 +316,6 @@ public class WorldEditor extends Screen implements ActionListener {
 		tiles.get(selected).setBorder(true);
 	}
 
-	public void mapToString() {
-		StringBuffer allLayers = new StringBuffer(pWorld.getLayout().getRowSize() + ";" + pWorld.getLayout().getColumnSize());
-		for (int i = 0; i < pWorld.numberOfLayouts(); i++) {
-			pWorld.setActualLayer(i);
-			StringBuffer map = new StringBuffer();
-			for (int j = 0; j < pWorld.getLayout().getRowSize(); j++) {
-				for (int k = 0; k < pWorld.getLayout().getColumnSize(); k++) {
-					if (((Field) pWorld.getLayout().getElement(k, j)).getTileID() != null) {
-						map.append("(" + ((Field) pWorld.getLayout().getElement(k, j)).getTileID() + ")");
-					} else {
-						map.append("(v)");
-					}
-				}
-			}
-			String actTile = map.substring(0, nextTileInString(0, map.toString()));
-			int counter = 1;
-			StringBuffer tmp = new StringBuffer();
-			for (int j = actTile.length(); j < map.length() - 1; j += actTile.length()) {
-				if (map.substring(j, nextTileInString(j, map.toString())).equals(actTile)) {
-					counter++;
-				} else {
-					tmp.append(counter + actTile + ";");
-					actTile = map.substring(j, nextTileInString(j, map.toString()));
-					counter = 1;
-				}
-			}
-			tmp.append(counter + actTile);
-			allLayers.append("\n" + tmp);
-		}
-
-		JFileChooser chooser = new JFileChooser();
-		chooser.setCurrentDirectory(new File("data/"));
-		int retrival = chooser.showSaveDialog(null);
-		if (retrival == JFileChooser.APPROVE_OPTION) {
-			try {
-				FileWriter fw = new FileWriter(chooser.getSelectedFile() + ".mpd");
-				fw.write(allLayers.toString());
-				fw.flush();
-				fw.close();
-			} catch (Exception ex) {
-				ex.printStackTrace();
-			}
-		}
-	}
-
 	public void loadMap() {
 		File fMap;
 		JFileChooser chooser = new JFileChooser();
@@ -411,7 +366,52 @@ public class WorldEditor extends Screen implements ActionListener {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+	
+		}
+	}
 
+	public void mapToString() {
+		StringBuffer allLayers = new StringBuffer(pWorld.getLayout().getRowSize() + ";" + pWorld.getLayout().getColumnSize());
+		for (int i = 0; i < pWorld.numberOfLayouts(); i++) {
+			pWorld.setActualLayer(i);
+			StringBuffer map = new StringBuffer();
+			for (int j = 0; j < pWorld.getLayout().getRowSize(); j++) {
+				for (int k = 0; k < pWorld.getLayout().getColumnSize(); k++) {
+					if (((Field) pWorld.getLayout().getElement(k, j)).getTileID() != null) {
+						map.append("(" + ((Field) pWorld.getLayout().getElement(k, j)).getTileID() + ")");
+					} else {
+						map.append("(v)");
+					}
+				}
+			}
+			String actTile = map.substring(0, nextTileInString(0, map.toString()));
+			int counter = 1;
+			StringBuffer tmp = new StringBuffer();
+			for (int j = actTile.length(); j < map.length() - 1; j += actTile.length()) {
+				if (map.substring(j, nextTileInString(j, map.toString())).equals(actTile)) {
+					counter++;
+				} else {
+					tmp.append(counter + actTile + ";");
+					actTile = map.substring(j, nextTileInString(j, map.toString()));
+					counter = 1;
+				}
+			}
+			tmp.append(counter + actTile);
+			allLayers.append("\n" + tmp);
+		}
+
+		JFileChooser chooser = new JFileChooser();
+		chooser.setCurrentDirectory(new File("data/"));
+		int retrival = chooser.showSaveDialog(null);
+		if (retrival == JFileChooser.APPROVE_OPTION) {
+			try {
+				FileWriter fw = new FileWriter(chooser.getSelectedFile() + ".mpd");
+				fw.write(allLayers.toString());
+				fw.flush();
+				fw.close();
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
 		}
 	}
 

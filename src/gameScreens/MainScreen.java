@@ -25,7 +25,11 @@ public class MainScreen extends Screen implements ActionListener {
 
 		String adding[] = { "Einzelspieler","Quick Start", "Spiel Laden", "Archievments", "Highscore", "Einstellungen", "WorldEditor", "Exit" };
 
-		Panel p = new Panel(345, 175, 150, 280/*40 * adding.length*/);
+		int Wwidth = getScreenFactory().getGame().getWindow().getWidth();
+		int Wheight = getScreenFactory().getGame().getWindow().getHeight();
+		int width = Wwidth/5;
+		int height = Wheight*2/5;
+		Panel p = new Panel(Wwidth/2-width/2, Wheight/2-height/2, width, height/*40 * adding.length*/);
 		p.setLayout(new GridLayout(adding.length, 1, p));
 		for (String toadd : adding) {
 			Button newb = new Button(toadd);
