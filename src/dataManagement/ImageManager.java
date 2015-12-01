@@ -1,7 +1,5 @@
 package dataManagement;
 
-import java.awt.geom.AffineTransform;
-import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
 import java.awt.image.WritableRaster;
@@ -33,8 +31,7 @@ public class ImageManager {
 		loadRelativNames();
 
 		try {
-			imgNotFound = ImageIO.read(new File(relativNames
-					.get("NotFound.png")));
+			imgNotFound = ImageIO.read(new File(relativNames.get("NotFound.png")));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -45,8 +42,7 @@ public class ImageManager {
 
 		if (path == null) { // Image Name not found in datadir
 			relativNames.put(imgname, relativNames.get("NotFound.png"));
-			System.out
-					.println("Image not found. Please make sure, that you dont use any Path Information!");
+			System.out.println("Image not found. Please make sure, that you dont use any Path Information!");
 			return imgNotFound;
 		}
 
@@ -106,8 +102,7 @@ public class ImageManager {
 				return img;
 			int color = AbstractEntity.getOwnerColor(owner).getRGB();
 
-			img2 = new BufferedImage(img.getWidth(), img.getHeight(),
-					BufferedImage.TYPE_4BYTE_ABGR);
+			img2 = new BufferedImage(img.getWidth(), img.getHeight(), BufferedImage.TYPE_4BYTE_ABGR);
 			for (int i = 1; i < img2.getHeight() - 1; i++) {
 				for (int j = 1; j < img2.getWidth() - 1; j++) {
 					int alpha = (img.getRGB(j, i) >> 24) & 0xff;
@@ -233,8 +228,7 @@ public class ImageManager {
 		}
 	}
 
-	public static BufferedImage getScaledImage(BufferedImage image, int width,
-			int height) throws IOException {
+	public static BufferedImage getScaledImage(BufferedImage image, int width, int height) throws IOException {
 		// int imageWidth = image.getWidth();
 		// int imageHeight = image.getHeight();
 		//
@@ -250,12 +244,20 @@ public class ImageManager {
 
 		BufferedImage target = new BufferedImage(width, height, image.getType());
 		java.awt.Graphics gr = target.getGraphics();
-		gr.drawImage(image.getScaledInstance(target.getWidth(),
-				target.getHeight(), BufferedImage.SCALE_FAST), 0, 0, null); // converting
-																			// Image
-																			// ->
-																			// BufferedImage
+		gr.drawImage(image.getScaledInstance(target.getWidth(), target.getHeight(), BufferedImage.SCALE_FAST), 0, 0, null); // converting
+																															// Image
+																															// ->
+																															// BufferedImage
 		return target;
+	}
+
+	public String getNameFromImage(BufferedImage img) {
+		for (int i = 0; i < data.values().size(); i++) {
+			if (img.equals(data.values().toArray()[i])) {
+				return (String) data.keySet().toArray()[i];
+			}
+		}
+		return null;
 	}
 
 	public void addImage(String key, BufferedImage value) {
