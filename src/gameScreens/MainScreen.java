@@ -25,11 +25,19 @@ public class MainScreen extends Screen implements ActionListener {
 
 		String adding[] = { "Einzelspieler","Quick Start", "Spiel Laden", "Archievments", "Highscore", "Einstellungen", "WorldEditor", "Exit" };
 
+		while(getScreenFactory().getGame().getWindow().getWidth() < 50 || getScreenFactory().getGame().getWindow().getHeight( ) <50){
+			try {
+				Thread.sleep(10);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+		
 		int Wwidth = getScreenFactory().getGame().getWindow().getWidth();
 		int Wheight = getScreenFactory().getGame().getWindow().getHeight();
 		int width = Wwidth/5;
 		int height = Wheight*2/5;
-		Panel p = new Panel(Wwidth/2-width/2, Wheight/2-height/2, width, height/*40 * adding.length*/);
+		Panel p = new Panel(Wwidth/2-width/2, Wheight/2-height/2, width, height);
 		p.setLayout(new GridLayout(adding.length, 1, p));
 		for (String toadd : adding) {
 			Button newb = new Button(toadd);
@@ -38,6 +46,8 @@ public class MainScreen extends Screen implements ActionListener {
 			newb.addActionListener(this);
 			p.addElement(newb);
 		}
+		
+		
 		Button placeholder = new Button(0, 0, Game.getImageManager().getImage("Hauptmenue.png"));
 		placeholder.setWidth(getScreenFactory().getGame().getWindow().getWidth());
 		placeholder.setHeight(getScreenFactory().getGame().getWindow().getHeight());
