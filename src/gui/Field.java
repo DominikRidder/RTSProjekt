@@ -7,7 +7,7 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
-import data.ImageLoader;
+import dataManagement.ImageManager;
 
 public class Field extends GuiElement {
 	private BufferedImage img;
@@ -32,28 +32,28 @@ public class Field extends GuiElement {
 
 	@Override
 	public void onUpdate(Screen screen) {
-		if (this.needUpdate()){
-			if (imgname != null){
-				img = Game.getImageLoader().getImage(imgname, getWidth(), getHeight());
+		if (this.needUpdate()) {
+			if (imgname != null) {
+				img = Game.getImageManager().getImage(imgname, getWidth(), getHeight());
 			}
 			this.setUpdate(false);
 		}
 	}
 
 	public void setImg(String imgname) {
-		img = Game.getImageLoader().getImage(imgname, getWidth(), getHeight());
+		img = Game.getImageManager().getImage(imgname, getWidth(), getHeight());
 		this.imgname = imgname;
 	}
-	
+
 	@Deprecated
 	public void setImg(BufferedImage img) {
-		if (img.getWidth() != getWidth() || img.getHeight() != getHeight()){
+		if (img.getWidth() != getWidth() || img.getHeight() != getHeight()) {
 			try {
-				this.img = ImageLoader.getScaledImage(img, getWidth(), getHeight());
+				this.img = ImageManager.getScaledImage(img, getWidth(), getHeight());
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-		}else{
+		} else {
 			this.img = img;
 		}
 	}

@@ -5,7 +5,9 @@ import gameEngine.Game;
 import gameEngine.MousepadListener;
 import gameEngine.Screen;
 import gameEngine.ScreenFactory;
+import gui.BigField;
 import gui.Button;
+import gui.Carrier;
 import gui.Field;
 import gui.GridLayout;
 import gui.GuiElement;
@@ -13,7 +15,6 @@ import gui.Label;
 import gui.LayerPanel;
 import gui.Panel;
 import gui.ScrollPane;
-import gui.TextField;
 
 import java.awt.Point;
 import java.awt.event.ActionEvent;
@@ -129,7 +130,7 @@ public class WorldEditor extends Screen implements ActionListener {
 		functions.add(load);
 		functions.add(zoomin);
 		functions.add(zoomout);
-//		functions.add(new TextField(0,0,0,0));
+		//		functions.add(new TextField(0,0,0,0));
 
 		for (int i = 0; i < functions.size(); i++) {
 			pFunctions.addElement(functions.get(i));
@@ -148,7 +149,7 @@ public class WorldEditor extends Screen implements ActionListener {
 	public void onUpdate() {
 		super.onUpdate();
 		MousepadListener mpl = getScreenFactory().getGame().getMousepadListener();
-		Field f;
+		Field f = new Field(mpl.getX(), mpl.getY());
 		int till = cursorSize - 1;
 		if (till < 0) {
 			till = 0;
@@ -159,11 +160,54 @@ public class WorldEditor extends Screen implements ActionListener {
 				if (lastposition != null) { // click was im ScrollPane
 					for (int i = 0; i <= till && i + lastposition.getX() < pWorld.getLayout().getRowSize(); i++) {
 						for (int j = 0; j <= till && j + lastposition.getY() < pWorld.getLayout().getColumnSize(); j++) {
-							f = (Field) pWorld.getLayout().getElement((int) lastposition.getX() + i, (int) lastposition.getY() + j);
-							if (selected != -1 && selected < tiles.size()) {
-								if (f.getImg() == null || !f.getImg().equals(tiles.get(selected).getImage())) {
-									f.setImg(tiles.get(selected).getText());
-									f.setTileID(tileID);
+							if (pWorld.getLayout().getElement((int) lastposition.getX() + i, (int) lastposition.getY() + j) instanceof Field) {
+								f = (Field) pWorld.getLayout().getElement((int) lastposition.getX() + i, (int) lastposition.getY() + j);
+								if (selected != -1 && selected < tiles.size()) {
+									if (f.getImg() == null || !f.getImg().equals(tiles.get(selected).getImage())) {
+										f.setImg(tiles.get(selected).getText());
+										f.setTileID(tileID);
+									}
+								}
+							}
+						}
+					}
+				}
+			} else {
+				lastposition = world.getCoordinate(mpl.getX(), mpl.getY());
+				if (lastposition != null) { // click was im ScrollPane
+					if (selected != -1 && selected < tiles.size()) {
+						if ((Game.getImageManager().getImage(tiles.get(selected).getText()).getWidth() > 16 || Game.getImageManager().getImage(tiles.get(selected).getText()).getHeight() > 16) && (Game.getImageManager().getImage(tiles.get(selected).getText()).getWidth() / 16 + lastposition.getX() < pWorld.getLayout().getRowSize() && Game.getImageManager().getImage(tiles.get(selected).getText()).getHeight() / 16 + lastposition.getY() < pWorld.getLayout().getColumnSize())) {
+							//						if (pWorld.getLayout().getElement((int) lastposition.getX(), (int) lastposition.getY()) instanceof BigField) {
+							//							System.out.println("Löschen");
+							//							((BigField) pWorld.getLayout().getElement((int) lastposition.getX(), (int) lastposition.getY())).delete();
+							//						}
+							Carrier c = new Carrier((int) lastposition.getX(), (int) lastposition.getY(), Game.getImageManager().getImage(tiles.get(selected).getText()), pWorld.getLayout());
+							for (int k = (int) lastposition.getX(); k < pWorld.getLayout().getRowSize() && k < lastposition.getX() + Game.getImageManager().getImage(tiles.get(selected).getText()).getWidth() / 16; k++) {
+								for (int l = (int) lastposition.getY(); l < pWorld.getLayout().getColumnSize() && l < lastposition.getY() + Game.getImageManager().getImage(tiles.get(selected).getText()).getHeight() / 16; l++) {
+									BigField bf = new BigField(k, l, c);
+									bf.setHeight(16);
+									bf.setWidth(16);
+									pWorld.getLayout().setElement(bf, k, l);
+								}
+							}
+							c.init();
+						} else {
+							for (int i = 0; i <= till && i + lastposition.getX() < pWorld.getLayout().getRowSize(); i++) {
+								for (int j = 0; j <= till && j + lastposition.getY() < pWorld.getLayout().getColumnSize(); j++) {
+									boolean update = true;
+									if (pWorld.getLayout().getElement((int) lastposition.getX() + i, (int) lastposition.getY() + j) instanceof Field) {
+										f = (Field) pWorld.getLayout().getElement((int) lastposition.getX() + i, (int) lastposition.getY() + j);
+										if (f.getImg() == null || !f.getImg().equals(tiles.get(selected).getImage())) {
+											update = true;
+										} else {
+											update = false;
+										}
+									}
+
+									if (update) {
+										f.setImg(tiles.get(selected).getText());
+										f.setTileID(tileID);
+									}
 								}
 							}
 						}
@@ -174,20 +218,7 @@ public class WorldEditor extends Screen implements ActionListener {
 		} else if (!mpl.isLeftClicked() && lastposition != null) {
 			lastposition = null;
 		} else {
-			lastposition = world.getCoordinate(mpl.getX(), mpl.getY());
-			if (lastposition != null) { // click was im ScrollPane
-				for (int i = 0; i <= till && i + lastposition.getX() < pWorld.getLayout().getRowSize(); i++) {
-					for (int j = 0; j <= till && j + lastposition.getY() < pWorld.getLayout().getColumnSize(); j++) {
-						f = (Field) pWorld.getLayout().getElement((int) lastposition.getX() + i, (int) lastposition.getY() + j);
-						if (selected != -1 && selected < tiles.size()) {
-							if (f.getImg() == null || !f.getImg().equals(tiles.get(selected).getImage())) {
-								f.setImg(tiles.get(selected).getText());
-								f.setTileID(tileID);
-							}
-						}
-					}
-				}
-			}
+
 		}
 		lastposition = null;
 	}
@@ -279,51 +310,6 @@ public class WorldEditor extends Screen implements ActionListener {
 		tiles.get(selected).setBorder(true);
 	}
 
-	public void mapToString() {
-		StringBuffer allLayers = new StringBuffer(pWorld.getLayout().getRowSize() + ";" + pWorld.getLayout().getColumnSize());
-		for (int i = 0; i < pWorld.numberOfLayouts(); i++) {
-			pWorld.setActualLayer(i);
-			StringBuffer map = new StringBuffer();
-			for (int j = 0; j < pWorld.getLayout().getRowSize(); j++) {
-				for (int k = 0; k < pWorld.getLayout().getColumnSize(); k++) {
-					if (((Field) pWorld.getLayout().getElement(k, j)).getTileID() != null) {
-						map.append("(" + ((Field) pWorld.getLayout().getElement(k, j)).getTileID() + ")");
-					} else {
-						map.append("(v)");
-					}
-				}
-			}
-			String actTile = map.substring(0, nextTileInString(0, map.toString()));
-			int counter = 1;
-			StringBuffer tmp = new StringBuffer();
-			for (int j = actTile.length(); j < map.length() - 1; j += actTile.length()) {
-				if (map.substring(j, nextTileInString(j, map.toString())).equals(actTile)) {
-					counter++;
-				} else {
-					tmp.append(counter + actTile + ";");
-					actTile = map.substring(j, nextTileInString(j, map.toString()));
-					counter = 1;
-				}
-			}
-			tmp.append(counter + actTile);
-			allLayers.append("\n" + tmp);
-		}
-
-		JFileChooser chooser = new JFileChooser();
-		chooser.setCurrentDirectory(new File("data/"));
-		int retrival = chooser.showSaveDialog(null);
-		if (retrival == JFileChooser.APPROVE_OPTION) {
-			try {
-				FileWriter fw = new FileWriter(chooser.getSelectedFile() + ".mpd");
-				fw.write(allLayers.toString());
-				fw.flush();
-				fw.close();
-			} catch (Exception ex) {
-				ex.printStackTrace();
-			}
-		}
-	}
-
 	public void loadMap() {
 		File fMap;
 		JFileChooser chooser = new JFileChooser();
@@ -378,6 +364,51 @@ public class WorldEditor extends Screen implements ActionListener {
 		}
 	}
 
+	public void mapToString() {
+		StringBuffer allLayers = new StringBuffer(pWorld.getLayout().getRowSize() + ";" + pWorld.getLayout().getColumnSize());
+		for (int i = 0; i < pWorld.numberOfLayouts(); i++) {
+			pWorld.setActualLayer(i);
+			StringBuffer map = new StringBuffer();
+			for (int j = 0; j < pWorld.getLayout().getRowSize(); j++) {
+				for (int k = 0; k < pWorld.getLayout().getColumnSize(); k++) {
+					if (((Field) pWorld.getLayout().getElement(k, j)).getTileID() != null) {
+						map.append("(" + ((Field) pWorld.getLayout().getElement(k, j)).getTileID() + ")");
+					} else {
+						map.append("(v)");
+					}
+				}
+			}
+			String actTile = map.substring(0, nextTileInString(0, map.toString()));
+			int counter = 1;
+			StringBuffer tmp = new StringBuffer();
+			for (int j = actTile.length(); j < map.length() - 1; j += actTile.length()) {
+				if (map.substring(j, nextTileInString(j, map.toString())).equals(actTile)) {
+					counter++;
+				} else {
+					tmp.append(counter + actTile + ";");
+					actTile = map.substring(j, nextTileInString(j, map.toString()));
+					counter = 1;
+				}
+			}
+			tmp.append(counter + actTile);
+			allLayers.append("\n" + tmp);
+		}
+
+		JFileChooser chooser = new JFileChooser();
+		chooser.setCurrentDirectory(new File("data/"));
+		int retrival = chooser.showSaveDialog(null);
+		if (retrival == JFileChooser.APPROVE_OPTION) {
+			try {
+				FileWriter fw = new FileWriter(chooser.getSelectedFile() + ".mpd");
+				fw.write(allLayers.toString());
+				fw.flush();
+				fw.close();
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+		}
+	}
+
 	public int nextTileInString(int start, String searchString) {
 		int count = 0;
 		int i = start;
@@ -399,11 +430,11 @@ public class WorldEditor extends Screen implements ActionListener {
 
 	public void loadTiles(String layer, ActionListener action) {
 		tiles.clear();
-		ArrayList<String> imgs = Game.getImageLoader().getImages(layer);
+		ArrayList<String> imgs = Game.getImageManager().getImages(layer);
 		pTiles.setLayout(new GridLayout(imgs.size() / 3 + 2, imgs.size() / 3 + 1, pTiles));
 		for (int i = 0; i < imgs.size(); i++) {
 			Button tile = null;
-			tile = new Button(0, 0, Game.getImageLoader().getImage(imgs.get(i)));
+			tile = new Button(0, 0, Game.getImageManager().getImage(imgs.get(i)));
 			tile.setText(imgs.get(i));
 			tile.setWidth(16);
 			tile.setHeight(16);

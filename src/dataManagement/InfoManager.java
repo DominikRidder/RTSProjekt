@@ -1,5 +1,5 @@
-package data;
- 
+package dataManagement;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -8,14 +8,14 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Stack;
 
-public class InfoLoader {
+public class InfoManager {
 	private final HashMap<String, HashMap<String, String>> data;
 	private HashMap<String, String> relativNames;
 
 	private final String datadir = "data";
 	private final String[] datatypes = { ".inf" };
 
-	public InfoLoader() {
+	public InfoManager() {
 		data = new HashMap<String, HashMap<String, String>>();
 
 		loadRelativNames();
@@ -56,9 +56,12 @@ public class InfoLoader {
 				if (line.length() > 0 && Character.isAlphabetic(line.charAt(0))) {
 					String parts[] = line.split("=", 2);
 					info.put(parts[0], parts[1]);
-					while(line.endsWith("\\")){
-						line = br.readLine();
-						info.put(parts[0], info.get(parts[0])+"\n"+line);
+					if (line.endsWith("\\")) {
+						while (line.endsWith("\\")) {
+							line = br.readLine();
+							info.put(parts[0], info.get(parts[0]) + "\n" + line);
+						}
+						info.put(parts[0], info.get(parts[0]).replace("\\\n", "\n"));
 					}
 				} else if (line.replace("\n", "").replace(" ", "").length() == 0) {
 					continue;

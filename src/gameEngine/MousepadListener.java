@@ -8,6 +8,7 @@ public class MousepadListener implements MouseListener, MouseMotionListener {
 
 	private int mouseX, mouseY;
 	private int markX = -1, markY = -1;
+	private int currentX, currentY;
 
 	private boolean leftClicked = false;
 	private boolean rightClicked = false;
@@ -103,6 +104,16 @@ public class MousepadListener implements MouseListener, MouseMotionListener {
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
+		currentX = e.getX();
+		currentY = e.getY();
+	}
+	
+	public int getCurrentX(){
+		return currentX;
+	}
+	
+	public int getCurrentY(){
+		return currentY;
 	}
 
 	public int getMarkX() {
