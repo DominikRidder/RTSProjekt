@@ -11,6 +11,7 @@ public class Carrier extends GuiElement {
 	private boolean wasDrawn = false;
 	private BufferedImage img;
 	private GridLayout gl;
+	private boolean initDone = false;
 
 	public Carrier(int x1, int y1, BufferedImage image, GridLayout gl) {
 		this.x1 = x1;
@@ -22,15 +23,18 @@ public class Carrier extends GuiElement {
 	}
 
 	public void init() {
+		String imgname = Game.getImageManager().getNameFromImage(img).split("\\\\")[Game.getImageManager().getNameFromImage(img).split("\\\\").length - 1];
 		for (int i = x1; i < x2; i++) {
 			for (int j = y1; j < y2; j++) {
-				String imgname = Game.getImageManager().getNameFromImage(img).split("\\\\")[Game.getImageManager().getNameFromImage(img).split("\\\\").length - 1];
 				if (imgname != null) {
 					Game.getImageManager().addImage(imgname + i + j + ";16;16", Game.getImageManager().getImage(imgname).getSubimage(0 + (i - x1) * 16, 0 + (j - y1) * 16, 16, 16));
 					((Field) gl.getElement(i, j)).setImg(imgname + i + j);
+				} else {
+					System.out.println("Imagename null ");
 				}
 			}
 		}
+		initDone = true;
 	}
 
 	public void delete() {
@@ -46,12 +50,16 @@ public class Carrier extends GuiElement {
 
 	@Override
 	public void onDraw(Graphics2D g2d) {
-		if (!wasDrawn) {
+		if (!wasDrawn && initDone) {
 			for (int i = x1; i < x2; i++) {
 				for (int j = y1; j < y2; j++) {
-					g2d.drawImage(((Field) gl.getElement(i, j)).getImg(), getX(), getY(), null);
+					if (((BigField) gl.getElement(i, j)).getImg() == null) {
+						System.out.println("Warum sind manche null in init() werden doch alle gesetzt");
+					}
+					g2d.drawImage(((BigField) gl.getElement(i, j)).getImg(), getX(), getY(), null);
 				}
 			}
+			wasDrawn = true;
 		}
 	}
 

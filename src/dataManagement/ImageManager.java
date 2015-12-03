@@ -42,7 +42,7 @@ public class ImageManager {
 
 		if (path == null) { // Image Name not found in datadir
 			relativNames.put(imgname, relativNames.get("NotFound.png"));
-			System.out.println("Image not found. Please make sure, that you dont use any Path Information!");
+			System.out.println("Image not found. Please make sure, that you dont use any Path Information! Image Name was " + imgname);
 			return imgNotFound;
 		}
 
