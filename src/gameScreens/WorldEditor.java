@@ -175,37 +175,39 @@ public class WorldEditor extends Screen implements ActionListener {
 			} else {
 				lastposition = world.getCoordinate(mpl.getX(), mpl.getY());
 				if (lastposition != null) { // click was im ScrollPane
-					if (selected != -1 && selected < tiles.size() && (Game.getImageManager().getImage(tiles.get(selected).getText()).getWidth() > 16 || Game.getImageManager().getImage(tiles.get(selected).getText()).getHeight() > 16) && (Game.getImageManager().getImage(tiles.get(selected).getText()).getWidth() / 16 + lastposition.getX() < pWorld.getLayout().getRowSize() && Game.getImageManager().getImage(tiles.get(selected).getText()).getHeight() / 16 + lastposition.getY() < pWorld.getLayout().getColumnSize())) {
-						//						if (pWorld.getLayout().getElement((int) lastposition.getX(), (int) lastposition.getY()) instanceof BigField) {
-						//							System.out.println("Löschen");
-						//							((BigField) pWorld.getLayout().getElement((int) lastposition.getX(), (int) lastposition.getY())).delete();
-						//						}
-						Carrier c = new Carrier((int) lastposition.getX(), (int) lastposition.getY(), Game.getImageManager().getImage(tiles.get(selected).getText()), pWorld.getLayout());
-						for (int k = (int) lastposition.getX(); k < pWorld.getLayout().getRowSize() && k < lastposition.getX() + Game.getImageManager().getImage(tiles.get(selected).getText()).getWidth() / 16; k++) {
-							for (int l = (int) lastposition.getY(); l < pWorld.getLayout().getColumnSize() && l < lastposition.getY() + Game.getImageManager().getImage(tiles.get(selected).getText()).getHeight() / 16; l++) {
-								BigField bf = new BigField(k, l, c);
-								bf.setHeight(16);
-								bf.setWidth(16);
-								pWorld.getLayout().setElement(bf, k, l);
-							}
-						}
-						c.init();
-					} else {
-						for (int i = 0; i <= till && i + lastposition.getX() < pWorld.getLayout().getRowSize(); i++) {
-							for (int j = 0; j <= till && j + lastposition.getY() < pWorld.getLayout().getColumnSize(); j++) {
-								boolean update = true;
-								if (pWorld.getLayout().getElement((int) lastposition.getX() + i, (int) lastposition.getY() + j) instanceof Field) {
-									f = (Field) pWorld.getLayout().getElement((int) lastposition.getX() + i, (int) lastposition.getY() + j);
-									if (f.getImg() == null || !f.getImg().equals(tiles.get(selected).getImage())) {
-										update = true;
-									} else {
-										update = false;
-									}
+					if (selected != -1 && selected < tiles.size()) {
+						if ((Game.getImageManager().getImage(tiles.get(selected).getText()).getWidth() > 16 || Game.getImageManager().getImage(tiles.get(selected).getText()).getHeight() > 16) && (Game.getImageManager().getImage(tiles.get(selected).getText()).getWidth() / 16 + lastposition.getX() < pWorld.getLayout().getRowSize() && Game.getImageManager().getImage(tiles.get(selected).getText()).getHeight() / 16 + lastposition.getY() < pWorld.getLayout().getColumnSize())) {
+							//						if (pWorld.getLayout().getElement((int) lastposition.getX(), (int) lastposition.getY()) instanceof BigField) {
+							//							System.out.println("Löschen");
+							//							((BigField) pWorld.getLayout().getElement((int) lastposition.getX(), (int) lastposition.getY())).delete();
+							//						}
+							Carrier c = new Carrier((int) lastposition.getX(), (int) lastposition.getY(), Game.getImageManager().getImage(tiles.get(selected).getText()), pWorld.getLayout());
+							for (int k = (int) lastposition.getX(); k < pWorld.getLayout().getRowSize() && k < lastposition.getX() + Game.getImageManager().getImage(tiles.get(selected).getText()).getWidth() / 16; k++) {
+								for (int l = (int) lastposition.getY(); l < pWorld.getLayout().getColumnSize() && l < lastposition.getY() + Game.getImageManager().getImage(tiles.get(selected).getText()).getHeight() / 16; l++) {
+									BigField bf = new BigField(k, l, c);
+									bf.setHeight(16);
+									bf.setWidth(16);
+									pWorld.getLayout().setElement(bf, k, l);
 								}
+							}
+							c.init();
+						} else {
+							for (int i = 0; i <= till && i + lastposition.getX() < pWorld.getLayout().getRowSize(); i++) {
+								for (int j = 0; j <= till && j + lastposition.getY() < pWorld.getLayout().getColumnSize(); j++) {
+									boolean update = true;
+									if (pWorld.getLayout().getElement((int) lastposition.getX() + i, (int) lastposition.getY() + j) instanceof Field) {
+										f = (Field) pWorld.getLayout().getElement((int) lastposition.getX() + i, (int) lastposition.getY() + j);
+										if (f.getImg() == null || !f.getImg().equals(tiles.get(selected).getImage())) {
+											update = true;
+										} else {
+											update = false;
+										}
+									}
 
-								if (update) {
-									f.setImg(tiles.get(selected).getText());
-									f.setTileID(tileID);
+									if (update) {
+										f.setImg(tiles.get(selected).getText());
+										f.setTileID(tileID);
+									}
 								}
 							}
 						}
