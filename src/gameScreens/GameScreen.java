@@ -30,6 +30,9 @@ public class GameScreen extends Screen implements ActionListener {
 	private int viewX, viewY;
 
 	private Button exit;
+	private int lastRightClick = 0;
+	private int lastRightClickX = 0;
+	private int lastRightClickY = 0;
 
 	public GameScreen(ScreenFactory screenFactory) {
 		super(screenFactory);
@@ -150,12 +153,29 @@ public class GameScreen extends Screen implements ActionListener {
 			setH(Math.abs(mpl.getY() - mpl.getMarkY()));
 			drawDraggingZone(g2d);
 		}
+		if(mpl.isRightClicked())
+		{
+			lastRightClick = 100;
+			lastRightClickX = mpl.getX();
+			lastRightClickY = mpl.getY();
+		}
+		if(lastRightClick != 0)
+		{
+			lastRightClick--;
+			drawRightClick(g2d, lastRightClickX, lastRightClickY);
+		}
 		super.onDraw(g2d);
 
 		mpl.setX(mpl.getX() - viewX);
 		mpl.setY(mpl.getY() - viewY);
 		mpl.setMarkX(mpl.getMarkX() - viewX);
 		mpl.setMarkY(mpl.getMarkY() - viewY);
+	}
+	
+	public void drawRightClick(Graphics2D g2d, int x, int y)
+	{
+		g2d.drawLine(x-4, y-2, x+4, y+2);
+		g2d.drawLine(x+4, y-2, x-4, y+2);
 	}
 
 	public void drawDraggingZone(Graphics2D g2d) {
