@@ -27,7 +27,7 @@ public class Carrier extends GuiElement {
 		for (int i = x1; i < x2; i++) {
 			for (int j = y1; j < y2; j++) {
 				if (imgname != null) {
-					Game.getImageManager().addImage(imgname + i + j + ";16;16", Game.getImageManager().getImage(imgname).getSubimage(0 + (i - x1) * 16, 0 + (j - y1) * 16, 16, 16));
+					Game.getImageManager().addImage(imgname + i + j, Game.getImageManager().getImage(imgname).getSubimage(0 + (i - x1) * 16, 0 + (j - y1) * 16, 16, 16));
 					((Field) gl.getElement(i, j)).setImg(imgname + i + j);
 				} else {
 					System.out.println("Imagename null ");
@@ -48,25 +48,31 @@ public class Carrier extends GuiElement {
 		}
 	}
 
+	public void onDraw(Graphics2D g2d, int x, int y) {
+		if (x == getX() && y == getY()){
+			onDraw(g2d);
+		}
+	}
+
 	@Override
 	public void onDraw(Graphics2D g2d) {
 		if (!wasDrawn && initDone) {
 			for (int i = x1; i < x2; i++) {
 				for (int j = y1; j < y2; j++) {
-					if (((BigField) gl.getElement(i, j)).getImg() == null) {
+					if (((Field) gl.getElement(i, j)).getImg() == null) {
 						System.out.println("Warum sind manche null in init() werden doch alle gesetzt");
 					}
-					g2d.drawImage(((BigField) gl.getElement(i, j)).getImg(), getX(), getY(), null);
+					BigField bf = (BigField) gl.getElement(i, j);
+					g2d.drawImage(bf.getImg(), bf.getX(), bf.getY(), null);
 				}
 			}
-			wasDrawn = true;
 		}
 	}
 
 	@Override
 	public void onUpdate(Screen screen) {
 		// TODO Auto-generated method stub
-
+		
 	}
 
 }

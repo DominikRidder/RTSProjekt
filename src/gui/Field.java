@@ -3,6 +3,7 @@ package gui;
 import gameEngine.Game;
 import gameEngine.Screen;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;

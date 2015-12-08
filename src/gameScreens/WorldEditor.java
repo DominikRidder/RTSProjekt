@@ -182,9 +182,11 @@ public class WorldEditor extends Screen implements ActionListener {
 							//							((BigField) pWorld.getLayout().getElement((int) lastposition.getX(), (int) lastposition.getY())).delete();
 							//						}
 							Carrier c = new Carrier((int) lastposition.getX(), (int) lastposition.getY(), Game.getImageManager().getImage(tiles.get(selected).getText()), pWorld.getLayout());
+							c.setX((int)(lastposition.getX()*16+pWorld.getX()));
+							c.setY((int)(lastposition.getY()*16+pWorld.getY()));
 							for (int k = (int) lastposition.getX(); k < pWorld.getLayout().getRowSize() && k < lastposition.getX() + Game.getImageManager().getImage(tiles.get(selected).getText()).getWidth() / 16; k++) {
 								for (int l = (int) lastposition.getY(); l < pWorld.getLayout().getColumnSize() && l < lastposition.getY() + Game.getImageManager().getImage(tiles.get(selected).getText()).getHeight() / 16; l++) {
-									BigField bf = new BigField(k, l, c);
+									BigField bf = new BigField(k*16+pWorld.getX(), l*16+pWorld.getY(), c);
 									bf.setHeight(16);
 									bf.setWidth(16);
 									pWorld.getLayout().setElement(bf, k, l);

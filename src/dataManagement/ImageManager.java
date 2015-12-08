@@ -261,6 +261,7 @@ public class ImageManager {
 	}
 
 	public void addImage(String key, BufferedImage value) {
+		relativNames.put(key, key);
 		if (data.containsKey(key)) {
 			data.replace(key, value);
 		} else {
