@@ -34,6 +34,11 @@ public class GameScreen extends Screen implements ActionListener {
 	private int lastRightClickX = 0;
 	private int lastRightClickY = 0;
 
+	private int savedX;
+	private int savedY;
+	private int savedMarkX;
+	private int savedMarkY;
+
 	public GameScreen(ScreenFactory screenFactory) {
 		super(screenFactory);
 	}
@@ -68,22 +73,32 @@ public class GameScreen extends Screen implements ActionListener {
 		MousepadListener mpl = this.getScreenFactory().getGame()
 				.getMousepadListener();
 		if (mpl.getCurrentX() > getScreenFactory().getGame().getWindow()
-				.getWidth() - 10
-				|| mpl.getCurrentX() - 10 < 0) {
+				.getWidth() - 30
+				|| mpl.getCurrentX() - 30 < 0) {
 			viewX += mpl.getCurrentX() > getScreenFactory().getGame()
-					.getWindow().getWidth() / 2 ? 3 : -3;
+					.getWindow().getWidth() / 2 ? 6 : -6;
 		}
 		if (mpl.getCurrentY() > getScreenFactory().getGame().getWindow()
-				.getHeight() - 40
-				|| mpl.getCurrentY() - 10 < 0) {
+				.getHeight() - 60
+				|| mpl.getCurrentY() - 30 < 0) {
 			viewY += mpl.getCurrentY() > getScreenFactory().getGame()
-					.getWindow().getWidth() / 2 ? 3 : -3;
+					.getWindow().getWidth() / 2 ? 6 : -6;
 		}
 
-		// mpl.setX(mpl.getX() + viewX);
-		// mpl.setY(mpl.getY() + viewY);
-		// mpl.setMarkX(mpl.getMarkX() + viewX);
-		// mpl.setMarkY(mpl.getMarkY() + viewY);
+		mpl.setX(mpl.getX() + viewX);
+		mpl.setY(mpl.getY() + viewY);
+		mpl.setMarkX(mpl.getMarkX() + viewX);
+		mpl.setMarkY(mpl.getMarkY() + viewY);
+
+		savedX = mpl.getX();
+		savedY = mpl.getY();
+		if (mpl.isDragging()) {
+			savedMarkX = mpl.getMarkX();
+			savedMarkY = mpl.getMarkY();
+		} else {
+			savedMarkX = savedX;
+			savedMarkY = savedY;
+		}
 
 		super.onUpdate();
 
@@ -101,10 +116,10 @@ public class GameScreen extends Screen implements ActionListener {
 			entry.setValue(pointToMapConst(key.getX(), key.getY()));
 		}
 
-		// mpl.setX(mpl.getX() - viewX);
-		// mpl.setY(mpl.getY() - viewY);
-		// mpl.setMarkX(mpl.getMarkX() - viewX);
-		// mpl.setMarkY(mpl.getMarkY() - viewY);
+		mpl.setX(mpl.getX() - viewX);
+		mpl.setY(mpl.getY() - viewY);
+		mpl.setMarkX(mpl.getMarkX() - viewX);
+		mpl.setMarkY(mpl.getMarkY() - viewY);
 	}
 
 	@Override
@@ -112,16 +127,12 @@ public class GameScreen extends Screen implements ActionListener {
 		MousepadListener mpl = this.getScreenFactory().getGame()
 				.getMousepadListener();
 
-		if (exit != null) { // Later we will just move a Panel, containing the HUD
+		if (exit != null) { // Later we will just move a Panel, containing the
+							// HUD
 			exit.setX(this.getScreenFactory().getGame().getWindow().getWidth()
 					- 50 + viewX);
 			exit.setY(viewY);
 		}
-
-		mpl.setX(mpl.getX() + viewX);
-		mpl.setY(mpl.getY() + viewY);
-		mpl.setMarkX(mpl.getMarkX() + viewX);
-		mpl.setMarkY(mpl.getMarkY() + viewY);
 
 		AffineTransform transform = new AffineTransform();
 		transform.translate(-viewX, -viewY);
@@ -139,43 +150,35 @@ public class GameScreen extends Screen implements ActionListener {
 		}
 
 		if (mpl.isDragging()) {
-			if (mpl.getMarkX() < mpl.getX()) {
-				setX(mpl.getMarkX());
+			if (savedMarkX < savedX) {
+				setX(savedMarkX);
 			} else {
-				setX(mpl.getX());
+				setX(savedX);
 			}
-			if (mpl.getMarkY() < mpl.getY()) {
-				setY(mpl.getMarkY());
+			if (savedMarkY < savedY) {
+				setY(savedMarkY);
 			} else {
-				setY(mpl.getY());
+				setY(savedY);
 			}
-			setW(Math.abs(mpl.getX() - mpl.getMarkX()));
-			setH(Math.abs(mpl.getY() - mpl.getMarkY()));
+			setW(Math.abs(savedX - savedMarkX));
+			setH(Math.abs(savedY - savedMarkY));
 			drawDraggingZone(g2d);
 		}
-		if(mpl.isRightClicked())
-		{
+		if (mpl.isRightClicked()) {
 			lastRightClick = 100;
-			lastRightClickX = mpl.getX();
-			lastRightClickY = mpl.getY();
+			lastRightClickX = savedX;
+			lastRightClickY = savedY;
 		}
-		if(lastRightClick != 0)
-		{
+		if (lastRightClick != 0) {
 			lastRightClick--;
 			drawRightClick(g2d, lastRightClickX, lastRightClickY);
 		}
 		super.onDraw(g2d);
-
-		mpl.setX(mpl.getX() - viewX);
-		mpl.setY(mpl.getY() - viewY);
-		mpl.setMarkX(mpl.getMarkX() - viewX);
-		mpl.setMarkY(mpl.getMarkY() - viewY);
 	}
-	
-	public void drawRightClick(Graphics2D g2d, int x, int y)
-	{
-		g2d.drawLine(x-4, y-2, x+4, y+2);
-		g2d.drawLine(x+4, y-2, x-4, y+2);
+
+	public void drawRightClick(Graphics2D g2d, int x, int y) {
+		g2d.drawLine(x - 4, y - 2, x + 4, y + 2);
+		g2d.drawLine(x + 4, y - 2, x - 4, y + 2);
 	}
 
 	public void drawDraggingZone(Graphics2D g2d) {

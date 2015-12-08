@@ -26,7 +26,8 @@ public class MousepadListener implements MouseListener, MouseMotionListener {
 
 	@Override
 	public void mouseExited(MouseEvent event) {
-
+		currentX = event.getX();
+		currentY = event.getY();
 	}
 
 	@Override
