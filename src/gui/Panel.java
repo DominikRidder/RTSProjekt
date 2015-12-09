@@ -3,7 +3,7 @@ package gui;
 import gameEngine.Screen;
 
 import java.awt.Graphics2D;
-import java.awt.Point;
+import Utilitys.Point;
 
 public class Panel extends APanel implements CoordinateMapping {
 
@@ -37,7 +37,7 @@ public class Panel extends APanel implements CoordinateMapping {
 	}
 
 	public void onDraw(Graphics2D g2d) {
-		if (!this.isVisible()){
+		if (!this.isVisible()) {
 			return;
 		}
 		layout.onDraw(g2d);
@@ -46,7 +46,7 @@ public class Panel extends APanel implements CoordinateMapping {
 
 	@Override
 	public void onUpdate(Screen screen) {
-		if (!this.isVisible()){
+		if (!this.isVisible()) {
 			return;
 		}
 		layout.onUpdate(screen);

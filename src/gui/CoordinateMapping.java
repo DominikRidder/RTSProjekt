@@ -1,6 +1,6 @@
 package gui;
 
-import java.awt.Point;
+import Utilitys.Point;
 
 public interface CoordinateMapping {
 	public Point getCoordinate(int x, int y);

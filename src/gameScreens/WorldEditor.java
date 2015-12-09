@@ -16,9 +16,9 @@ import gui.LayerPanel;
 import gui.Panel;
 import gui.ScrollPane;
 
-import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -27,6 +27,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.swing.JFileChooser;
+
+import Utilitys.Point;
 
 public class WorldEditor extends Screen implements ActionListener {
 	int scale = 16;
@@ -160,8 +162,11 @@ public class WorldEditor extends Screen implements ActionListener {
 				if (lastposition != null) { // click was im ScrollPane
 					for (int i = 0; i <= till && i + lastposition.getX() < pWorld.getLayout().getRowSize(); i++) {
 						for (int j = 0; j <= till && j + lastposition.getY() < pWorld.getLayout().getColumnSize(); j++) {
-							if (pWorld.getLayout().getElement((int) lastposition.getX() + i, (int) lastposition.getY() + j) instanceof Field) {
-								f = (Field) pWorld.getLayout().getElement((int) lastposition.getX() + i, (int) lastposition.getY() + j);
+							if (pWorld.getLayout().getElement(lastposition.getX() + i, lastposition.getY() + j) instanceof BigField) {
+								((BigField) pWorld.getLayout().getElement(lastposition.getX() + i, lastposition.getY() + j)).delete();
+							} else if (pWorld.getLayout().getElement(lastposition.getX() + i, lastposition.getY() + j) instanceof Field) {
+								System.out.println("Feld");
+								f = (Field) pWorld.getLayout().getElement(lastposition.getX() + i, lastposition.getY() + j);
 								if (selected != -1 && selected < tiles.size()) {
 									if (f.getImg() == null || !f.getImg().equals(tiles.get(selected).getImage())) {
 										f.setImg(tiles.get(selected).getText());
@@ -176,17 +181,21 @@ public class WorldEditor extends Screen implements ActionListener {
 				lastposition = world.getCoordinate(mpl.getX(), mpl.getY());
 				if (lastposition != null) { // click was im ScrollPane
 					if (selected != -1 && selected < tiles.size()) {
-						if ((Game.getImageManager().getImage(tiles.get(selected).getText()).getWidth() > 16 || Game.getImageManager().getImage(tiles.get(selected).getText()).getHeight() > 16) && (Game.getImageManager().getImage(tiles.get(selected).getText()).getWidth() / 16 + lastposition.getX() < pWorld.getLayout().getRowSize() && Game.getImageManager().getImage(tiles.get(selected).getText()).getHeight() / 16 + lastposition.getY() < pWorld.getLayout().getColumnSize())) {
-							//						if (pWorld.getLayout().getElement((int) lastposition.getX(), (int) lastposition.getY()) instanceof BigField) {
-							//							System.out.println("Löschen");
-							//							((BigField) pWorld.getLayout().getElement((int) lastposition.getX(), (int) lastposition.getY())).delete();
-							//						}
-							Carrier c = new Carrier((int) lastposition.getX(), (int) lastposition.getY(), Game.getImageManager().getImage(tiles.get(selected).getText()), pWorld.getLayout());
-							c.setX((int)(lastposition.getX()*16+pWorld.getX()));
-							c.setY((int)(lastposition.getY()*16+pWorld.getY()));
-							for (int k = (int) lastposition.getX(); k < pWorld.getLayout().getRowSize() && k < lastposition.getX() + Game.getImageManager().getImage(tiles.get(selected).getText()).getWidth() / 16; k++) {
-								for (int l = (int) lastposition.getY(); l < pWorld.getLayout().getColumnSize() && l < lastposition.getY() + Game.getImageManager().getImage(tiles.get(selected).getText()).getHeight() / 16; l++) {
-									BigField bf = new BigField(k*16+pWorld.getX(), l*16+pWorld.getY(), c);
+						BufferedImage selectedImage = Game.getImageManager().getImage(tiles.get(selected).getText());
+						if ((selectedImage.getWidth() > 16 || selectedImage.getHeight() > 16) && (selectedImage.getWidth() / 16 + lastposition.getX() < pWorld.getLayout().getRowSize() && selectedImage.getHeight() / 16 + lastposition.getY() < pWorld.getLayout().getColumnSize())) {
+							for (int i = lastposition.getX(); i < pWorld.getLayout().getRowSize() && i < lastposition.getX() + selectedImage.getWidth() / 16; i++) {
+								for (int j = lastposition.getY(); j < pWorld.getLayout().getColumnSize() && j < lastposition.getY() + selectedImage.getHeight() / 16; j++) {
+									if (pWorld.getLayout().getElement(i, j) instanceof BigField) {
+										((BigField) pWorld.getLayout().getElement(i, j)).delete();
+									}
+								}
+							}
+							Carrier c = new Carrier(lastposition.getX(), lastposition.getY(), selectedImage, pWorld.getLayout());
+							c.setX((lastposition.getX() * 16 + pWorld.getX()));
+							c.setY((lastposition.getY() * 16 + pWorld.getY()));
+							for (int k = lastposition.getX(); k < pWorld.getLayout().getRowSize() && k < lastposition.getX() + selectedImage.getWidth() / 16; k++) {
+								for (int l = lastposition.getY(); l < pWorld.getLayout().getColumnSize() && l < lastposition.getY() + selectedImage.getHeight() / 16; l++) {
+									BigField bf = new BigField(k * 16 + pWorld.getX(), l * 16 + pWorld.getY(), c);
 									bf.setHeight(16);
 									bf.setWidth(16);
 									pWorld.getLayout().setElement(bf, k, l);
@@ -197,8 +206,11 @@ public class WorldEditor extends Screen implements ActionListener {
 							for (int i = 0; i <= till && i + lastposition.getX() < pWorld.getLayout().getRowSize(); i++) {
 								for (int j = 0; j <= till && j + lastposition.getY() < pWorld.getLayout().getColumnSize(); j++) {
 									boolean update = true;
-									if (pWorld.getLayout().getElement((int) lastposition.getX() + i, (int) lastposition.getY() + j) instanceof Field) {
-										f = (Field) pWorld.getLayout().getElement((int) lastposition.getX() + i, (int) lastposition.getY() + j);
+									if (pWorld.getLayout().getElement(lastposition.getX() + i, lastposition.getY() + j) instanceof BigField) {
+										((BigField) pWorld.getLayout().getElement(lastposition.getX() + i, lastposition.getY() + j)).delete();
+									}
+									if (pWorld.getLayout().getElement(lastposition.getX() + i, lastposition.getY() + j) instanceof Field) {
+										f = (Field) pWorld.getLayout().getElement(lastposition.getX() + i, lastposition.getY() + j);
 										if (f.getImg() == null || !f.getImg().equals(tiles.get(selected).getImage())) {
 											update = true;
 										} else {

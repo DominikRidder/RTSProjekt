@@ -29,8 +29,6 @@ public class Carrier extends GuiElement {
 				if (imgname != null) {
 					Game.getImageManager().addImage(imgname + i + j, Game.getImageManager().getImage(imgname).getSubimage(0 + (i - x1) * 16, 0 + (j - y1) * 16, 16, 16));
 					((Field) gl.getElement(i, j)).setImg(imgname + i + j);
-				} else {
-					System.out.println("Imagename null ");
 				}
 			}
 		}
@@ -49,7 +47,7 @@ public class Carrier extends GuiElement {
 	}
 
 	public void onDraw(Graphics2D g2d, int x, int y) {
-		if (x == getX() && y == getY()){
+		if (x == getX() && y == getY()) {
 			onDraw(g2d);
 		}
 	}
@@ -59,11 +57,8 @@ public class Carrier extends GuiElement {
 		if (!wasDrawn && initDone) {
 			for (int i = x1; i < x2; i++) {
 				for (int j = y1; j < y2; j++) {
-					if (((Field) gl.getElement(i, j)).getImg() == null) {
-						System.out.println("Warum sind manche null in init() werden doch alle gesetzt");
-					}
-					BigField bf = (BigField) gl.getElement(i, j);
-					g2d.drawImage(bf.getImg(), bf.getX(), bf.getY(), null);
+					Field f = (Field) gl.getElement(i, j);
+					g2d.drawImage(f.getImg(), f.getX(), f.getY(), null);
 				}
 			}
 		}
@@ -72,7 +67,7 @@ public class Carrier extends GuiElement {
 	@Override
 	public void onUpdate(Screen screen) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

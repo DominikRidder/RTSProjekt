@@ -7,10 +7,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.geom.AffineTransform;
-import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 
 public class Button extends GuiElement {
 
@@ -44,15 +41,17 @@ public class Button extends GuiElement {
 
 	public Button(BufferedImage img) {
 		this.image = img;
-		ImageSet = true;
-		setWidth(image.getWidth());
-		setHeight(image.getHeight());
+		if (image != null) {
+			ImageSet = true;
+			setWidth(image.getWidth());
+			setHeight(image.getHeight());
+		}
 	}
 
-	public String getText(){
+	public String getText() {
 		return text;
 	}
-	
+
 	public void setImage(BufferedImage img) {
 		this.image = img;
 		ImageSet = true;
@@ -94,12 +93,12 @@ public class Button extends GuiElement {
 	}
 
 	public void onDraw(Graphics2D g2d) {
-		if (!this.isVisible()){
+		if (!this.isVisible()) {
 			return;
 		}
 		int width = getWidth();
 		int height = getHeight();
-		
+
 		if (ImageSet) {
 			g2d.drawImage(image, getX(), getY(), width, height, null);
 		} else {
@@ -114,7 +113,7 @@ public class Button extends GuiElement {
 	}
 
 	public void onUpdate(Screen screen) {
-		if (!this.isVisible()){
+		if (!this.isVisible()) {
 			return;
 		}
 		MousepadListener mpl = screen.getScreenFactory().getGame().getMousepadListener();
