@@ -39,6 +39,14 @@ public class GameScreen extends Screen implements ActionListener {
 	private int savedMarkX;
 	private int savedMarkY;
 
+	/**************************/
+	/****** Dummy Targets *******/
+
+	private int mapwidth = 2000;
+	private int mapheight = 2000;
+
+	/*************************/
+
 	public GameScreen(ScreenFactory screenFactory) {
 		super(screenFactory);
 	}
@@ -83,6 +91,19 @@ public class GameScreen extends Screen implements ActionListener {
 				|| mpl.getCurrentY() - 30 < 0) {
 			viewY += mpl.getCurrentY() > getScreenFactory().getGame()
 					.getWindow().getWidth() / 2 ? 6 : -6;
+		}
+		int wwidth = getScreenFactory().getGame().getWindow().getWidth();
+		int wheight = getScreenFactory().getGame().getWindow().getHeight();
+
+		if (viewX > mapwidth - wwidth) {
+			viewX = mapwidth - wwidth;
+		} else if (viewX < 0) {
+			viewX = 0;
+		}
+		if (viewY > mapheight - wheight) {
+			viewY = mapheight - wheight;
+		} else if (viewY < 0) {
+			viewY = 0;
 		}
 
 		mpl.setX(mpl.getX() + viewX);
