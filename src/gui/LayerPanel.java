@@ -3,8 +3,9 @@ package gui;
 import gameEngine.Screen;
 
 import java.awt.Graphics2D;
-import java.awt.Point;
 import java.util.ArrayList;
+
+import Utilitys.Point;
 
 public class LayerPanel extends APanel implements CoordinateMapping {
 

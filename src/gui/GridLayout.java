@@ -4,7 +4,7 @@ import gameEngine.MousepadListener;
 import gameEngine.Screen;
 
 import java.awt.Graphics2D;
-import java.awt.Point;
+import Utilitys.Point;
 
 public class GridLayout implements ILayout, CoordinateMapping {
 
