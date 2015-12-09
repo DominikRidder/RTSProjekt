@@ -170,15 +170,15 @@ public class GameScreen extends Screen implements ActionListener {
 			lastRightClickY = savedY;
 		}
 		if (lastRightClick != 0) {
-			lastRightClick--;
 			drawRightClick(g2d, lastRightClickX, lastRightClickY);
+			lastRightClick--;
 		}
 		super.onDraw(g2d);
 	}
 
 	public void drawRightClick(Graphics2D g2d, int x, int y) {
-		g2d.drawLine(x - 4, y - 2, x + 4, y + 2);
-		g2d.drawLine(x + 4, y - 2, x - 4, y + 2);
+		g2d.drawLine(x - (int)(6*lastRightClick/100.), y - (int)(3*lastRightClick/100.), x + (int)(6*lastRightClick/100.), y + (int)(3*lastRightClick/100.));
+		g2d.drawLine(x + (int)(6*lastRightClick/100.), y - (int)(3*lastRightClick/100.), x - (int)(6*lastRightClick/100.), y + (int)(3*lastRightClick/100.));
 	}
 
 	public void drawDraggingZone(Graphics2D g2d) {
