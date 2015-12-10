@@ -85,6 +85,10 @@ public abstract class AbstractEntity implements IEntity, Comparable<AbstractEnti
 		return imgrg;
 	}
 
+	public int getOwner() {
+		return owner;
+	}
+	
 	public AbstractEntity hasCollision() {//sucht automatisch die naechste hitbox
 		for (int i = 0; i < l_Entities.size(); i++) {
 			if (l_Entities.get(i).entityID == this.entityID) {
@@ -262,7 +266,7 @@ public abstract class AbstractEntity implements IEntity, Comparable<AbstractEnti
 	
 
 	@Override
-	public boolean takeDamage(int dmg) {
+	public boolean takeDamage(int dmg, AbstractEntity dmgdealer) {
 		// TODO Auto-generated method stub
 		if(this.getLife() <= 0)
 			return false;

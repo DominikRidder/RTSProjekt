@@ -32,14 +32,7 @@ public class CompactLayout implements ILayout {
 
 	@Override
 	public void onUpdate(Screen screen) {
-		if (parent.needUpdate()){
-			for (GuiElement elem : container){
-				elem.setX(elem.getX()+parent.getX()-lastx);
-				elem.setY(elem.getY()+parent.getY()-lasty);
-			}
-			lastx = parent.getX();
-			lasty = parent.getY();
-		}
+		repack();
 		for (GuiElement elem : container){
 			elem.onUpdate(screen);
 		}
@@ -67,6 +60,17 @@ public class CompactLayout implements ILayout {
 		} else if (element.getY()+element.getHeight() > parent.getY()+parent.getHeight()) {
 			element.setY(parent.getY()+parent.getHeight() - element.getHeight());
 		}
-		
+	}
+
+	@Override
+	public void repack() {
+		if (parent.needUpdate()){
+			for (GuiElement elem : container){
+				elem.setX(elem.getX()+parent.getX()-lastx);
+				elem.setY(elem.getY()+parent.getY()-lasty);
+			}
+			lastx = parent.getX();
+			lasty = parent.getY();
+		}
 	}
 }

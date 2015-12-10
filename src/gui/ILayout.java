@@ -11,4 +11,6 @@ interface ILayout {
 	public void onUpdate(Screen screen);
 	
 	public void addElement(GuiElement element);
+	
+	public void repack();
 }

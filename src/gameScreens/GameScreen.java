@@ -4,9 +4,13 @@ import entity.AbstractEntity;
 import entity.OrkTest;
 import entity.Tree;
 import gameEngine.MousepadListener;
+import gameEngine.Player;
 import gameEngine.Screen;
 import gameEngine.ScreenFactory;
 import gui.Button;
+import gui.CompactLayout;
+import gui.Label;
+import gui.Panel;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -29,7 +33,9 @@ public class GameScreen extends Screen implements ActionListener {
 
 	private int viewX, viewY;
 
-	private Button exit;
+//	private Button exit;
+	private Panel hud;
+	
 	private int lastRightClick = 0;
 	private int lastRightClickX = 0;
 	private int lastRightClickY = 0;
@@ -38,6 +44,8 @@ public class GameScreen extends Screen implements ActionListener {
 	private int savedY;
 	private int savedMarkX;
 	private int savedMarkY;
+	
+	private Label wood;
 
 	/**************************/
 	/****** Dummy Targets *******/
@@ -56,9 +64,13 @@ public class GameScreen extends Screen implements ActionListener {
 		Random rnd = new Random();
 		System.out.println("Main Creating!");
 		List<AbstractEntity> entitys = AbstractEntity.getEntities();
+		
+		Player hum_sp = new Player(0);
+		Player comp_sp = new Player(1);
+		
 		for (int i = 0; i < 10; i++) {
 			entitys.add(new OrkTest(rnd.nextInt(700) + 40,
-					rnd.nextInt(500) + 40, i % 8));// TODO get(i) funktion
+					rnd.nextInt(500) + 40, rnd.nextInt(2)));// TODO get(i) funktion
 													// vermeiden, weil
 													// LinkedList
 			entitys.add(new Tree(rnd.nextInt(700) + 40, rnd.nextInt(500) + 40,
@@ -68,29 +80,51 @@ public class GameScreen extends Screen implements ActionListener {
 					pointToMapConst(entitys.get(i).getX(), entitys.get(i)
 							.getY()));
 		}
-		exit = new Button(this.getScreenFactory().getGame().getWindow()
+		
+		/*********** HUD ***********************/
+		
+		wood = new Label("Wood: "+hum_sp.getWood());
+		wood.setX(this.getScreenFactory().getGame().getWindow()
+				.getWidth() - 200);
+		wood.setY(0);
+		wood.setWidth(150);
+		wood.setHeight(50);
+		
+		Button exit = new Button(this.getScreenFactory().getGame().getWindow()
 				.getWidth() - 50, 0, 50, 50, "X");
 		exit.setBackgroundColor(Color.BLACK);
 		exit.setTextColor(Color.RED);
 		exit.addActionListener(this);
-		addGuiElement(exit);
+		
+		hud = new Panel(0,0, this.getScreenFactory().getGame().getWindow()
+				.getWidth(), this.getScreenFactory().getGame().getWindow()
+				.getHeight());
+		hud.setLayout(new CompactLayout(hud));
+		hud.addElement(wood);
+		hud.addElement(exit);
+		
+		addGuiElement(hud);
 	}
 
 	@Override
 	public void onUpdate() {
 		MousepadListener mpl = this.getScreenFactory().getGame()
 				.getMousepadListener();
+		wood.setText("Wood: "+Player.getPlayer(0).getWood());
+		
+		int scrollspeed = 6;
+		
 		if (mpl.getCurrentX() > getScreenFactory().getGame().getWindow()
 				.getWidth() - 30
 				|| mpl.getCurrentX() - 30 < 0) {
 			viewX += mpl.getCurrentX() > getScreenFactory().getGame()
-					.getWindow().getWidth() / 2 ? 6 : -6;
+					.getWindow().getWidth() / 2 ? scrollspeed : -scrollspeed;
 		}
 		if (mpl.getCurrentY() > getScreenFactory().getGame().getWindow()
 				.getHeight() - 60
 				|| mpl.getCurrentY() - 30 < 0) {
 			viewY += mpl.getCurrentY() > getScreenFactory().getGame()
-					.getWindow().getWidth() / 2 ? 6 : -6;
+					.getWindow().getWidth() / 2 ? scrollspeed : -scrollspeed;
 		}
 		int wwidth = getScreenFactory().getGame().getWindow().getWidth();
 		int wheight = getScreenFactory().getGame().getWindow().getHeight();
@@ -141,6 +175,8 @@ public class GameScreen extends Screen implements ActionListener {
 		mpl.setY(mpl.getY() - viewY);
 		mpl.setMarkX(mpl.getMarkX() - viewX);
 		mpl.setMarkY(mpl.getMarkY() - viewY);
+		
+		checkWin();
 	}
 
 	@Override
@@ -148,11 +184,10 @@ public class GameScreen extends Screen implements ActionListener {
 		MousepadListener mpl = this.getScreenFactory().getGame()
 				.getMousepadListener();
 
-		if (exit != null) { // Later we will just move a Panel, containing the
-							// HUD
-			exit.setX(this.getScreenFactory().getGame().getWindow().getWidth()
-					- 50 + viewX);
-			exit.setY(viewY);
+		if (hud != null) {
+			hud.setX(viewX);
+			hud.setY(viewY);
+			hud.repack();
 		}
 
 		AffineTransform transform = new AffineTransform();
@@ -198,8 +233,14 @@ public class GameScreen extends Screen implements ActionListener {
 	}
 
 	public void drawRightClick(Graphics2D g2d, int x, int y) {
-		g2d.drawLine(x - (int)(6*lastRightClick/100.), y - (int)(3*lastRightClick/100.), x + (int)(6*lastRightClick/100.), y + (int)(3*lastRightClick/100.));
-		g2d.drawLine(x + (int)(6*lastRightClick/100.), y - (int)(3*lastRightClick/100.), x - (int)(6*lastRightClick/100.), y + (int)(3*lastRightClick/100.));
+		g2d.drawLine(x - (int) (6 * lastRightClick / 100.), y
+				- (int) (3 * lastRightClick / 100.), x
+				+ (int) (6 * lastRightClick / 100.), y
+				+ (int) (3 * lastRightClick / 100.));
+		g2d.drawLine(x + (int) (6 * lastRightClick / 100.), y
+				- (int) (3 * lastRightClick / 100.), x
+				- (int) (6 * lastRightClick / 100.), y
+				+ (int) (3 * lastRightClick / 100.));
 	}
 
 	public void drawDraggingZone(Graphics2D g2d) {
@@ -238,4 +279,22 @@ public class GameScreen extends Screen implements ActionListener {
 		}
 	}
 
+	public void checkWin() {
+		int own = -1;
+		int next = -1;
+		for (AbstractEntity ent : this.getEntitys()) {
+			next = ent.getOwner();
+			if (next != -1){
+				if (own == -1){
+					own = next;
+				}else if (next != own){
+					return;
+				}
+			}
+		}
+		if (own != -1){
+			Player.dropAllPlayer(); // as long we don't have a Screen for stats
+			this.getScreenFactory().showScreen(new MainScreen(this.getScreenFactory()));
+		}
+	}
 }

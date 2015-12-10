@@ -58,7 +58,6 @@ public class LayerPanel extends APanel implements CoordinateMapping {
 		for (ILayout layout : layouts) {
 			layout.onUpdate(screen);
 		}
-		this.setUpdate(false); // Udpating the layouts should be finished here
 	}
 
 	public Point getCoordinate(int x, int y) {
@@ -67,7 +66,8 @@ public class LayerPanel extends APanel implements CoordinateMapping {
 			if (layout instanceof CoordinateMapping) {
 				return ((CoordinateMapping) layout).getCoordinate(x, y);
 			} else {
-				throw new RuntimeException("Layout don't support the CoordinateMapping!");
+				throw new RuntimeException(
+						"Layout don't support the CoordinateMapping!");
 			}
 		}
 		return null;
@@ -87,5 +87,15 @@ public class LayerPanel extends APanel implements CoordinateMapping {
 
 	public int numberOfLayouts() {
 		return layouts.size();
+	}
+
+	@Override
+	public void repack() {
+		if (this.needUpdate()) {
+			for (ILayout layout : layouts) {
+				layout.repack();
+			}
+			this.setUpdate(false); // Udpating the layouts should be finished here
+		}
 	}
 }

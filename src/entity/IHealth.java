@@ -1,7 +1,7 @@
 package entity;
 
 public interface IHealth {
-	boolean takeDamage(int dmg);
+	boolean takeDamage(int dmg, AbstractEntity dmgdealer);
 	boolean checkDeath();
 	boolean die();
 	void setMinDmg(int mindmg);
