@@ -38,6 +38,23 @@ public class SettingsManager {
 	}
 	
 	/**
+	 * Very dangerous for Strings and integer
+	 * @param trigger
+	 * @param value
+	 */
+	public void setValue(String trigger, Object value)
+	{
+		if(!l_settings.get(trigger).setVal(value))
+		{
+			System.out.println("value of '"+trigger+"' unsuccessfully changed!");
+		}
+		else
+		{
+			System.out.println("value of '"+trigger+"' successfully changed!");
+		}
+	}
+	
+	/**
 	 * dangerous for strings!
 	 * @param trigger
 	 * @return
