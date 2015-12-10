@@ -121,8 +121,8 @@ public class SettingsScreen extends Screen implements ActionListener {
 				subpanel.addElement(newb);
 			}
 			
-			subpanel.setX(startx);
-			subpanel.setY(starty);
+			subpanel.setX(subpanel.getX()+startx);
+			subpanel.setY(subpanel.getY()+starty);
 			
 			addGuiElement(subpanel);
 			break;
