@@ -86,6 +86,9 @@ public class MainScreen extends Screen implements ActionListener {
 		case "WorldEditor":
 			this.getScreenFactory().showScreen(new WorldEditor(this.getScreenFactory()));
 			break;
+		case "Einstellungen":
+			this.getScreenFactory().showScreen(new SettingsScreen(this.getScreenFactory()));
+			break;
 		case "Exit":
 			System.exit(0);
 			break;

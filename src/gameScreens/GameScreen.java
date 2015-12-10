@@ -42,8 +42,8 @@ public class GameScreen extends Screen implements ActionListener {
 	/**************************/
 	/****** Dummy Targets *******/
 
-	private int mapwidth = 2000;
-	private int mapheight = 2000;
+	private final int mapwidth = 2000;
+	private final int mapheight = 2000;
 
 	/*************************/
 
@@ -230,7 +230,7 @@ public class GameScreen extends Screen implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		switch (e.getActionCommand()) { // name of the button
 		case "X":
-			System.exit(0);
+			this.getScreenFactory().showScreen(new SettingsScreen(this.getScreenFactory()));
 			break;
 		default:
 			System.out.println("Unknown ActionEvent: " + e.getActionCommand());

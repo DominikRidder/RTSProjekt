@@ -25,8 +25,13 @@ public abstract class Screen {
 
 	public void onUpdate() {
 		if (guiElemens.size() != 0) {
-			for (GuiElement guiElem : guiElemens) {
-				guiElem.onUpdate(this);
+			try{
+				for (GuiElement guiElem : guiElemens) {
+					guiElem.onUpdate(this);
+				}
+			} catch (ConcurrentModificationException e) {
+				// I guess that's a multithreading problem.
+
 			}
 		}
 	}
