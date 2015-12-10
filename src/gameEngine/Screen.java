@@ -99,6 +99,11 @@ public abstract class Screen {
 		guiElemens.add(guielem);
 		updateGuiElementOrder();
 	}
+	
+	public void rmGuiElement(GuiElement guielem) {
+		guiElemens.remove(guielem);
+		updateGuiElementOrder();
+	}
 
 	public void updateGuiElementOrder() {
 		Collections.sort(guiElemens);

@@ -14,6 +14,8 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 public class SettingsScreen extends Screen implements ActionListener {
+	private Panel subpanel;
+	
 	public SettingsScreen(ScreenFactory screenFactory) {
 		super(screenFactory);
 	}
@@ -31,17 +33,17 @@ public class SettingsScreen extends Screen implements ActionListener {
 		p.setLayout(new GridLayout(adding.length, 1, p));
 		for (String toadd : adding) {
 			Button newb = new Button(toadd);
-			newb.setBackgroundColor(new Color(0, 0, 0, 0.5f));
 			newb.setTextColor(Color.RED);
 			newb.addActionListener(this);
 			p.addElement(newb);
 		}
 		
 		
-		/*Button placeholder = new Button(0, 0, Game.getImageManager().getImage("Hauptmenue.png"));
+		Button placeholder = new Button(0, 0, Wwidth, Wheight, "");
 		placeholder.setWidth(getScreenFactory().getGame().getWindow().getWidth());
 		placeholder.setHeight(getScreenFactory().getGame().getWindow().getHeight());
-		addGuiElement(placeholder);*/
+		placeholder.setBackgroundColor(new Color(0, 0, 0, 0.5f));
+		addGuiElement(placeholder);
 
 		addGuiElement(p);
 	}
@@ -69,8 +71,32 @@ public class SettingsScreen extends Screen implements ActionListener {
 		}
 		switch (e.getActionCommand()) { // name of the button
 		case "Zurück":
+			if(subpanel != null)
+			{
+				rmGuiElement(subpanel);
+				subpanel = null;
+				break;
+			}
 			this.getScreenFactory().swap();
 			break;
+		case "Sound":
+			String adding[] = { "Zurück", "Volume"};
+			
+			int Wwidth = getScreenFactory().getGame().getWindow().getWidth();
+			int Wheight = getScreenFactory().getGame().getWindow().getHeight();
+			int width = Wwidth/5;
+			int height = Wheight*2/5;
+			subpanel = new Panel(Wwidth/2+width/2, Wheight/2-height/2, width, height);
+			subpanel.setLayout(new GridLayout(adding.length, 1, subpanel));
+			for (String toadd : adding) {
+				Button newb = new Button(toadd);
+				newb.setTextColor(Color.RED);
+				newb.addActionListener(this);
+				subpanel.addElement(newb);
+			}
+			addGuiElement(subpanel);
+			break;
+			
 		case "WorldEditor":
 			this.getScreenFactory().showScreen(new WorldEditor(this.getScreenFactory()));
 			break;
