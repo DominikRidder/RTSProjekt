@@ -50,8 +50,8 @@ public class GameScreen extends Screen implements ActionListener {
 	/**************************/
 	/****** Dummy Targets *******/
 
-	private int mapwidth = 2000;
-	private int mapheight = 2000;
+	private final int mapwidth = 2000;
+	private final int mapheight = 2000;
 
 	/*************************/
 
@@ -178,6 +178,16 @@ public class GameScreen extends Screen implements ActionListener {
 		
 		checkWin();
 	}
+	
+	public int viewX()
+	{
+		return viewX;
+	}
+	
+	public int viewY()
+	{
+		return viewY;
+	}
 
 	@Override
 	public void onDraw(Graphics2D g2d) {
@@ -193,7 +203,7 @@ public class GameScreen extends Screen implements ActionListener {
 		AffineTransform transform = new AffineTransform();
 		transform.translate(-viewX, -viewY);
 		g2d.transform(transform);
-
+		
 		/*
 		 * for (AbstractEntity e : AbstractEntity.getEntities()) {//linkedList
 		 * performance plus e.draw(g2d); }
@@ -271,7 +281,7 @@ public class GameScreen extends Screen implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		switch (e.getActionCommand()) { // name of the button
 		case "X":
-			System.exit(0);
+			this.getScreenFactory().showScreen(new SettingsScreen(this.getScreenFactory()));
 			break;
 		default:
 			System.out.println("Unknown ActionEvent: " + e.getActionCommand());
