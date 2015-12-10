@@ -12,7 +12,11 @@ import sun.audio.AudioStream;
 
 public class MusikThread extends JPanel implements Runnable {
 
-	private final AudioPlayer player = AudioPlayer.player;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private AudioPlayer player;
 	private AudioStream audioStream;
 	private boolean isOn = false;
 
@@ -26,9 +30,17 @@ public class MusikThread extends JPanel implements Runnable {
 			} catch (IOException ex) {
 				ex.printStackTrace();
 			}
-			if (isOn == false) {
+			if (isOn == false && Game.getSetting().getValueBool("cl_s_sound")) {
+				player = AudioPlayer.player;
 				player.start(audioStream);
 				isOn = true;
+			}
+			
+			if(!Game.getSetting().getValueBool("cl_s_sound") && isOn)
+			{
+				player = null;
+				isOn = false;
+				
 			}
 
 			try {

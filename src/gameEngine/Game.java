@@ -1,12 +1,12 @@
 package gameEngine;
 
-import java.awt.event.KeyListener;
 import java.awt.image.BufferStrategy;
 
 import javax.swing.JFrame;
 
 import dataManagement.ImageManager;
 import dataManagement.InfoManager;
+import dataManagement.SettingsManager;
 
 public class Game {
 	private BufferStrategy strat;
@@ -19,6 +19,7 @@ public class Game {
 	
 	private static ImageManager imagemanager;
 	private static InfoManager infomanager;
+	private static SettingsManager settings;
 	
 	public Game(int windowX, int windowY, String title) {
 		window.setSize(windowX, windowY);
@@ -45,14 +46,18 @@ public class Game {
 
 		imagemanager = new ImageManager();
 		infomanager = new InfoManager();
+		settings = new SettingsManager();
 		
 		screenFactory = new ScreenFactory(this);
 		gameThread = new GameThread(this);
-		musikThread = new MusikThread();
-
+		
+		
+			musikThread = new MusikThread();
+			window.add(musikThread);
+		
 		keyboardListener = new KeyboardListener();
 		mousepadListener = new MousepadListener();
-		window.add(musikThread);
+		
 		window.add(gameThread);
 		window.addKeyListener(keyboardListener);
 
@@ -84,5 +89,9 @@ public class Game {
 
 	public static InfoManager getInfoManager(){
 		return infomanager;
+	}
+	
+	public static SettingsManager getSetting(){
+		return settings;
 	}
 }

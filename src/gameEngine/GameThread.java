@@ -7,6 +7,10 @@ import java.awt.RenderingHints;
 import javax.swing.JPanel;
 
 public class GameThread extends JPanel implements Runnable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private final Game game;
 
 	public GameThread(Game game) {
