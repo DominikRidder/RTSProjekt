@@ -124,7 +124,7 @@ public abstract class Unit extends AbstractEntity {
 				&& opponent != this.getEntityID()
 				&& Math.abs(e.getX() - getX()) < 64 
 				&& Math.abs(e.getY() - getY()) < 64)
-			return e.takeDamage(getRandDmg());
+			return e.takeDamage(getRandDmg(), this);
 		return false;
 		
 	}

@@ -50,7 +50,6 @@ public class Panel extends APanel implements CoordinateMapping {
 			return;
 		}
 		layout.onUpdate(screen);
-		this.setUpdate(false); // Udpating the layouts should be finished here
 	}
 
 	public Point getCoordinate(int x, int y) {
@@ -66,5 +65,13 @@ public class Panel extends APanel implements CoordinateMapping {
 
 	public GridLayout getLayout() {
 		return (GridLayout) layout;
+	}
+
+	@Override
+	public void repack() {
+		if (this.needUpdate()){
+			layout.repack();
+			this.setUpdate(false);
+		}
 	}
 }

@@ -39,9 +39,7 @@ public class GridLayout implements ILayout, CoordinateMapping {
 	public void onUpdate(Screen screen) {
 		MousepadListener mpl = screen.getScreenFactory().getGame().getMousepadListener();
 
-		if (parent.needUpdate()) {
-			resizeElements();
-		}
+		repack();
 
 		for (int i = 0; i < container.length; i++) {
 			for (int j = 0; j < container[0].length; j++) {
@@ -51,20 +49,6 @@ public class GridLayout implements ILayout, CoordinateMapping {
 			}
 		}
 	}
-
-	private void resizeElements() {
-		GuiElement[][] copy = container;
-		container = new GuiElement[copy.length][copy[0].length];
-
-		for (int i = 0; i < copy.length; i++) {
-			for (int j = 0; j < copy[0].length; j++) {
-				if (copy[i][j] != null) {
-					this.addElement(copy[i][j]);
-				}
-			}
-		}
-	}
-
 	@Override
 	public void addElement(GuiElement element) {
 		for (int i = 0; i < container.length; i++) {
@@ -123,6 +107,20 @@ public class GridLayout implements ILayout, CoordinateMapping {
 
 	public void setElement(GuiElement elem, int x, int y) {
 		container[y][x] = elem;
+	}
+
+	@Override
+	public void repack() {
+		GuiElement[][] copy = container;
+		container = new GuiElement[copy.length][copy[0].length];
+
+		for (int i = 0; i < copy.length; i++) {
+			for (int j = 0; j < copy[0].length; j++) {
+				if (copy[i][j] != null) {
+					this.addElement(copy[i][j]);
+				}
+			}
+		}
 	}
 
 }

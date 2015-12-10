@@ -1,5 +1,6 @@
 package entity;
 
+import gameEngine.Player;
 import gameEngine.Screen;
 
 import java.awt.Graphics2D;
@@ -51,10 +52,19 @@ public class Tree extends AbstractEntity {
 	}
 	
 	@Override
-	public boolean takeDamage(int dmg) {
+	public boolean takeDamage(int dmg, AbstractEntity dmgdealer) {
 		if(m_hit <= 0)
 			m_hit+=4;
-		return super.takeDamage(dmg);
+		
+		int before = this.getLife();
+		boolean isalive =  super.takeDamage(dmg, dmgdealer);
+		
+		if (dmgdealer.getOwner() != -1){
+			Player togift = Player.getPlayer(dmgdealer.getOwner());
+			togift.setWood(togift.getWood()+before-getLife());
+		}
+		
+		return isalive;
 	}
 	
 	@Override
