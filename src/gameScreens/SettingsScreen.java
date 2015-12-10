@@ -15,6 +15,7 @@ import java.util.ArrayList;
 
 public class SettingsScreen extends Screen implements ActionListener {
 	private Panel subpanel;
+	private int startx, starty;
 	
 	public SettingsScreen(ScreenFactory screenFactory) {
 		super(screenFactory);
@@ -23,13 +24,22 @@ public class SettingsScreen extends Screen implements ActionListener {
 	@Override
 	public void onCreate() {
 
-		String adding[] = { "Zurück", "Game-Settings", "Steuerrung", "Sound", "Hauptmenü" , "Beenden"};
+		String adding[] = { "Zurück", "Game-Settings", "Steuerrung", "Audio", "Video", "Hauptmenü" , "Beenden"};
+		
+		startx = 0;
+		starty = 0;
+		if(getScreenFactory().getPrevScreen() instanceof GameScreen)
+		{
+			GameScreen e = (GameScreen)getScreenFactory().getPrevScreen();
+			startx = e.viewX();
+			starty = e.viewY();
+		}
 		
 		int Wwidth = getScreenFactory().getGame().getWindow().getWidth();
 		int Wheight = getScreenFactory().getGame().getWindow().getHeight();
 		int width = Wwidth/5;
 		int height = Wheight*2/5;
-		Panel p = new Panel(Wwidth/2-width/2, Wheight/2-height/2, width, height);
+		Panel p = new Panel(startx + Wwidth/2-width/2, starty+Wheight/2-height/2, width, height);
 		p.setLayout(new GridLayout(adding.length, 1, p));
 		for (String toadd : adding) {
 			Button newb = new Button(toadd);
@@ -39,7 +49,7 @@ public class SettingsScreen extends Screen implements ActionListener {
 		}
 		
 		
-		Button placeholder = new Button(0, 0, Wwidth, Wheight, "");
+		Button placeholder = new Button(startx, starty, Wwidth, Wheight, "");
 		placeholder.setWidth(getScreenFactory().getGame().getWindow().getWidth());
 		placeholder.setHeight(getScreenFactory().getGame().getWindow().getHeight());
 		placeholder.setBackgroundColor(new Color(0, 0, 0, 0.5f));
@@ -70,6 +80,7 @@ public class SettingsScreen extends Screen implements ActionListener {
 			return;
 		}
 		switch (e.getActionCommand()) { // name of the button
+		//MainSettings
 		case "Zurück":
 			if(subpanel != null)
 			{
@@ -79,14 +90,14 @@ public class SettingsScreen extends Screen implements ActionListener {
 			}
 			this.getScreenFactory().swap();
 			break;
-		case "Sound":
+		case "Audio":
 			String adding[] = { "Zurück", "Volume"};
 			
 			int Wwidth = getScreenFactory().getGame().getWindow().getWidth();
 			int Wheight = getScreenFactory().getGame().getWindow().getHeight();
 			int width = Wwidth/5;
 			int height = Wheight*2/5;
-			subpanel = new Panel(Wwidth/2+width/2, Wheight/2-height/2, width, height);
+			subpanel = new Panel(startx+Wwidth/2+width/2, starty+Wheight/2-height/2, width, height);
 			subpanel.setLayout(new GridLayout(adding.length, 1, subpanel));
 			for (String toadd : adding) {
 				Button newb = new Button(toadd);
@@ -106,6 +117,15 @@ public class SettingsScreen extends Screen implements ActionListener {
 		case "Beenden":
 			System.exit(0);
 			break;
+		//GameSettings:
+			
+		//Steuerrung:
+		//Sound:
+		case "Volume":
+			System.out.println("Volume subpanel button test erfolgreich");
+			break;
+		//Video:
+		
 		default:
 			System.out.println("Unknown ActionEvent: " + e.getActionCommand());
 			break;

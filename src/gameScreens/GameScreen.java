@@ -178,6 +178,16 @@ public class GameScreen extends Screen implements ActionListener {
 		
 		checkWin();
 	}
+	
+	public int viewX()
+	{
+		return viewX;
+	}
+	
+	public int viewY()
+	{
+		return viewY;
+	}
 
 	@Override
 	public void onDraw(Graphics2D g2d) {
@@ -193,7 +203,7 @@ public class GameScreen extends Screen implements ActionListener {
 		AffineTransform transform = new AffineTransform();
 		transform.translate(-viewX, -viewY);
 		g2d.transform(transform);
-
+		
 		/*
 		 * for (AbstractEntity e : AbstractEntity.getEntities()) {//linkedList
 		 * performance plus e.draw(g2d); }
