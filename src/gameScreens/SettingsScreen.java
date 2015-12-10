@@ -1,6 +1,7 @@
 package gameScreens;
 
 import entity.AbstractEntity;
+import gameEngine.MousepadListener;
 import gameEngine.Screen;
 import gameEngine.ScreenFactory;
 import gui.Button;
@@ -60,7 +61,16 @@ public class SettingsScreen extends Screen implements ActionListener {
 
 	@Override
 	public void onUpdate() {
+		MousepadListener mpl = this.getScreenFactory().getGame()
+				.getMousepadListener();
+		
+		mpl.setX(mpl.getX() + startx);
+		mpl.setY(mpl.getY() + starty);
+		
 		super.onUpdate(); // updating Gui Elements
+		
+		mpl.setX(mpl.getX() + startx);
+		mpl.setY(mpl.getY() + starty);
 	}
 
 	@Override
