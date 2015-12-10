@@ -26,6 +26,11 @@ public class SettingsScreen extends Screen implements ActionListener {
 
 		String adding[] = { "Zurück", "Game-Settings", "Steuerrung", "Audio", "Video", "Hauptmenü" , "Beenden"};
 		
+		int Wwidth = getScreenFactory().getGame().getWindow().getWidth();
+		int Wheight = getScreenFactory().getGame().getWindow().getHeight();
+		int width = Wwidth/5;
+		int height = Wheight*2/5;
+		
 		startx = 0;
 		starty = 0;
 		if(getScreenFactory().getPrevScreen() instanceof GameScreen)
@@ -35,26 +40,26 @@ public class SettingsScreen extends Screen implements ActionListener {
 			starty = e.viewY();
 		}
 		
-		int Wwidth = getScreenFactory().getGame().getWindow().getWidth();
-		int Wheight = getScreenFactory().getGame().getWindow().getHeight();
-		int width = Wwidth/5;
-		int height = Wheight*2/5;
-		Panel p = new Panel(startx + Wwidth/2-width/2, starty+Wheight/2-height/2, width, height);
+		
+		Panel p = new Panel(Wwidth/2-width/2, Wheight/2-height/2, width, height);
 		p.setLayout(new GridLayout(adding.length, 1, p));
 		for (String toadd : adding) {
+			
 			Button newb = new Button(toadd);
 			newb.setTextColor(Color.RED);
 			newb.addActionListener(this);
 			p.addElement(newb);
 		}
 		
-		
 		Button placeholder = new Button(startx, starty, Wwidth, Wheight, "");
 		placeholder.setWidth(getScreenFactory().getGame().getWindow().getWidth());
 		placeholder.setHeight(getScreenFactory().getGame().getWindow().getHeight());
 		placeholder.setBackgroundColor(new Color(0, 0, 0, 0.5f));
 		addGuiElement(placeholder);
-
+		
+		p.setX(p.getX()+startx);
+		p.setY(p.getY()+starty);
+		
 		addGuiElement(p);
 	}
 
@@ -97,7 +102,7 @@ public class SettingsScreen extends Screen implements ActionListener {
 			int Wheight = getScreenFactory().getGame().getWindow().getHeight();
 			int width = Wwidth/5;
 			int height = Wheight*2/5;
-			subpanel = new Panel(startx+Wwidth/2+width/2, starty+Wheight/2-height/2, width, height);
+			subpanel = new Panel(Wwidth/2+width/2, Wheight/2-height/2, width, height);
 			subpanel.setLayout(new GridLayout(adding.length, 1, subpanel));
 			for (String toadd : adding) {
 				Button newb = new Button(toadd);
@@ -105,6 +110,10 @@ public class SettingsScreen extends Screen implements ActionListener {
 				newb.addActionListener(this);
 				subpanel.addElement(newb);
 			}
+			
+			subpanel.setX(startx);
+			subpanel.setY(starty);
+			
 			addGuiElement(subpanel);
 			break;
 			
