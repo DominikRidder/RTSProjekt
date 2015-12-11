@@ -11,8 +11,8 @@ public class ScreenFactory {
 
 	public void showScreen(Screen newscreen) {
 		this.lastScreen = screen;
-		this.screen = newscreen;
-		this.screen.onCreate();
+		newscreen.onCreate(); // Create
+		this.screen = newscreen;  // than draw
 	}
 	
 	/**
