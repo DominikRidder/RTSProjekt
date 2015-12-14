@@ -1,40 +1,50 @@
 package dataManagement;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map.Entry;
+import java.util.Scanner;
 
 public class SettingsManager {
-	private final HashMap<String, Setting<Object> > l_settings;
+	private final HashMap<String,Setting> l_settings;
+	private final String m_startconfig = "autoexec.cfg";
+	private final String m_seperator = "=";
 	
 	public SettingsManager()
 	{
-		l_settings = new HashMap<String, Setting<Object> >();
+		l_settings = new HashMap<String, Setting >();
 		init();
+		System.out.println("sucessfull init of Settings");
 	}
 	
 	
-	public void init()
+	private void init()
 	{
 		/*Syntax: Integer UND Boolean werte: ** VALUE, MIN_VALUE, MAX_VALUE, DESCRIPTION **
-				  String					 ** VALUE, DESCRIPTION **
+				  Without limits:			 ** VALUE, DESCRIPTION **
 		*/
 		//TODO: Datei Einlesen & stuff
 		//Incoming Konsole
+		//Init default stuff
 		
 		//player
-		l_settings.put("cl_p_name", new Setting<Object>("Rudolf", "Name of the main player"));
-		
-		
+		l_settings.put("cl_p_everynumbertest", new Setting(1, "you could give this one every value of an int"));
 		//sound
-		l_settings.put("cl_s_sound", new Setting<Object>(1, 0, 1, "Sounds are generally on/off"));
-		l_settings.put("cl_s_volume", new Setting<Object>(10, 0, 20, "loudness of the sound"));
+		l_settings.put("cl_s_sound", new Setting(1, 0, 1, "Sounds are generally on/off"));
+		l_settings.put("cl_s_volume", new Setting(10, 0, 20, "loudness of the sound"));
 		
 		//video
-		l_settings.put("cl_v_screen_w", new Setting<Object>(620, 500, 4096, "Breite des bildschirms"));
-		l_settings.put("cl_v_screen_h", new Setting<Object>(620, 500, 4096, "Hoehe des bildschirms"));
+		l_settings.put("cl_v_screen_w", new Setting(620, 500, 4096, "Breite des bildschirms"));
+		l_settings.put("cl_v_screen_h", new Setting(620, 500, 4096, "Hoehe des bildschirms"));
 		
 		
 		
-		
+		//load Data from file
+		loadData(m_startconfig);
 	}
 	
 	/**
@@ -42,16 +52,15 @@ public class SettingsManager {
 	 * @param trigger
 	 * @param value
 	 */
-	public void setValue(String trigger, Object value)
+	public boolean setValue(String trigger, int value)
 	{
 		if(!l_settings.get(trigger).setVal(value))
 		{
 			System.out.println("value of '"+trigger+"' unsuccessfully changed!");
+			return false;
 		}
-		else
-		{
-			System.out.println("value of '"+trigger+"' successfully changed!");
-		}
+		System.out.println("value of '"+trigger+"' successfully changed!");
+		return true;
 	}
 	
 	/**
@@ -61,7 +70,7 @@ public class SettingsManager {
 	 */
 	public boolean getValueBool(String trigger)
 	{
-		return (int)l_settings.get(trigger).getVal() != 0;
+		return l_settings.get(trigger).getVal() != 0;
 	}
 	
 	/**
@@ -71,21 +80,117 @@ public class SettingsManager {
 	 */
 	public int getValueInt(String trigger)
 	{
-		return (int)l_settings.get(trigger).getVal();
+		return l_settings.get(trigger).getVal();
 	}
 	
 	/**
-	 * dangerous for int!
+	 * Returns minimal value, max value and the description of a Setting
 	 * @param trigger
 	 * @return
 	 */
-	public String getValueString(String trigger)
-	{
-		return (String)l_settings.get(trigger).getVal();
-	}
-	
 	public String help(String trigger)
 	{
-		return l_settings.get(trigger).getDescription();
+		Setting tmp = l_settings.get(trigger);
+		return "min: "+tmp.m_min+"max: "+tmp.m_max+"\n"+tmp.getDescription();
 	}
+	
+	/**
+	 * changes the data from an execute file
+	 */
+	public void loadData(String filename)
+	{
+		Scanner sc = null;
+		try {
+			sc = new Scanner(new File(filename));
+		} catch (FileNotFoundException e) {
+			//File doesn't exist? generate simply one!
+			System.out.println("can't find '"+m_startconfig+"'\ncreating new one");
+			saveData();
+			return;//nothing to do anymore, return!
+		}
+		while(sc.hasNext())
+		{
+			String line = sc.nextLine();
+			String args[] = line.split(m_seperator);
+			if(args.length != 2)
+			{
+				System.out.println("can't interprete '"+line+"' in '"+filename+"'");
+				continue;
+			}
+			int a = 0;
+			try {
+				a = Integer.parseInt(args[1].trim());
+			} catch(NumberFormatException e)
+			{
+				System.out.println("can't interprete '"+args[1]+"' to a number");
+				continue;
+			}
+			setValue(args[0].trim(), a);
+		}
+		sc.close();
+	}
+	
+	public void saveData()
+	{//TODO fix this
+		FileWriter f = null;
+		try {
+			f = new FileWriter(new File(m_startconfig), false);
+			Iterator<Entry<String, Setting>> it = l_settings.entrySet().iterator();
+			
+		    while (it.hasNext()) {
+		        Entry<String, Setting> pair = it.next();
+		        //System.out.println(pair.getKey() + " = " + pair.getValue().getVal());
+		        f.write(pair.getKey()+ " = "+pair.getValue().getVal());
+		        //it.remove(); // avoids a ConcurrentModificationException
+		    }
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	private class Setting 
+	{
+		private final int m_min;
+		private final int m_max;
+		private int m_value;
+		private final String m_desc;
+		
+		Setting(int value, int min, int max, String description)
+		{
+			m_value = value;
+			m_min = min;
+			m_max = max;
+			m_desc = description;
+		}
+		
+		Setting(int value, String description)
+		{
+			m_value = value;
+			m_min = Integer.MIN_VALUE;
+			m_max = Integer.MAX_VALUE;
+			m_desc = description;
+		}
+		
+		public boolean setVal(int value)
+		{
+			if(m_value >= m_min && m_value <= m_max)
+			{
+				m_value = value;
+				return true;
+			}
+			return false;
+		}
+		
+		public int getVal()
+		{
+			return m_value;
+		}
+		
+		public String getDescription()
+		{
+			return m_desc;
+		}
+	}
+
 }
