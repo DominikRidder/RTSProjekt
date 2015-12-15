@@ -26,7 +26,6 @@ public class Game {
 		window.setTitle(title);
 		init();
 		new Thread(gameThread).start();
-		new Thread(musikThread).start();
 	}
 
 	public Game(String title) {
@@ -35,7 +34,6 @@ public class Game {
 		window.setTitle(title);
 		init();
 		new Thread(gameThread).start();
-
 	}
 
 	private void init() {
@@ -53,6 +51,7 @@ public class Game {
 		
 		
 			musikThread = new MusikThread();
+			needSound(settings.getValueBool("cl_s_sound"));
 			window.add(musikThread);
 		
 		keyboardListener = new KeyboardListener();
@@ -63,6 +62,8 @@ public class Game {
 
 		gameThread.addMouseListener(mousepadListener);
 		gameThread.addMouseMotionListener(mousepadListener);
+		
+		needSound(Game.settings.getValueBool("cl_s_sound"));
 
 		window.setVisible(true);
 	}
@@ -93,5 +94,13 @@ public class Game {
 	
 	public static SettingsManager getSetting(){
 		return settings;
+	}
+	
+	public void needSound(boolean yes)
+	{
+		if(!yes)
+			musikThread.stop();
+		else
+			musikThread.start();
 	}
 }

@@ -19,28 +19,52 @@ public class MusikThread extends JPanel implements Runnable {
 	private AudioPlayer player;
 	private AudioStream audioStream;
 	private boolean isOn = false;
+	private Thread t;
+	
+	public MusikThread()
+	{
+		start();
+	}
+	
+	void stop()
+	{
+		t = null;
+		player = null;
+		if(audioStream != null)
+		{
+			try {
+				audioStream.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			audioStream = null;
+		}
+		isOn = false;
+	}
+	
+	void start()
+	{
+		t = new Thread(this);
+		t.start();
+	}
 
 	@Override
 	public void run() {
-		while (true) {
-			try {
+		while (t != null) {
+			if (isOn == false) {
 				File f = new File("data/Music/hauptmenue_v1.wav");
-				InputStream in = new FileInputStream(f);
-				audioStream = new AudioStream(in);
-			} catch (IOException ex) {
-				ex.printStackTrace();
-			}
-			if (isOn == false && Game.getSetting().getValueBool("cl_s_sound")) {
+				InputStream in;
+				try {
+					in = new FileInputStream(f);
+					audioStream = new AudioStream(in);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				player = AudioPlayer.player;
 				player.start(audioStream);
 				isOn = true;
-			}
-			
-			if(!Game.getSetting().getValueBool("cl_s_sound") && isOn)
-			{
-				player = null;
-				isOn = false;
-				
 			}
 
 			try {

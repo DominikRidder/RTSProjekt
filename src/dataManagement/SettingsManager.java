@@ -1,5 +1,6 @@
 package dataManagement;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -12,6 +13,7 @@ import java.util.Scanner;
 public class SettingsManager {
 	private final HashMap<String,Setting> l_settings;
 	private final String m_startconfig = "autoexec.cfg";
+	private final String m_configstorage = "config.cfg";
 	private final String m_seperator = "=";
 	
 	public SettingsManager()
@@ -45,6 +47,7 @@ public class SettingsManager {
 		
 		//load Data from file
 		loadData(m_startconfig);
+		loadData(m_configstorage);
 	}
 	
 	/**
@@ -59,8 +62,20 @@ public class SettingsManager {
 			System.out.println("value of '"+trigger+"' unsuccessfully changed!");
 			return false;
 		}
-		System.out.println("value of '"+trigger+"' successfully changed!");
+		System.out.println("value of '"+trigger+"' successfully changed to '"+value+"'!");
+		saveData();//save the config after changing by user
 		return true;
+	}
+	
+	/**
+	 * Only used to update the Settings by the startconfig or by the config storage
+	 * @param trigger
+	 * @param value
+	 * @return
+	 */
+	private boolean setValueSilent(String trigger, int value)
+	{
+		return l_settings.get(trigger).setVal(value);
 	}
 	
 	/**
@@ -84,6 +99,15 @@ public class SettingsManager {
 	}
 	
 	/**
+	 * Switches Value from true to false, or from false to true
+	 * @param trigger
+	 */
+	public void switchValue(String trigger)
+	{
+		setValue(trigger, getValueBool(trigger) ? 0 : 1);  
+	}
+	
+	/**
 	 * Returns minimal value, max value and the description of a Setting
 	 * @param trigger
 	 * @return
@@ -104,8 +128,8 @@ public class SettingsManager {
 			sc = new Scanner(new File(filename));
 		} catch (FileNotFoundException e) {
 			//File doesn't exist? generate simply one!
-			System.out.println("can't find '"+m_startconfig+"'\ncreating new one");
-			saveData();
+			System.out.println("can't find '"+filename+"'\ncreating new one");
+			saveData(filename);
 			return;//nothing to do anymore, return!
 		}
 		while(sc.hasNext())
@@ -125,24 +149,40 @@ public class SettingsManager {
 				System.out.println("can't interprete '"+args[1]+"' to a number");
 				continue;
 			}
-			setValue(args[0].trim(), a);
+			if(!setValueSilent(args[0].trim(), a))
+			{
+				System.out.println("the value '"+a+"' of '"+args[0].trim()+"' is out of range!");
+			}
 		}
 		sc.close();
 	}
 	
+	/**
+	 * Saves the Settings into the default Storage
+	 * autoexec just gets loaded (startsettings) while the 
+	 * main config gets loaded and written back!
+	 */
 	public void saveData()
+	{
+		saveData(m_configstorage);
+	}
+	
+	private void saveData(String filename)
 	{//TODO fix this
 		FileWriter f = null;
 		try {
-			f = new FileWriter(new File(m_startconfig), false);
+			f = new FileWriter(new File(filename), false);
+			BufferedWriter bw = new BufferedWriter(f);
 			Iterator<Entry<String, Setting>> it = l_settings.entrySet().iterator();
 			
 		    while (it.hasNext()) {
 		        Entry<String, Setting> pair = it.next();
 		        //System.out.println(pair.getKey() + " = " + pair.getValue().getVal());
-		        f.write(pair.getKey()+ " = "+pair.getValue().getVal());
+		        bw.write(pair.getKey()+m_seperator+pair.getValue().getVal());
+		        bw.newLine();
 		        //it.remove(); // avoids a ConcurrentModificationException
 		    }
+		    bw.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

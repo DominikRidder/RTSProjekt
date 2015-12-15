@@ -1,6 +1,7 @@
 package gameScreens;
 
 import entity.AbstractEntity;
+import gameEngine.Game;
 import gameEngine.MousepadListener;
 import gameEngine.Screen;
 import gameEngine.ScreenFactory;
@@ -106,7 +107,7 @@ public class SettingsScreen extends Screen implements ActionListener {
 			this.getScreenFactory().swap();
 			break;
 		case "Audio":
-			String adding[] = { "Zurück", "Volume"};
+			String adding[] = { "Zurück", "Ton"};
 			
 			int Wwidth = getScreenFactory().getGame().getWindow().getWidth();
 			int Wheight = getScreenFactory().getGame().getWindow().getHeight();
@@ -140,8 +141,9 @@ public class SettingsScreen extends Screen implements ActionListener {
 			
 		//Steuerrung:
 		//Sound:
-		case "Volume":
-			System.out.println("Volume subpanel button test erfolgreich");
+		case "Ton":
+			Game.getSetting().switchValue("cl_s_sound");
+			getScreenFactory().getGame().needSound(Game.getSetting().getValueBool("cl_s_sound"));
 			break;
 		//Video:
 		
