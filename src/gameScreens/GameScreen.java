@@ -3,6 +3,7 @@ package gameScreens;
 import entity.AbstractEntity;
 import entity.OrkTest;
 import entity.Tree;
+import gameEngine.KeyboardListener;
 import gameEngine.MousepadListener;
 import gameEngine.Player;
 import gameEngine.Screen;
@@ -108,8 +109,15 @@ public class GameScreen extends Screen implements ActionListener {
 
 	@Override
 	public void onUpdate() {
-		MousepadListener mpl = this.getScreenFactory().getGame()
-				.getMousepadListener();
+		KeyboardListener kbl = this.getScreenFactory().getGame().getKeyboardListener();
+		if(kbl.isKeyPressed(27))//ESC button
+		{
+			Button b = new Button("ESC");
+			b.addActionListener(this);
+			b.callActions();
+		}
+		
+		MousepadListener mpl = this.getScreenFactory().getGame().getMousepadListener();
 		wood.setText("Wood: "+Player.getPlayer(0).getWood());
 		
 		int scrollspeed = 6;
@@ -280,7 +288,7 @@ public class GameScreen extends Screen implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		switch (e.getActionCommand()) { // name of the button
-		case "X":
+		case "ESC":
 			this.getScreenFactory().showScreen(new SettingsScreen(this.getScreenFactory()));
 			break;
 		default:

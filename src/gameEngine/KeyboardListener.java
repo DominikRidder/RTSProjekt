@@ -8,7 +8,7 @@ public class KeyboardListener implements KeyListener {
 
 	private final boolean[] keys = new boolean[256];
 
-	private ArrayList<Integer> ispressed = new ArrayList<Integer>();
+	private final ArrayList<Integer> ispressed = new ArrayList<Integer>();
 
 	@Override
 	public void keyPressed(KeyEvent event) {

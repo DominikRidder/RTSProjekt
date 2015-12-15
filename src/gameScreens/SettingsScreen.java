@@ -2,6 +2,7 @@ package gameScreens;
 
 import entity.AbstractEntity;
 import gameEngine.Game;
+import gameEngine.KeyboardListener;
 import gameEngine.MousepadListener;
 import gameEngine.Screen;
 import gameEngine.ScreenFactory;
@@ -67,6 +68,14 @@ public class SettingsScreen extends Screen implements ActionListener {
 
 	@Override
 	public void onUpdate() {
+		KeyboardListener kbl = this.getScreenFactory().getGame().getKeyboardListener();
+		if(kbl.isKeyPressed(27))//ESC button
+		{
+			Button b = new Button("Zurück");
+			b.addActionListener(this);
+			b.callActions();
+		}
+		
 		MousepadListener mpl = this.getScreenFactory().getGame()
 				.getMousepadListener();
 		
