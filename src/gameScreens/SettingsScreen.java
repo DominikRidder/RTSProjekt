@@ -69,7 +69,7 @@ public class SettingsScreen extends Screen implements ActionListener {
 	@Override
 	public void onUpdate() {
 		KeyboardListener kbl = this.getScreenFactory().getGame().getKeyboardListener();
-		if(kbl.isKeyPressed(27))//ESC button
+		if(kbl.isOnPress(27))//ESC button
 		{
 			Button b = new Button("Zurück");
 			b.addActionListener(this);
