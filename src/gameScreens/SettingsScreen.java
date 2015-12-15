@@ -19,6 +19,7 @@ import java.util.ArrayList;
 public class SettingsScreen extends Screen implements ActionListener {
 	private Panel subpanel;
 	private int startx, starty;
+	private int tickcounter = 20;
 	
 	public SettingsScreen(ScreenFactory screenFactory) {
 		super(screenFactory);
@@ -69,11 +70,15 @@ public class SettingsScreen extends Screen implements ActionListener {
 	@Override
 	public void onUpdate() {
 		KeyboardListener kbl = this.getScreenFactory().getGame().getKeyboardListener();
-		if(kbl.isOnPress(27))//ESC button
+		if(kbl.isOnPress(27) && tickcounter == 0)//ESC button
 		{
 			Button b = new Button("Zurück");
 			b.addActionListener(this);
 			b.callActions();
+		}
+		if(tickcounter != 0)
+		{
+			tickcounter--;
 		}
 		
 		MousepadListener mpl = this.getScreenFactory().getGame()

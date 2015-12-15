@@ -13,7 +13,6 @@ import gui.CompactLayout;
 import gui.Label;
 import gui.Panel;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -86,41 +85,52 @@ public class GameScreen extends Screen implements ActionListener {
 		
 		wood = new Label("Wood: "+hum_sp.getWood());
 		wood.setX(this.getScreenFactory().getGame().getWindow()
-				.getWidth() - 200);
+				.getWidth() - 150);
 		wood.setY(0);
 		wood.setWidth(150);
 		wood.setHeight(50);
-		
-		Button exit = new Button(this.getScreenFactory().getGame().getWindow()
-				.getWidth() - 50, 0, 50, 50, "X");
-		exit.setBackgroundColor(Color.BLACK);
-		exit.setTextColor(Color.RED);
-		exit.addActionListener(this);
 		
 		hud = new Panel(0,0, this.getScreenFactory().getGame().getWindow()
 				.getWidth(), this.getScreenFactory().getGame().getWindow()
 				.getHeight());
 		hud.setLayout(new CompactLayout(hud));
 		hud.addElement(wood);
-		hud.addElement(exit);
 		
 		addGuiElement(hud);
 	}
 
 	@Override
 	public void onUpdate() {
+		int scrollspeed = 6;//Todo make this global
 		KeyboardListener kbl = this.getScreenFactory().getGame().getKeyboardListener();
 		if(kbl.isOnPress(27))//ESC button
 		{
 			Button b = new Button("ESC");
 			b.addActionListener(this);
 			b.callActions();
+			return;
+		}
+		if(kbl.isKeyPressed(39))
+		{
+			viewX+= scrollspeed;
+		}
+		if(kbl.isKeyPressed(37))
+		{
+			viewX-= scrollspeed;
+		}
+		if(kbl.isKeyPressed(38))
+		{
+			viewY-= scrollspeed;
+		}
+		if(kbl.isKeyPressed(40))
+		{
+			viewY+= scrollspeed;
 		}
 		
 		MousepadListener mpl = this.getScreenFactory().getGame().getMousepadListener();
 		wood.setText("Wood: "+Player.getPlayer(0).getWood());
 		
-		int scrollspeed = 6;
+		
 		
 		if (mpl.getCurrentX() > getScreenFactory().getGame().getWindow()
 				.getWidth() - 30
