@@ -44,10 +44,32 @@ public class SettingsManager {
 		l_settings.put("cl_v_screen_h", new Setting(620, 500, 4096, "Hoehe des bildschirms"));
 		
 		
+		//Buttons
+		l_settings.put("btn_ESC", new Setting(27, 0, 128));
+		l_settings.put("btn_SPACE", new Setting(32, 0, 128));
+		
+		for(int i = 33; i <= 122; i++)//from space to z in the ascii table//some default button, at least you can add them :D
+		{
+			l_settings.put("btn_"+(char)i, new Setting(i, 0, 255));
+		}
 		
 		//load Data from file
 		loadData(m_startconfig);
 		loadData(m_configstorage);
+	}
+	
+	/**
+	 * Adds or changes the button with the value value
+	 * @param value
+	 * @throws IndexOutOfBoundsException
+	 */
+	public void newButton(int value) throws IndexOutOfBoundsException
+	{
+		if(value <= 122 || value >= 256)
+		{
+			throw new IndexOutOfBoundsException("value is wrong!");
+		}
+		l_settings.put("btn_"+(char)value, new Setting(value, 0, 255));
 	}
 	
 	/**
@@ -210,6 +232,14 @@ public class SettingsManager {
 			m_min = Integer.MIN_VALUE;
 			m_max = Integer.MAX_VALUE;
 			m_desc = description;
+		}
+		
+		private Setting(int value, int min, int max)
+		{
+			m_value = value;
+			m_min = min;
+			m_max = max;
+			m_desc = "";
 		}
 		
 		public boolean setVal(int value)
