@@ -132,7 +132,7 @@ public class WorldEditor extends Screen implements ActionListener {
 		functions.add(load);
 		functions.add(zoomin);
 		functions.add(zoomout);
-		//		functions.add(new TextField(0,0,0,0));
+		// functions.add(new TextField(0,0,0,0));
 
 		for (int i = 0; i < functions.size(); i++) {
 			pFunctions.addElement(functions.get(i));
@@ -282,6 +282,8 @@ public class WorldEditor extends Screen implements ActionListener {
 			break;
 		case "Karte laden":
 			loadMap();
+			pWorld.setActualLayer(0);
+			loadTiles("L1", this);
 			break;
 		case "+":
 			scale *= 2;
@@ -350,22 +352,42 @@ public class WorldEditor extends Screen implements ActionListener {
 					}
 					int containerI = -1;
 					int containerJ = 0;
-					//					int offset = nextTileInString(0, line);
+					// int offset = nextTileInString(0, line);
 					String tiles[] = line.split(";");
 					for (int i = 0; i < tiles.length; i++) {
-						//						String tile = line.substring(i, nextTileInString(i, line));
+						// String tile = line.substring(i, nextTileInString(i, line));
 						data = tiles[i].split("\\(", 2);
 						int quantity = Integer.parseInt(data[0]);
 						String imgname = data[1].substring(0, data[1].length() - 1);
-						for (int j = quantity; j > 0; j--) {
-							if (containerI < height - 1) {
-								containerI++;
-							} else {
-								containerJ++;
-								containerI = 0;
+						if (imgname.contains(",")) {
+							String[] bigImageData = imgname.split(",");
+							if (Game.getImageManager().getImage(bigImageData[0] + bigImageData[1] + bigImageData[2]) != ((Field) pWorld.getLayout().getElement(Integer.parseInt(bigImageData[1]), Integer.parseInt(bigImageData[2]))).getImg()) {
+								BufferedImage image = Game.getImageManager().getImage(bigImageData[0]);
+								Carrier c = new Carrier(Integer.parseInt(bigImageData[1]), Integer.parseInt(bigImageData[2]), image, pWorld.getLayout());
+								c.setX((Integer.parseInt(bigImageData[1]) * 16 + pWorld.getX()));
+								c.setY((Integer.parseInt(bigImageData[2]) * 16 + pWorld.getY()));
+								for (int k = Integer.parseInt(bigImageData[1]); k < pWorld.getLayout().getRowSize() && k < Integer.parseInt(bigImageData[1]) + image.getWidth() / 16; k++) {
+									for (int l = Integer.parseInt(bigImageData[2]); l < pWorld.getLayout().getColumnSize() && l < Integer.parseInt(bigImageData[2]) + image.getHeight() / 16; l++) {
+										BigField bigf = new BigField(k * 16 + pWorld.getX(), l * 16 + pWorld.getY(), c);
+										bigf.setHeight(16);
+										bigf.setWidth(16);
+										pWorld.getLayout().setElement(bigf, k, l);
+									}
+								}
+								c.init();
 							}
-							if (!imgname.equals("v")) {
-								((Field) pWorld.getLayout().getElement(containerI, containerJ)).setImg(imgname);
+							// TODO
+						} else {
+							for (int j = quantity; j > 0; j--) {
+								if (containerI < height - 1) {
+									containerI++;
+								} else {
+									containerJ++;
+									containerI = 0;
+								}
+								if (!imgname.equals("v")) {
+									((Field) pWorld.getLayout().getElement(containerI, containerJ)).setImg(imgname);
+								}
 							}
 						}
 					}
