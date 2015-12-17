@@ -3,7 +3,6 @@ package gameScreens;
 import entity.AbstractEntity;
 import gameEngine.Game;
 import gameEngine.KeyboardListener;
-import gameEngine.MousepadListener;
 import gameEngine.Screen;
 import gameEngine.ScreenFactory;
 import gui.Button;
@@ -18,7 +17,6 @@ import java.util.ArrayList;
 
 public class SettingsScreen extends Screen implements ActionListener {
 	private Panel subpanel;
-	private int startx, starty;
 	private int tickcounter = 20;
 	
 	public SettingsScreen(ScreenFactory screenFactory, Screen prevscreen) {
@@ -34,19 +32,9 @@ public class SettingsScreen extends Screen implements ActionListener {
 		int Wheight = getScreenFactory().getGame().getWindow().getHeight();
 		int width = Wwidth/5;
 		int height = Wheight*2/5;
-		
-		startx = 0;
-		starty = 0;
-		if(prevscreen instanceof GameScreen)
-		{
-			GameScreen e = (GameScreen)prevscreen;
-			startx = e.viewX();
-			starty = e.viewY();
-		}
-		
-		
+			
 		Panel p = new Panel(Wwidth/2-width/2, Wheight/2-height/2, width, height);
-		p.setLayout(new GridLayout(adding.length+1, 1, p));
+		p.setLayout(new GridLayout(adding.length, 1, p));
 		for (String toadd : adding) {
 			
 			Button newb = new Button(toadd);
@@ -55,12 +43,9 @@ public class SettingsScreen extends Screen implements ActionListener {
 			p.addElement(newb);
 		}
 		
-		Button placeholder = new Button(startx, starty, Wwidth, Wheight, "");
+		Button placeholder = new Button(0, 0, Wwidth, Wheight, "");
 		placeholder.setBackgroundColor(new Color(0, 0, 0, 0.5f));
 		addGuiElement(placeholder);
-		
-		p.setX(p.getX()+startx);
-		p.setY(p.getY()+starty);
 		
 		addGuiElement(p);
 	}
@@ -77,18 +62,9 @@ public class SettingsScreen extends Screen implements ActionListener {
 		if(tickcounter != 0)
 		{
 			tickcounter--;
-		}
-		
-		MousepadListener mpl = this.getScreenFactory().getGame()
-				.getMousepadListener();
-		
-		mpl.setX(mpl.getX() + startx);
-		mpl.setY(mpl.getY() + starty);
-		
+		}	
 		super.onUpdate(); // updating Gui Elements
-		
-		mpl.setX(mpl.getX() + startx);
-		mpl.setY(mpl.getY() + starty);
+
 	}
 
 	@Override
@@ -139,10 +115,6 @@ public class SettingsScreen extends Screen implements ActionListener {
 				newb.addActionListener(this);
 				subpanel.addElement(newb);
 			}
-			
-			subpanel.setX(subpanel.getX()+startx);
-			subpanel.setY(subpanel.getY()+starty);
-			
 			addGuiElement(subpanel);
 			break;
 			

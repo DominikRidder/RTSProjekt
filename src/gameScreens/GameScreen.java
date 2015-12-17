@@ -17,6 +17,7 @@ import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.NoninvertibleTransformException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -212,16 +213,12 @@ public class GameScreen extends Screen implements ActionListener {
 		MousepadListener mpl = this.getScreenFactory().getGame()
 				.getMousepadListener();
 
-		if (hud != null) {
-			hud.setX(viewX);
-			hud.setY(viewY);
-			hud.repack();
-		}
-
 		AffineTransform transform = new AffineTransform();
 		transform.translate(-viewX, -viewY);
 		g2d.transform(transform);
 		
+		if (hud != null)
+			hud.repack();
 		/*
 		 * for (AbstractEntity e : AbstractEntity.getEntities()) {//linkedList
 		 * performance plus e.draw(g2d); }
@@ -256,6 +253,12 @@ public class GameScreen extends Screen implements ActionListener {
 		if (lastRightClick != 0) {
 			drawRightClick(g2d, lastRightClickX, lastRightClickY);
 			lastRightClick--;
+		}
+		try {
+			g2d.transform(transform.createInverse());//transform back to normal
+		} catch (NoninvertibleTransformException e) {//THIS WILL NEVER NEVER NEVER ... happen!
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		super.onDraw(g2d);
 	}
