@@ -32,7 +32,7 @@ public class MusikThread extends JPanel implements Runnable {
 			}
 			if (isOn == false && Game.getSetting().getValueBool("cl_s_sound")) {
 				player = AudioPlayer.player;
-				player.start(audioStream);
+//				player.start(audioStream);
 				isOn = true;
 			}
 			
