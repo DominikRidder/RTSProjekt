@@ -38,7 +38,6 @@ public class SettingsScreen extends Screen implements ActionListener {
 		for (String toadd : adding) {
 			
 			Button newb = new Button(toadd);
-			newb.setTextColor(Color.RED);
 			newb.addActionListener(this);
 			p.addElement(newb);
 		}

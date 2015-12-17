@@ -14,7 +14,7 @@ public class ControlSettingField extends GuiElement {
 	private boolean hasfocus;
 	private String label = "";
 	private final String setting;
-	private final Color textcolor = Color.WHITE, backgroundcolor = Color.BLACK;
+	private final Color textcolor = Color.YELLOW, backgroundcolor = Color.GRAY;
 
 	public ControlSettingField(int x, int y, int width, int height, String stng) {
 		setX(x);
@@ -42,10 +42,11 @@ public class ControlSettingField extends GuiElement {
 		if(label.length() > 0)
 		{
 			g2d.setColor(textcolor);
-			g2d.drawString("'"+label+"'-Knopf:", getX(), getY() + getHeight() / 2);
+			g2d.drawImage(Game.getImageManager().getImage("editbox.png"), getX(), getY(), getWidth(), getHeight(), null);
+			g2d.drawString("'"+label+"'-Knopf:", getX(), getY() + getHeight() / 2+5);
 			if(hasfocus)
 				g2d.setColor(Color.GREEN);
-			g2d.drawString(""+text, getX()+100, getY() + getHeight() / 2);
+			g2d.drawString(""+text, getX()+100, getY() + getHeight() / 2+5);
 		}
 		else
 			g2d.drawString(""+text, getX(), getY() + getHeight() / 2);

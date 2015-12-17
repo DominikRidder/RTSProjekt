@@ -8,7 +8,6 @@ import gui.Button;
 import gui.GridLayout;
 import gui.Panel;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -41,8 +40,6 @@ public class MainScreen extends Screen implements ActionListener {
 		p.setLayout(new GridLayout(adding.length, 1, p));
 		for (String toadd : adding) {
 			Button newb = new Button(toadd);
-			newb.setBackgroundColor(Color.BLACK);
-			newb.setTextColor(Color.RED);
 			newb.addActionListener(this);
 			p.addElement(newb);
 		}
