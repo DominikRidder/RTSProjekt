@@ -171,7 +171,7 @@ public class StoryScreen extends Screen implements ActionListener {
 						.getHeight() * 1 / 10, "Start Mission");
 		startmission.addActionListener(this);
 //		startmission.setBackgroundColor(new Color(0,0,0,0));
-		startmission.setTextColor(Color.RED);
+		startmission.setTextColor(Color.YELLOW);
 
 		description = new Monolog("");
 		description.setSize(width * 9 / 20, getScreenFactory().getGame()
@@ -184,6 +184,7 @@ public class StoryScreen extends Screen implements ActionListener {
 		description.setFont(new Font("newname",Font.ITALIC, 14));
 		
 		title = new Label("");
+		title.turnOffDecorator();
 		title.setFont(new Font("somename", Font.BOLD, 20));
 		title.setSize(width * 4 / 5, getScreenFactory().getGame()
 				.getWindow().getHeight() * 1 / 5);
