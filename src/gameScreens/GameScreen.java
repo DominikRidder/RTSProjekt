@@ -3,6 +3,7 @@ package gameScreens;
 import entity.AbstractEntity;
 import entity.OrkTest;
 import entity.Tree;
+import gameEngine.Game;
 import gameEngine.KeyboardListener;
 import gameEngine.MousepadListener;
 import gameEngine.Player;
@@ -102,7 +103,7 @@ public class GameScreen extends Screen implements ActionListener {
 
 	@Override
 	public void onUpdate() {
-		int scrollspeed = 6;//Todo make this global
+		int scrollspeed = Game.getSetting().getValueInt("cl_g_scrollspeed");
 		KeyboardListener kbl = this.getScreenFactory().getGame().getKeyboardListener();
 		if(kbl.isOnPress("btn_ESC"))//ESC button
 		{
@@ -198,16 +199,6 @@ public class GameScreen extends Screen implements ActionListener {
 		checkWin();
 	}
 	
-	public int viewX()
-	{
-		return viewX;
-	}
-	
-	public int viewY()
-	{
-		return viewY;
-	}
-
 	@Override
 	public void onDraw(Graphics2D g2d) {
 		MousepadListener mpl = this.getScreenFactory().getGame()

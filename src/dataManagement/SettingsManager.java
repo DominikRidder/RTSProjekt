@@ -32,6 +32,8 @@ public class SettingsManager {
 		//TODO: Datei Einlesen & stuff
 		//Incoming Konsole
 		//Init default stuff
+		//game
+		l_settings.put("cl_g_scrollspeed", new Setting(6, 1, 30, "The Speed of the moving of the Map by the mouse and by the arrow keys"));
 		
 		//player
 		l_settings.put("cl_p_everynumbertest", new Setting(1, "you could give this one every value of an int"));
