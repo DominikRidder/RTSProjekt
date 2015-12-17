@@ -106,6 +106,10 @@ public class GridLayout implements ILayout, CoordinateMapping {
 	}
 
 	public void setElement(GuiElement elem, int x, int y) {
+		elem.setX(parent.getX() + parent.getWidth() / container[0].length * x);
+		elem.setY(parent.getY() + parent.getHeight() / container.length * y);
+		elem.setWidth(parent.getWidth() / container[0].length);
+		elem.setHeight(parent.getHeight() / container.length);
 		container[y][x] = elem;
 	}
 
