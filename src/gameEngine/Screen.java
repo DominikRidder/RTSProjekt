@@ -16,9 +16,16 @@ public abstract class Screen {
 	private int x, y, w, h;
 	private final ScreenFactory screenFactory;
 	private final ArrayList<GuiElement> guiElemens = new ArrayList<GuiElement>();
+	protected Screen prevscreen;
 
+	public Screen(ScreenFactory screenFactory, Screen prev) {
+		this.screenFactory = screenFactory;
+		prevscreen = prev;
+	}
+	
 	public Screen(ScreenFactory screenFactory) {
 		this.screenFactory = screenFactory;
+		prevscreen = null;
 	}
 
 	public abstract void onCreate();
@@ -107,5 +114,9 @@ public abstract class Screen {
 
 	public void updateGuiElementOrder() {
 		Collections.sort(guiElemens);
+	}
+
+	public Screen getPrevscreen() {
+		return prevscreen;
 	}
 }

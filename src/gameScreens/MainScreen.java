@@ -78,16 +78,16 @@ public class MainScreen extends Screen implements ActionListener {
 		}
 		switch (e.getActionCommand()) { // name of the button
 		case "Einzelspieler":
-			this.getScreenFactory().showScreen(new StoryScreen(this.getScreenFactory()));
+			this.getScreenFactory().createScreen(new StoryScreen(this.getScreenFactory()));
 			break;
 		case "Quick Start":
-			this.getScreenFactory().showScreen(new GameScreen(this.getScreenFactory()));
+			this.getScreenFactory().createScreen(new GameScreen(this.getScreenFactory()));
 			break;
 		case "WorldEditor":
-			this.getScreenFactory().showScreen(new WorldEditor(this.getScreenFactory()));
+			this.getScreenFactory().createScreen(new WorldEditor(this.getScreenFactory()));
 			break;
 		case "Einstellungen":
-			this.getScreenFactory().showScreen(new SettingsScreen(this.getScreenFactory()));
+			this.getScreenFactory().createScreen(new SettingsScreen(this.getScreenFactory(), this));
 			break;
 		case "Exit":
 			System.exit(0);

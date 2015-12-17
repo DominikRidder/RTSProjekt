@@ -59,17 +59,18 @@ public class SettingsManager {
 	}
 	
 	/**
-	 * Adds or changes the button with the value value
+	 * Adds the button with the value value
 	 * @param value
 	 * @throws IndexOutOfBoundsException
 	 */
 	public void newButton(int value) throws IndexOutOfBoundsException
 	{
-		if(value <= 122 || value >= 256)
+		if(value <= 0|| value >= 256)
 		{
 			throw new IndexOutOfBoundsException("value is wrong!");
 		}
-		l_settings.put("btn_"+(char)value, new Setting(value, 0, 255));
+		if(value != 27 && value != 32 && l_settings.get("btn_"+(char)value) == null)
+			l_settings.put("btn_"+(char)value, new Setting(value, 0, 255));
 	}
 	
 	/**

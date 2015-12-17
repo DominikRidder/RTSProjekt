@@ -3,30 +3,19 @@ public class ScreenFactory {
 
 	private final Game game;
 	private Screen screen = null;
-	private Screen lastScreen = null;
 
 	public ScreenFactory(Game game) {
 		this.game = game;
 	}
+	
+	public void activeScreen(Screen alreadyexistingscreen)
+	{
+		this.screen = alreadyexistingscreen;
+	}
 
-	public void showScreen(Screen newscreen) {
-		this.lastScreen = screen;
+	public void createScreen(Screen newscreen) {
 		newscreen.onCreate(); // Create
 		this.screen = newscreen;  // than draw
-	}
-	
-	/**
-	 * tauscht lastScreen und Screen, DARF KEIN ONCREATE AUFRUFEN!
-	 */
-	public void swap()
-	{
-		Screen tmp = screen;
-		screen = lastScreen;
-		lastScreen = tmp;
-	}
-	
-	public Screen getPrevScreen() {
-		return lastScreen;
 	}
 
 	public Screen getCurrentScreen() {

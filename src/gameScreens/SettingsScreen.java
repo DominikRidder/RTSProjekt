@@ -21,8 +21,8 @@ public class SettingsScreen extends Screen implements ActionListener {
 	private int startx, starty;
 	private int tickcounter = 20;
 	
-	public SettingsScreen(ScreenFactory screenFactory) {
-		super(screenFactory);
+	public SettingsScreen(ScreenFactory screenFactory, Screen prevscreen) {
+		super(screenFactory, prevscreen);
 	}
 
 	@Override
@@ -37,16 +37,16 @@ public class SettingsScreen extends Screen implements ActionListener {
 		
 		startx = 0;
 		starty = 0;
-		if(getScreenFactory().getPrevScreen() instanceof GameScreen)
+		if(prevscreen instanceof GameScreen)
 		{
-			GameScreen e = (GameScreen)getScreenFactory().getPrevScreen();
+			GameScreen e = (GameScreen)prevscreen;
 			startx = e.viewX();
 			starty = e.viewY();
 		}
 		
 		
 		Panel p = new Panel(Wwidth/2-width/2, Wheight/2-height/2, width, height);
-		p.setLayout(new GridLayout(adding.length, 1, p));
+		p.setLayout(new GridLayout(adding.length+1, 1, p));
 		for (String toadd : adding) {
 			
 			Button newb = new Button(toadd);
@@ -56,8 +56,6 @@ public class SettingsScreen extends Screen implements ActionListener {
 		}
 		
 		Button placeholder = new Button(startx, starty, Wwidth, Wheight, "");
-		placeholder.setWidth(getScreenFactory().getGame().getWindow().getWidth());
-		placeholder.setHeight(getScreenFactory().getGame().getWindow().getHeight());
 		placeholder.setBackgroundColor(new Color(0, 0, 0, 0.5f));
 		addGuiElement(placeholder);
 		
@@ -70,7 +68,7 @@ public class SettingsScreen extends Screen implements ActionListener {
 	@Override
 	public void onUpdate() {
 		KeyboardListener kbl = this.getScreenFactory().getGame().getKeyboardListener();
-		if(kbl.isOnPress(27) && tickcounter == 0)//ESC button
+		if(kbl.isOnPress("btn_ESC") && tickcounter == 0)//ESC button
 		{
 			Button b = new Button("Zurück");
 			b.addActionListener(this);
@@ -95,7 +93,13 @@ public class SettingsScreen extends Screen implements ActionListener {
 
 	@Override
 	public void onDraw(Graphics2D g2d) {
-		this.getScreenFactory().getPrevScreen().onDraw(g2d);
+		if(prevscreen instanceof SettingsScreen)
+		{
+			super.onDraw(g2d);
+			return;
+		}
+		if(prevscreen != null)
+			prevscreen.onDraw(g2d);
 		super.onDraw(g2d); // Drawing gui elements
 	}
 
@@ -118,7 +122,7 @@ public class SettingsScreen extends Screen implements ActionListener {
 				subpanel = null;
 				break;
 			}
-			this.getScreenFactory().swap();
+			this.getScreenFactory().activeScreen(prevscreen);
 			break;
 		case "Audio":
 			String adding[] = { "Zurück", "Ton"};
@@ -143,17 +147,21 @@ public class SettingsScreen extends Screen implements ActionListener {
 			break;
 			
 		case "WorldEditor":
-			this.getScreenFactory().showScreen(new WorldEditor(this.getScreenFactory()));
+			this.getScreenFactory().createScreen(new WorldEditor(this.getScreenFactory()));
 			break;
 		case "Hauptmenü":
-			this.getScreenFactory().showScreen(new MainScreen(this.getScreenFactory()));
+			this.getScreenFactory().createScreen(new MainScreen(this.getScreenFactory()));
 			break;
 		case "Beenden":
 			System.exit(0);
 			break;
+		case "Steuerrung":
+			this.getScreenFactory().createScreen(new ControlScreen(this.getScreenFactory(), this));
+			break;
 		//GameSettings:
 			
 		//Steuerrung:
+		
 		//Sound:
 		case "Ton":
 			Game.getSetting().switchValue("cl_s_sound");

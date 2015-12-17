@@ -103,14 +103,14 @@ public class GameScreen extends Screen implements ActionListener {
 	public void onUpdate() {
 		int scrollspeed = 6;//Todo make this global
 		KeyboardListener kbl = this.getScreenFactory().getGame().getKeyboardListener();
-		if(kbl.isOnPress(27))//ESC button
+		if(kbl.isOnPress("btn_ESC"))//ESC button
 		{
 			Button b = new Button("ESC");
 			b.addActionListener(this);
 			b.callActions();
 			return;
 		}
-		if(kbl.isKeyPressed(39))
+		if(kbl.isKeyPressed(39))//i would let this unchangeable
 		{
 			viewX+= scrollspeed;
 		}
@@ -299,7 +299,7 @@ public class GameScreen extends Screen implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		switch (e.getActionCommand()) { // name of the button
 		case "ESC":
-			this.getScreenFactory().showScreen(new SettingsScreen(this.getScreenFactory()));
+			this.getScreenFactory().createScreen(new SettingsScreen(this.getScreenFactory(), this));
 			break;
 		default:
 			System.out.println("Unknown ActionEvent: " + e.getActionCommand());
@@ -322,7 +322,7 @@ public class GameScreen extends Screen implements ActionListener {
 		}
 		if (own != -1){
 			Player.dropAllPlayer(); // as long we don't have a Screen for stats
-			this.getScreenFactory().showScreen(new MainScreen(this.getScreenFactory()));
+			this.getScreenFactory().createScreen(new MainScreen(this.getScreenFactory()));
 		}
 	}
 }

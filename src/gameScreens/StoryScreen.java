@@ -1,8 +1,5 @@
 package gameScreens;
 
-import dataManagement.ImageManager;
-import dataManagement.InfoManager;
-import entity.AbstractEntity;
 import gameEngine.Game;
 import gameEngine.Mission;
 import gameEngine.Screen;
@@ -19,15 +16,18 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+
+import dataManagement.ImageManager;
+import dataManagement.InfoManager;
+import entity.AbstractEntity;
 
 public class StoryScreen extends Screen implements ActionListener {
 
 	private static final int RACE_HUMAN = 0, RACE_SHADOW = 1, RACE_ANCIENT = 2;
 
-	private String imglocation[] = { "story_hum.png", "story_sha.png",
+	private final String imglocation[] = { "story_hum.png", "story_sha.png",
 			"story_aci.png" };
 
 	private ArrayList<Mission> humMission;
@@ -38,7 +38,7 @@ public class StoryScreen extends Screen implements ActionListener {
 	private ArrayList<Button> humB;
 	private ArrayList<Button> shaB;
 
-	private String races[] = { "Human", "Shadow", "Ancient" };
+	private final String races[] = { "Human", "Shadow", "Ancient" };
 
 	private int actual = RACE_HUMAN;
 
@@ -47,7 +47,7 @@ public class StoryScreen extends Screen implements ActionListener {
 
 	private Button background;
 
-	private int progress[] = { 0, 0, 0, 0 };
+	private final int progress[] = { 0, 0, 0, 0 };
 
 	private boolean finishedCreating;
 
@@ -220,6 +220,7 @@ public class StoryScreen extends Screen implements ActionListener {
 		return null;
 	}
 
+	@Override
 	public void onDraw(Graphics2D g2d) {
 		if (!finishedCreating) {
 			return;
@@ -287,7 +288,7 @@ public class StoryScreen extends Screen implements ActionListener {
 			modus = 2;
 			break;
 		case "Start Mission":
-			this.getScreenFactory().showScreen(
+			this.getScreenFactory().createScreen(
 					new GameScreen(this.getScreenFactory()));
 			break;
 		default:
@@ -422,6 +423,7 @@ public class StoryScreen extends Screen implements ActionListener {
 		}
 	}
 
+	@Override
 	public void onUpdate() {
 		switch (modus) {
 		case 0:

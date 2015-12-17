@@ -31,6 +31,16 @@ public class KeyboardListener implements KeyListener {
 
 	}
 	
+	/**
+	 * @param Gets the Button Name as input, returns if it's pressed or not: example: btn_ESC
+	 * returns true if is On Press, otherwise false
+	 * @return
+	 */
+	public boolean isOnPress(String s)
+	{
+		return isOnPress(Game.getSetting().getValueInt(s));
+	}
+	
 	public boolean isOnPress(int key)
 	{
 		if(postfire[key])
@@ -41,8 +51,17 @@ public class KeyboardListener implements KeyListener {
 		return false;
 	}
 
+	public boolean isKeyPressed(String s)
+	{
+		return isKeyPressed(Game.getSetting().getValueInt(s));
+	}
 	public boolean isKeyPressed(int key) {
 		return keys[key];
+	}
+	
+	public boolean isKeyReleased(String s)
+	{
+		return isKeyReleased(Game.getSetting().getValueInt(s));
 	}
 
 	public boolean isKeyReleased(int key) {
