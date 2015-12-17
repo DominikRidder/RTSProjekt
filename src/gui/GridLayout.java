@@ -37,10 +37,10 @@ public class GridLayout implements ILayout, CoordinateMapping {
 
 	@Override
 	public void onUpdate(Screen screen) {
-		MousepadListener mpl = screen.getScreenFactory().getGame().getMousepadListener();
-
-		repack();
-
+		if (parent.needUpdate()) {
+			repack();
+		}
+		
 		for (int i = 0; i < container.length; i++) {
 			for (int j = 0; j < container[0].length; j++) {
 				if (container[i][j] != null) {

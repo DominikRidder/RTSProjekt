@@ -50,6 +50,7 @@ public class Panel extends APanel implements CoordinateMapping {
 			return;
 		}
 		layout.onUpdate(screen);
+		setUpdate(false);
 	}
 
 	public Point getCoordinate(int x, int y) {
