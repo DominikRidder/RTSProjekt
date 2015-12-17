@@ -55,9 +55,13 @@ public class LayerPanel extends APanel implements CoordinateMapping {
 
 	@Override
 	public void onUpdate(Screen screen) {
+		if (!this.isVisible()) {
+			return;
+		}
 		for (ILayout layout : layouts) {
 			layout.onUpdate(screen);
 		}
+		setUpdate(false);
 	}
 
 	public Point getCoordinate(int x, int y) {

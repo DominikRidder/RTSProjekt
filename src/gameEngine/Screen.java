@@ -44,7 +44,7 @@ public abstract class Screen {
 				}
 			} catch (ConcurrentModificationException e) {
 				// I guess that's a multithreading problem.
-
+				
 			}
 		}
 	}
