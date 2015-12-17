@@ -3,12 +3,8 @@ package gui;
 import gameEngine.Game;
 import gameEngine.Screen;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
-
-import dataManagement.ImageManager;
 
 public class Field extends GuiElement {
 	private BufferedImage img;
@@ -44,19 +40,6 @@ public class Field extends GuiElement {
 	public void setImg(String imgname) {
 		img = Game.getImageManager().getImage(imgname, getWidth(), getHeight());
 		this.imgname = imgname;
-	}
-
-	@Deprecated
-	public void setImg(BufferedImage img) {
-		if (img.getWidth() != getWidth() || img.getHeight() != getHeight()) {
-			try {
-				this.img = ImageManager.getScaledImage(img, getWidth(), getHeight());
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		} else {
-			this.img = img;
-		}
 	}
 
 	public BufferedImage getImg() {
