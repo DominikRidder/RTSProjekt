@@ -3,6 +3,8 @@ package gameScreens;
 import entity.AbstractEntity;
 import entity.OrkTest;
 import entity.Tree;
+import gameEngine.Game;
+import gameEngine.KeyboardListener;
 import gameEngine.MousepadListener;
 import gameEngine.Player;
 import gameEngine.Screen;
@@ -12,11 +14,11 @@ import gui.CompactLayout;
 import gui.Label;
 import gui.Panel;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.NoninvertibleTransformException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -85,34 +87,52 @@ public class GameScreen extends Screen implements ActionListener {
 		
 		wood = new Label("Wood: "+hum_sp.getWood());
 		wood.setX(this.getScreenFactory().getGame().getWindow()
-				.getWidth() - 200);
+				.getWidth() - 150);
 		wood.setY(0);
 		wood.setWidth(150);
 		wood.setHeight(50);
-		
-		Button exit = new Button(this.getScreenFactory().getGame().getWindow()
-				.getWidth() - 50, 0, 50, 50, "X");
-		exit.setBackgroundColor(Color.BLACK);
-		exit.setTextColor(Color.RED);
-		exit.addActionListener(this);
 		
 		hud = new Panel(0,0, this.getScreenFactory().getGame().getWindow()
 				.getWidth(), this.getScreenFactory().getGame().getWindow()
 				.getHeight());
 		hud.setLayout(new CompactLayout(hud));
 		hud.addElement(wood);
-		hud.addElement(exit);
 		
 		addGuiElement(hud);
 	}
 
 	@Override
 	public void onUpdate() {
-		MousepadListener mpl = this.getScreenFactory().getGame()
-				.getMousepadListener();
+		int scrollspeed = Game.getSetting().getValueInt("cl_g_scrollspeed");
+		KeyboardListener kbl = this.getScreenFactory().getGame().getKeyboardListener();
+		if(kbl.isOnPress("btn_ESC"))//ESC button
+		{
+			Button b = new Button("ESC");
+			b.addActionListener(this);
+			b.callActions();
+			return;
+		}
+		if(kbl.isKeyPressed(39))//i would let this unchangeable
+		{
+			viewX+= scrollspeed;
+		}
+		if(kbl.isKeyPressed(37))
+		{
+			viewX-= scrollspeed;
+		}
+		if(kbl.isKeyPressed(38))
+		{
+			viewY-= scrollspeed;
+		}
+		if(kbl.isKeyPressed(40))
+		{
+			viewY+= scrollspeed;
+		}
+		
+		MousepadListener mpl = this.getScreenFactory().getGame().getMousepadListener();
 		wood.setText("Wood: "+Player.getPlayer(0).getWood());
 		
-		int scrollspeed = 6;
+		
 		
 		if (mpl.getCurrentX() > getScreenFactory().getGame().getWindow()
 				.getWidth() - 30
@@ -179,31 +199,17 @@ public class GameScreen extends Screen implements ActionListener {
 		checkWin();
 	}
 	
-	public int viewX()
-	{
-		return viewX;
-	}
-	
-	public int viewY()
-	{
-		return viewY;
-	}
-
 	@Override
 	public void onDraw(Graphics2D g2d) {
 		MousepadListener mpl = this.getScreenFactory().getGame()
 				.getMousepadListener();
 
-		if (hud != null) {
-			hud.setX(viewX);
-			hud.setY(viewY);
-			hud.repack();
-		}
-
 		AffineTransform transform = new AffineTransform();
 		transform.translate(-viewX, -viewY);
 		g2d.transform(transform);
 		
+		if (hud != null)
+			hud.repack();
 		/*
 		 * for (AbstractEntity e : AbstractEntity.getEntities()) {//linkedList
 		 * performance plus e.draw(g2d); }
@@ -238,6 +244,12 @@ public class GameScreen extends Screen implements ActionListener {
 		if (lastRightClick != 0) {
 			drawRightClick(g2d, lastRightClickX, lastRightClickY);
 			lastRightClick--;
+		}
+		try {
+			g2d.transform(transform.createInverse());//transform back to normal
+		} catch (NoninvertibleTransformException e) {//THIS WILL NEVER NEVER NEVER ... happen!
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		super.onDraw(g2d);
 	}
@@ -280,8 +292,8 @@ public class GameScreen extends Screen implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		switch (e.getActionCommand()) { // name of the button
-		case "X":
-			this.getScreenFactory().showScreen(new SettingsScreen(this.getScreenFactory()));
+		case "ESC":
+			this.getScreenFactory().createScreen(new SettingsScreen(this.getScreenFactory(), this));
 			break;
 		default:
 			System.out.println("Unknown ActionEvent: " + e.getActionCommand());
@@ -304,7 +316,7 @@ public class GameScreen extends Screen implements ActionListener {
 		}
 		if (own != -1){
 			Player.dropAllPlayer(); // as long we don't have a Screen for stats
-			this.getScreenFactory().showScreen(new MainScreen(this.getScreenFactory()));
+			this.getScreenFactory().createScreen(new MainScreen(this.getScreenFactory()));
 		}
 	}
 }

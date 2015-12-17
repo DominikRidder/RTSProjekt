@@ -16,17 +16,16 @@ public class Game {
 	private MusikThread musikThread;
 	private KeyboardListener keyboardListener;
 	private MousepadListener mousepadListener;
-	
+
 	private static ImageManager imagemanager;
 	private static InfoManager infomanager;
 	private static SettingsManager settings;
-	
+
 	public Game(int windowX, int windowY, String title) {
 		window.setSize(windowX, windowY);
 		window.setTitle(title);
 		init();
 		new Thread(gameThread).start();
-		new Thread(musikThread).start();
 	}
 
 	public Game(String title) {
@@ -35,7 +34,6 @@ public class Game {
 		window.setTitle(title);
 		init();
 		new Thread(gameThread).start();
-
 	}
 
 	private void init() {
@@ -47,22 +45,24 @@ public class Game {
 		imagemanager = new ImageManager();
 		infomanager = new InfoManager();
 		settings = new SettingsManager();
-		
+
 		screenFactory = new ScreenFactory(this);
 		gameThread = new GameThread(this);
-		
-		
-			musikThread = new MusikThread();
-			window.add(musikThread);
-		
+
+		musikThread = new MusikThread();
+		needSound(settings.getValueBool("cl_s_sound"));
+		window.add(musikThread);
+
 		keyboardListener = new KeyboardListener();
 		mousepadListener = new MousepadListener();
-		
+
 		window.add(gameThread);
 		window.addKeyListener(keyboardListener);
 
 		gameThread.addMouseListener(mousepadListener);
 		gameThread.addMouseMotionListener(mousepadListener);
+
+		needSound(Game.settings.getValueBool("cl_s_sound"));
 
 		window.setVisible(true);
 	}
@@ -82,16 +82,23 @@ public class Game {
 	public JFrame getWindow() {
 		return window;
 	}
-	
-	public static ImageManager getImageManager(){
+
+	public static ImageManager getImageManager() {
 		return imagemanager;
 	}
 
-	public static InfoManager getInfoManager(){
+	public static InfoManager getInfoManager() {
 		return infomanager;
 	}
-	
-	public static SettingsManager getSetting(){
+
+	public static SettingsManager getSetting() {
 		return settings;
+	}
+
+	public void needSound(boolean yes) {
+		if (!yes)
+			musikThread.stop();
+		else
+			musikThread.start();
 	}
 }

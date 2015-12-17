@@ -1,9 +1,9 @@
 package gui;
 
-import gameEngine.MousepadListener;
 import gameEngine.Screen;
 
 import java.awt.Graphics2D;
+
 import Utilitys.Point;
 
 public class GridLayout implements ILayout, CoordinateMapping {
@@ -37,9 +37,9 @@ public class GridLayout implements ILayout, CoordinateMapping {
 
 	@Override
 	public void onUpdate(Screen screen) {
-		MousepadListener mpl = screen.getScreenFactory().getGame().getMousepadListener();
-
-		repack();
+		if (parent.needUpdate()) {
+			repack();
+		}
 
 		for (int i = 0; i < container.length; i++) {
 			for (int j = 0; j < container[0].length; j++) {
@@ -49,6 +49,7 @@ public class GridLayout implements ILayout, CoordinateMapping {
 			}
 		}
 	}
+
 	@Override
 	public void addElement(GuiElement element) {
 		for (int i = 0; i < container.length; i++) {
@@ -106,6 +107,10 @@ public class GridLayout implements ILayout, CoordinateMapping {
 	}
 
 	public void setElement(GuiElement elem, int x, int y) {
+		elem.setX(parent.getX() + parent.getWidth() / container[0].length * x);
+		elem.setY(parent.getY() + parent.getHeight() / container.length * y);
+		elem.setWidth(parent.getWidth() / container[0].length);
+		elem.setHeight(parent.getHeight() / container.length);
 		container[y][x] = elem;
 	}
 

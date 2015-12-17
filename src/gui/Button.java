@@ -1,5 +1,6 @@
 package gui;
 
+import gameEngine.Game;
 import gameEngine.MousepadListener;
 import gameEngine.Screen;
 
@@ -12,9 +13,9 @@ import java.awt.image.BufferedImage;
 public class Button extends GuiElement {
 
 	private String text;
-	private Color textcolor = Color.WHITE, backgroundcolor = Color.BLACK;
+	private Color textcolor = Color.YELLOW, backgroundcolor = Color.GRAY;
 	private boolean ispressed = false;
-	private BufferedImage image;
+	private BufferedImage image = Game.getImageManager().getImage("menubutton.png");
 	private boolean ImageSet = false;
 	private boolean changed = true;
 
@@ -57,21 +58,25 @@ public class Button extends GuiElement {
 		ImageSet = true;
 	}
 
+	@Override
 	public void setX(int x) {
 		super.setX(x);
 		changed = true;
 	}
 
+	@Override
 	public void setY(int y) {
 		super.setY(y);
 		changed = true;
 	}
 
+	@Override
 	public void setHeight(int height) {
 		super.setHeight(height);
 		changed = true;
 	}
 
+	@Override
 	public void setWidth(int width) {
 		super.setWidth(width);
 		changed = true;
@@ -92,6 +97,7 @@ public class Button extends GuiElement {
 		changed = true;
 	}
 
+	@Override
 	public void onDraw(Graphics2D g2d) {
 		if (!this.isVisible()) {
 			return;
@@ -105,13 +111,18 @@ public class Button extends GuiElement {
 			int stringwidth = g2d.getFontMetrics().stringWidth(text);
 			int stringheight = g2d.getFontMetrics().getHeight();
 			g2d.setColor(backgroundcolor);
-			g2d.fill3DRect(getX(), getY(), width, height, true);
+			if(text != null && text != "")
+				g2d.drawImage(image, getX(), getY(), width, height, null);
+			else
+				g2d.fill3DRect(getX(), getY(), width, height, true);
+			//g2d.fillRoundRect(getX(), getY(), width, height, width, height);
 			g2d.setColor(textcolor);
 			g2d.drawString(text, getX() + width / 2 - stringwidth / 2, getY() + height / 2 + stringheight / 2);
 		}
 		drawBorder(g2d);
 	}
 
+	@Override
 	public void onUpdate(Screen screen) {
 		if (!this.isVisible()) {
 			return;

@@ -1,7 +1,8 @@
 package gameScreens;
 
 import entity.AbstractEntity;
-import gameEngine.MousepadListener;
+import gameEngine.Game;
+import gameEngine.KeyboardListener;
 import gameEngine.Screen;
 import gameEngine.ScreenFactory;
 import gui.Button;
@@ -16,10 +17,10 @@ import java.util.ArrayList;
 
 public class SettingsScreen extends Screen implements ActionListener {
 	private Panel subpanel;
-	private int startx, starty;
+	private int tickcounter = 20;
 	
-	public SettingsScreen(ScreenFactory screenFactory) {
-		super(screenFactory);
+	public SettingsScreen(ScreenFactory screenFactory, Screen prevscreen) {
+		super(screenFactory, prevscreen);
 	}
 
 	@Override
@@ -31,56 +32,49 @@ public class SettingsScreen extends Screen implements ActionListener {
 		int Wheight = getScreenFactory().getGame().getWindow().getHeight();
 		int width = Wwidth/5;
 		int height = Wheight*2/5;
-		
-		startx = 0;
-		starty = 0;
-		if(getScreenFactory().getPrevScreen() instanceof GameScreen)
-		{
-			GameScreen e = (GameScreen)getScreenFactory().getPrevScreen();
-			startx = e.viewX();
-			starty = e.viewY();
-		}
-		
-		
+			
 		Panel p = new Panel(Wwidth/2-width/2, Wheight/2-height/2, width, height);
 		p.setLayout(new GridLayout(adding.length, 1, p));
 		for (String toadd : adding) {
 			
 			Button newb = new Button(toadd);
-			newb.setTextColor(Color.RED);
 			newb.addActionListener(this);
 			p.addElement(newb);
 		}
 		
-		Button placeholder = new Button(startx, starty, Wwidth, Wheight, "");
-		placeholder.setWidth(getScreenFactory().getGame().getWindow().getWidth());
-		placeholder.setHeight(getScreenFactory().getGame().getWindow().getHeight());
+		Button placeholder = new Button(0, 0, Wwidth, Wheight, "");
 		placeholder.setBackgroundColor(new Color(0, 0, 0, 0.5f));
 		addGuiElement(placeholder);
-		
-		p.setX(p.getX()+startx);
-		p.setY(p.getY()+starty);
 		
 		addGuiElement(p);
 	}
 
 	@Override
 	public void onUpdate() {
-		MousepadListener mpl = this.getScreenFactory().getGame()
-				.getMousepadListener();
-		
-		mpl.setX(mpl.getX() + startx);
-		mpl.setY(mpl.getY() + starty);
-		
+		KeyboardListener kbl = this.getScreenFactory().getGame().getKeyboardListener();
+		if(kbl.isOnPress("btn_ESC") && tickcounter == 0)//ESC button
+		{
+			Button b = new Button("Zurück");
+			b.addActionListener(this);
+			b.callActions();
+		}
+		if(tickcounter != 0)
+		{
+			tickcounter--;
+		}	
 		super.onUpdate(); // updating Gui Elements
-		
-		mpl.setX(mpl.getX() + startx);
-		mpl.setY(mpl.getY() + starty);
+
 	}
 
 	@Override
 	public void onDraw(Graphics2D g2d) {
-		this.getScreenFactory().getPrevScreen().onDraw(g2d);
+		if(prevscreen instanceof SettingsScreen)
+		{
+			super.onDraw(g2d);
+			return;
+		}
+		if(prevscreen != null)
+			prevscreen.onDraw(g2d);
 		super.onDraw(g2d); // Drawing gui elements
 	}
 
@@ -103,10 +97,10 @@ public class SettingsScreen extends Screen implements ActionListener {
 				subpanel = null;
 				break;
 			}
-			this.getScreenFactory().swap();
+			this.getScreenFactory().activeScreen(prevscreen);
 			break;
 		case "Audio":
-			String adding[] = { "Zurück", "Volume"};
+			String adding[] = { "Zurück", "Ton"};
 			
 			int Wwidth = getScreenFactory().getGame().getWindow().getWidth();
 			int Wheight = getScreenFactory().getGame().getWindow().getHeight();
@@ -120,28 +114,29 @@ public class SettingsScreen extends Screen implements ActionListener {
 				newb.addActionListener(this);
 				subpanel.addElement(newb);
 			}
-			
-			subpanel.setX(subpanel.getX()+startx);
-			subpanel.setY(subpanel.getY()+starty);
-			
 			addGuiElement(subpanel);
 			break;
 			
 		case "WorldEditor":
-			this.getScreenFactory().showScreen(new WorldEditor(this.getScreenFactory()));
+			this.getScreenFactory().createScreen(new WorldEditor(this.getScreenFactory()));
 			break;
 		case "Hauptmenü":
-			this.getScreenFactory().showScreen(new MainScreen(this.getScreenFactory()));
+			this.getScreenFactory().createScreen(new MainScreen(this.getScreenFactory()));
 			break;
 		case "Beenden":
 			System.exit(0);
 			break;
+		case "Steuerrung":
+			this.getScreenFactory().createScreen(new ControlScreen(this.getScreenFactory(), this));
+			break;
 		//GameSettings:
 			
 		//Steuerrung:
+		
 		//Sound:
-		case "Volume":
-			System.out.println("Volume subpanel button test erfolgreich");
+		case "Ton":
+			Game.getSetting().switchValue("cl_s_sound");
+			getScreenFactory().getGame().needSound(Game.getSetting().getValueBool("cl_s_sound"));
 			break;
 		//Video:
 		

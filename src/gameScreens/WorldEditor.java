@@ -132,7 +132,7 @@ public class WorldEditor extends Screen implements ActionListener {
 		functions.add(load);
 		functions.add(zoomin);
 		functions.add(zoomout);
-		//		functions.add(new TextField(0,0,0,0));
+		// functions.add(new TextField(0,0,0,0));
 
 		for (int i = 0; i < functions.size(); i++) {
 			pFunctions.addElement(functions.get(i));
@@ -149,6 +149,7 @@ public class WorldEditor extends Screen implements ActionListener {
 	}
 
 	public void onUpdate() {
+
 		super.onUpdate();
 		MousepadListener mpl = getScreenFactory().getGame().getMousepadListener();
 		Field f = new Field(mpl.getX(), mpl.getY());
@@ -165,7 +166,7 @@ public class WorldEditor extends Screen implements ActionListener {
 							if (pWorld.getLayout().getElement(lastposition.getX() + i, lastposition.getY() + j) instanceof BigField) {
 								((BigField) pWorld.getLayout().getElement(lastposition.getX() + i, lastposition.getY() + j)).delete();
 							} else if (pWorld.getLayout().getElement(lastposition.getX() + i, lastposition.getY() + j) instanceof Field) {
-								System.out.println("Feld");
+								//System.out.println("Feld");
 								f = (Field) pWorld.getLayout().getElement(lastposition.getX() + i, lastposition.getY() + j);
 								if (selected != -1 && selected < tiles.size()) {
 									if (f.getImg() == null || !f.getImg().equals(tiles.get(selected).getImage())) {
@@ -190,6 +191,7 @@ public class WorldEditor extends Screen implements ActionListener {
 									}
 								}
 							}
+
 							Carrier c = new Carrier(lastposition.getX(), lastposition.getY(), selectedImage, pWorld.getLayout());
 							c.setX((lastposition.getX() * 16 + pWorld.getX()));
 							c.setY((lastposition.getY() * 16 + pWorld.getY()));
@@ -217,7 +219,6 @@ public class WorldEditor extends Screen implements ActionListener {
 											update = false;
 										}
 									}
-
 									if (update) {
 										f.setImg(tiles.get(selected).getText());
 										f.setTileID(tileID);
@@ -235,6 +236,7 @@ public class WorldEditor extends Screen implements ActionListener {
 
 		}
 		lastposition = null;
+
 	}
 
 	@Override
@@ -282,6 +284,8 @@ public class WorldEditor extends Screen implements ActionListener {
 			break;
 		case "Karte laden":
 			loadMap();
+			pWorld.setActualLayer(0);
+			loadTiles("L1", this);
 			break;
 		case "+":
 			scale *= 2;
@@ -350,22 +354,48 @@ public class WorldEditor extends Screen implements ActionListener {
 					}
 					int containerI = -1;
 					int containerJ = 0;
-					//					int offset = nextTileInString(0, line);
+					// int offset = nextTileInString(0, line);
 					String tiles[] = line.split(";");
 					for (int i = 0; i < tiles.length; i++) {
-						//						String tile = line.substring(i, nextTileInString(i, line));
+						// String tile = line.substring(i, nextTileInString(i, line));
 						data = tiles[i].split("\\(", 2);
 						int quantity = Integer.parseInt(data[0]);
-						String imgname = data[1].substring(0, data[1].length() - 1);
-						for (int j = quantity; j > 0; j--) {
-							if (containerI < height - 1) {
-								containerI++;
+						String imgData = "";
+						for (int j = data.length - 1; j > 0; j--) {
+							imgData += data[j];
+						}
+						String imgname = imgData.substring(0, imgData.length() - 1);
+						if (imgname.contains(",")) {
+							String[] bigImageData = imgname.split(",");
+							if (Game.getImageManager().getImage(bigImageData[0] + bigImageData[1] + bigImageData[2]) != ((Field) pWorld.getLayout().getElement(Integer.parseInt(bigImageData[1]), Integer.parseInt(bigImageData[2]))).getImg()) {
+								BufferedImage image = Game.getImageManager().getImage(bigImageData[0]);
+								Carrier c = new Carrier(Integer.parseInt(bigImageData[1]), Integer.parseInt(bigImageData[2]), image, pWorld.getLayout());
+								c.setX((Integer.parseInt(bigImageData[1]) * 16 + pWorld.getX()));
+								c.setY((Integer.parseInt(bigImageData[2]) * 16 + pWorld.getY()));
+								for (int k = Integer.parseInt(bigImageData[1]); k < pWorld.getLayout().getRowSize() && k < Integer.parseInt(bigImageData[1]) + image.getWidth() / 16; k++) {
+									for (int l = Integer.parseInt(bigImageData[2]); l < pWorld.getLayout().getColumnSize() && l < Integer.parseInt(bigImageData[2]) + image.getHeight() / 16; l++) {
+										BigField bigf = new BigField(k * 16 + pWorld.getX(), l * 16 + pWorld.getY(), c);
+										bigf.setHeight(16);
+										bigf.setWidth(16);
+										pWorld.getLayout().setElement(bigf, k, l);
+									}
+								}
+								c.init();
 							} else {
-								containerJ++;
-								containerI = 0;
+								containerI++;
 							}
-							if (!imgname.equals("v")) {
-								((Field) pWorld.getLayout().getElement(containerI, containerJ)).setImg(imgname);
+						} else {
+							for (int j = quantity; j > 0; j--) {
+								if (containerI < height - 1) {
+									containerI++;
+								} else {
+									containerJ++;
+									containerI = 0;
+								}
+								if (!imgname.equals("v")) {
+									((Field) pWorld.getLayout().getElement(containerI, containerJ)).setImg(imgname);
+									((Field) pWorld.getLayout().getElement(containerI, containerJ)).setTileID(imgname);
+								}
 							}
 						}
 					}
@@ -380,6 +410,7 @@ public class WorldEditor extends Screen implements ActionListener {
 
 	public void mapToString() {
 		StringBuffer allLayers = new StringBuffer(pWorld.getLayout().getRowSize() + ";" + pWorld.getLayout().getColumnSize());
+		int last = pWorld.getActualLayer();
 		for (int i = 0; i < pWorld.numberOfLayouts(); i++) {
 			pWorld.setActualLayer(i);
 			StringBuffer map = new StringBuffer();
@@ -413,7 +444,12 @@ public class WorldEditor extends Screen implements ActionListener {
 		int retrival = chooser.showSaveDialog(null);
 		if (retrival == JFileChooser.APPROVE_OPTION) {
 			try {
-				FileWriter fw = new FileWriter(chooser.getSelectedFile() + ".mpd");
+				FileWriter fw = null;
+				if (chooser.getSelectedFile().getName().contains(".")) {
+					fw = new FileWriter(chooser.getSelectedFile());
+				} else {
+					fw = new FileWriter(chooser.getSelectedFile() + ".mpd");
+				}
 				fw.write(allLayers.toString());
 				fw.flush();
 				fw.close();
@@ -421,6 +457,7 @@ public class WorldEditor extends Screen implements ActionListener {
 				ex.printStackTrace();
 			}
 		}
+		pWorld.setActualLayer(last);
 	}
 
 	public int nextTileInString(int start, String searchString) {

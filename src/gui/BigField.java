@@ -1,6 +1,5 @@
 package gui;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
 
 public class BigField extends Field {
@@ -16,9 +15,9 @@ public class BigField extends Field {
 		if (carry != null) {
 			carry.onDraw(g2d, getX(), getY());
 		}
-//		if (getImg() != null) {
-//			g2d.drawImage(getImg(), getX(), getY(), null);
-//		}
+		//		if (getImg() != null) {
+		//			g2d.drawImage(getImg(), getX(), getY(), null);
+		//		}
 	}
 
 	public void delete() {

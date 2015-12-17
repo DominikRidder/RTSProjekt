@@ -29,6 +29,7 @@ public class Carrier extends GuiElement {
 				if (imgname != null) {
 					Game.getImageManager().addImage(imgname + i + j, Game.getImageManager().getImage(imgname).getSubimage(0 + (i - x1) * 16, 0 + (j - y1) * 16, 16, 16));
 					((Field) gl.getElement(i, j)).setImg(imgname + i + j);
+					((Field) gl.getElement(i, j)).setTileID(imgname + "," + i + "," + j);
 				}
 			}
 		}
@@ -58,7 +59,9 @@ public class Carrier extends GuiElement {
 			for (int i = x1; i < x2; i++) {
 				for (int j = y1; j < y2; j++) {
 					Field f = (Field) gl.getElement(i, j);
-					g2d.drawImage(f.getImg(), f.getX(), f.getY(), null);
+					if (f != null) {
+						g2d.drawImage(f.getImg(), f.getX(), f.getY(), null);
+					}
 				}
 			}
 		}

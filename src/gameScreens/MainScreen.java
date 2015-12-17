@@ -8,7 +8,6 @@ import gui.Button;
 import gui.GridLayout;
 import gui.Panel;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -41,8 +40,6 @@ public class MainScreen extends Screen implements ActionListener {
 		p.setLayout(new GridLayout(adding.length, 1, p));
 		for (String toadd : adding) {
 			Button newb = new Button(toadd);
-			newb.setBackgroundColor(Color.BLACK);
-			newb.setTextColor(Color.RED);
 			newb.addActionListener(this);
 			p.addElement(newb);
 		}
@@ -78,16 +75,16 @@ public class MainScreen extends Screen implements ActionListener {
 		}
 		switch (e.getActionCommand()) { // name of the button
 		case "Einzelspieler":
-			this.getScreenFactory().showScreen(new StoryScreen(this.getScreenFactory()));
+			this.getScreenFactory().createScreen(new StoryScreen(this.getScreenFactory()));
 			break;
 		case "Quick Start":
-			this.getScreenFactory().showScreen(new GameScreen(this.getScreenFactory()));
+			this.getScreenFactory().createScreen(new GameScreen(this.getScreenFactory()));
 			break;
 		case "WorldEditor":
-			this.getScreenFactory().showScreen(new WorldEditor(this.getScreenFactory()));
+			this.getScreenFactory().createScreen(new WorldEditor(this.getScreenFactory()));
 			break;
 		case "Einstellungen":
-			this.getScreenFactory().showScreen(new SettingsScreen(this.getScreenFactory()));
+			this.getScreenFactory().createScreen(new SettingsScreen(this.getScreenFactory(), this));
 			break;
 		case "Exit":
 			System.exit(0);

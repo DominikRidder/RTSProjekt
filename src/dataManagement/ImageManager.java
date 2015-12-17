@@ -252,12 +252,15 @@ public class ImageManager {
 	}
 
 	public String getNameFromImage(BufferedImage img) {
+		if (img == null) {
+			return "null";
+		}
 		for (int i = 0; i < data.values().size(); i++) {
 			if (img.equals(data.values().toArray()[i])) {
 				return (String) data.keySet().toArray()[i];
 			}
 		}
-		return null;
+		return "null";
 	}
 
 	public void addImage(String key, BufferedImage value) {
