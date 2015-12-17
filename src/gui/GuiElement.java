@@ -6,20 +6,18 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.event.ActionListener;
-import java.awt.geom.AffineTransform;
-import java.awt.image.AffineTransformOp;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.util.ArrayList;
 
 public abstract class GuiElement implements Comparable<GuiElement> {
 
-	private ArrayList<ActionListener> actionlistener = new ArrayList<ActionListener>(1);
+	private final ArrayList<ActionListener> actionlistener = new ArrayList<ActionListener>(1);
 	private int layer;
-	private Rectangle bounds = new Rectangle(0,0,0,0);
+	private final Rectangle bounds = new Rectangle(0,0,0,0);
 	private boolean update;
 	private boolean border = false;
 	private boolean visible = true;
+	
+	protected Color textcolor = Color.YELLOW, backgroundcolor = Color.GRAY;
 	
 	public Rectangle getBounds(){
 		return bounds;
@@ -105,6 +103,7 @@ public abstract class GuiElement implements Comparable<GuiElement> {
 
 	public abstract void onUpdate(Screen screen);
 
+	@Override
 	public int compareTo(GuiElement arg0) {
 		if (this.layer > arg0.layer) {
 			return 1;

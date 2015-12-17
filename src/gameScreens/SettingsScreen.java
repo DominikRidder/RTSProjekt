@@ -110,7 +110,6 @@ public class SettingsScreen extends Screen implements ActionListener {
 			subpanel.setLayout(new GridLayout(adding.length, 1, subpanel));
 			for (String toadd : adding) {
 				Button newb = new Button(toadd);
-				newb.setTextColor(Color.RED);
 				newb.addActionListener(this);
 				subpanel.addElement(newb);
 			}

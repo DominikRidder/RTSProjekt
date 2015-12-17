@@ -14,7 +14,7 @@ public class ControlSettingField extends GuiElement {
 	private boolean hasfocus;
 	private String label = "";
 	private final String setting;
-	private final Color textcolor = Color.YELLOW, backgroundcolor = Color.GRAY;
+	//private final Color textcolor = Color.YELLOW, backgroundcolor = Color.GRAY;
 
 	public ControlSettingField(int x, int y, int width, int height, String stng) {
 		setX(x);

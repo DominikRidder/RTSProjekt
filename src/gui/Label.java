@@ -9,7 +9,7 @@ import java.awt.image.BufferedImage;
 
 public class Label extends GuiElement {
 	private String text;
-	private Color textcolor = Color.YELLOW, backgroundcolor = Color.GRAY;
+	//private Color textcolor = Color.YELLOW, backgroundcolor = Color.GRAY;
 	private BufferedImage image = Game.getImageManager().getImage("menubutton.png");
 	private boolean ImageSet = false;
 
