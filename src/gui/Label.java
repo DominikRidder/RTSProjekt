@@ -4,6 +4,8 @@ import gameEngine.Game;
 import gameEngine.Screen;
 
 import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
@@ -12,6 +14,7 @@ public class Label extends GuiElement {
 	//private Color textcolor = Color.YELLOW, backgroundcolor = Color.GRAY;
 	private BufferedImage image = Game.getImageManager().getImage("menubutton.png");
 	private boolean ImageSet = false;
+	private Font font;
 
 	public Label(int x, int y, BufferedImage image) {
 		setX(x);
@@ -57,24 +60,42 @@ public class Label extends GuiElement {
 	public void setBackgroundColor(Color c) {
 		backgroundcolor = c;
 	}
+	
+	public void setFont(Font font) {
+		this.font = font;
+	}
+	
+	public void turnOffDecorator() {
+		image = null;
+	}
 
 	@Override
 	public void onDraw(Graphics2D g2d) {
 		int width = getWidth();
 		int height = getHeight();
-
+		Font swap = null;
+		
 		if (ImageSet) {
 			g2d.drawImage(image, getX(), getY(), width, height, null);
 		} else {
+			if (font != null) {
+				swap = g2d.getFont();
+				g2d.setFont(font);
+			}
 			int stringwidth = g2d.getFontMetrics().stringWidth(text);
 			int stringheight = g2d.getFontMetrics().getHeight();
 			g2d.setColor(backgroundcolor);
-			if(image != null)
+			if(image != null){
 				g2d.drawImage(image, getX(), getY(), width, height, null);
-			else
+			}else{
 				g2d.fill3DRect(getX(), getY(), width, height, true);
+			}
 			g2d.setColor(textcolor);
-			g2d.drawString(text, getX() + width / 2 - stringwidth / 2, getY() + height / 2 + stringheight / 2);
+			g2d.drawString(text, getX() + width / 2 - stringwidth / 2,
+						getY() + height / 2 + stringheight / 2);
+			if (swap != null){
+				g2d.setFont(swap);
+			}
 		}
 	}
 

@@ -7,9 +7,11 @@ import gameEngine.ScreenFactory;
 import gui.Button;
 import gui.CompactLayout;
 import gui.Label;
+import gui.Monolog;
 import gui.Panel;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -54,8 +56,8 @@ public class StoryScreen extends Screen implements ActionListener {
 	private HashMap<String, String> savestate;
 
 	private Panel previewWindow;
-
-	private Label description;
+	private Monolog description;
+	private Label title;
 
 	private int modus;
 
@@ -159,21 +161,43 @@ public class StoryScreen extends Screen implements ActionListener {
 		invis.setImage(Game.getImageManager().getImage("InvisibleImage.png"));
 		invis.addActionListener(this);
 
-		Button startmission = new Button(width + width * 1 / 5,
+		Button background = new Button(Game.getImageManager().getImage("MissionImage2.png"));
+		background.setX(width + width * 1 / 5);
+		background.setSize(width * 4 / 5, getScreenFactory().getGame().getWindow().getHeight());
+		
+		Button startmission = new Button(width + width * 8 / 20,
 				getScreenFactory().getGame().getWindow().getHeight() * 4 / 5,
-				width * 4 / 5, getScreenFactory().getGame().getWindow()
-						.getHeight() * 1 / 5, "Start Mission");
+				width * 9 / 20, getScreenFactory().getGame().getWindow()
+						.getHeight() * 1 / 10, "Start Mission");
 		startmission.addActionListener(this);
+//		startmission.setBackgroundColor(new Color(0,0,0,0));
+		startmission.setTextColor(Color.YELLOW);
 
-		description = new Label("");
-		description.setSize(width * 4 / 5, getScreenFactory().getGame()
-				.getWindow().getHeight() * 4 / 5);
-		description.setX(width + width * 1 / 5);
+		description = new Monolog("");
+		description.setSize(width * 9 / 20, getScreenFactory().getGame()
+				.getWindow().getHeight() * 3 / 5);
+		description.setX(width + width * 8 / 20);
+		description.setY(getScreenFactory().getGame()
+				.getWindow().getHeight() * 1 / 5);
+		description.setBackgroundColor(new Color(0,0,0,0));
+		description.setTextColor(Color.BLACK);
+		description.setFont(new Font("newname",Font.ITALIC, 14));
+		
+		title = new Label("");
+		title.turnOffDecorator();
+		title.setFont(new Font("somename", Font.BOLD, 20));
+		title.setSize(width * 4 / 5, getScreenFactory().getGame()
+				.getWindow().getHeight() * 1 / 5);
+		title.setX(width + width * 1 / 5);
+		title.setBackgroundColor(new Color(0,0,0,0));
+		title.setTextColor(new Color(255,215,0));
 
 		previewWindow = new Panel(width, 0, width + 1 / 5 * width,
 				getScreenFactory().getGame().getWindow().getHeight());
 		previewWindow.setLayout(new CompactLayout(previewWindow));
 
+		previewWindow.addElement(background);
+		previewWindow.addElement(title);
 		previewWindow.addElement(description);
 		previewWindow.addElement(invis);
 		previewWindow.addElement(startmission);
@@ -304,9 +328,9 @@ public class StoryScreen extends Screen implements ActionListener {
 			} else if (race.equals("Both")) {
 				mission = bothMission.get(missionNumber);
 			}
+			title.setText(mission.getName());
 			description.setText(mission.getDescription());
 			modus = 1;
-
 			// System.out.println("Unknown ActionEvent: " +
 			// e.getActionCommand());
 		}

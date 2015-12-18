@@ -63,7 +63,7 @@ public class MusikThread extends JPanel implements Runnable {
 					e.printStackTrace();
 				}
 				player = AudioPlayer.player;
-				player.start(audioStream);
+//				player.start(audioStream);
 				isOn = true;
 			}
 
