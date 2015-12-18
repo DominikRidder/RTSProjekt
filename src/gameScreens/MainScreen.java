@@ -44,6 +44,7 @@ public class MainScreen extends Screen implements ActionListener {
 			p.addElement(newb);
 		}
 		
+		//BackgroundFiller bgf = new BackgroundFiller(0, 0, Wwidth, Wheight);
 		
 		Button placeholder = new Button(0, 0, Game.getImageManager().getImage("Hauptmenue.png"));
 		placeholder.setWidth(getScreenFactory().getGame().getWindow().getWidth());
