@@ -17,7 +17,7 @@ public abstract class GuiElement implements Comparable<GuiElement> {
 	private boolean border = false;
 	private boolean visible = true;
 	
-	protected Color textcolor = Color.YELLOW, backgroundcolor = Color.GRAY;
+	protected Color textcolor = Color.YELLOW, backgroundcolor = Color.ORANGE;
 	
 	public Rectangle getBounds(){
 		return bounds;

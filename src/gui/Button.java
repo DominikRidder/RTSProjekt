@@ -104,15 +104,29 @@ public class Button extends GuiElement {
 		}
 		int width = getWidth();
 		int height = getHeight();
+		
+		g2d.setColor(backgroundcolor);
 
 		if (ImageSet) {
+			if(ispressed)
+			{
+				g2d.fillRoundRect(getX(), getY(), width, height, 5, 5);
+			}
 			g2d.drawImage(image, getX(), getY(), width, height, null);
 		} else {
 			int stringwidth = g2d.getFontMetrics().stringWidth(text);
 			int stringheight = g2d.getFontMetrics().getHeight();
-			g2d.setColor(backgroundcolor);
 			if(text != null && text != "")
-				g2d.drawImage(image, getX(), getY(), width, height, null);
+			{
+				if(ispressed)
+				{
+					g2d.fill3DRect(getX(), getY(), width, height, true);
+					g2d.drawImage(image, getX()+2, getY()+2, width-4, height-4, null);
+				}
+				else
+					g2d.drawImage(image, getX(), getY(), width, height, null);
+				
+			}
 			else
 				g2d.fill3DRect(getX(), getY(), width, height, true);
 			//g2d.fillRoundRect(getX(), getY(), width, height, width, height);
