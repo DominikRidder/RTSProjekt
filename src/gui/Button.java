@@ -130,9 +130,10 @@ public class Button extends GuiElement {
 			else
 				g2d.fill3DRect(getX(), getY(), width, height, true);
 			//g2d.fillRoundRect(getX(), getY(), width, height, width, height);
+			
 			g2d.setColor(textcolor);
 			g2d.drawString(text, getX() + width / 2 - stringwidth / 2, getY() + height / 2 + stringheight / 2);
-		}
+	}
 		drawBorder(g2d);
 	}
 

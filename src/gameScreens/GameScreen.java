@@ -108,8 +108,8 @@ public class GameScreen extends Screen implements ActionListener {
 		wood.setWidth(150);
 		wood.setHeight(50);
 		
-		MiniMap map = new MiniMap(0, getScreenFactory().getGame().getWindow().getHeight()-200, 200, 200, pWorld);
-		Label mapback = new Label(map.getX(), map.getY()-2, map.getWidth()+5, map.getHeight()+5, "");
+		MiniMap map = new MiniMap(5, getScreenFactory().getGame().getHeight()-205, 200, 200, pWorld);
+		Label mapback = new Label(map.getX()-5, map.getY()-5, map.getWidth()+10, map.getHeight()+10, "");
 		mapback.setBackgroundColor(Color.black);
 		
 		hud = new Panel(0,0, this.getScreenFactory().getGame().getWindow()
@@ -160,17 +160,17 @@ public class GameScreen extends Screen implements ActionListener {
 				.getWidth() - 30
 				|| mpl.getCurrentX() - 30 < 0) {
 			viewX += mpl.getCurrentX() > getScreenFactory().getGame()
-					.getWindow().getWidth() / 2 ? scrollspeed : -scrollspeed;
+					.getWidth() / 2 ? scrollspeed : -scrollspeed;
 		}
 		if (mpl.getCurrentY() > getScreenFactory().getGame().getWindow()
 				.getHeight() - 60
 				|| mpl.getCurrentY() - 30 < 0) {
 			viewY += mpl.getCurrentY() > getScreenFactory().getGame()
-					.getWindow().getWidth() / 2 ? scrollspeed : -scrollspeed;
+					.getWidth() / 2 ? scrollspeed : -scrollspeed;
 		}
 		
-		int wwidth = getScreenFactory().getGame().getWindow().getWidth();
-		int wheight = getScreenFactory().getGame().getWindow().getHeight();
+		int wwidth = getScreenFactory().getGame().getWidth();
+		int wheight = getScreenFactory().getGame().getHeight();
 
 		if (viewX > mapwidth - wwidth) {
 			viewX = mapwidth - wwidth;
@@ -266,7 +266,7 @@ public class GameScreen extends Screen implements ActionListener {
 		}
 		if (lastRightClick != 0) {
 			drawRightClick(g2d, lastRightClickX, lastRightClickY);
-			lastRightClick--;
+			lastRightClick-=2;
 		}
 		try {
 			g2d.transform(transform.createInverse());//transform back to normal

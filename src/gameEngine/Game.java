@@ -95,6 +95,14 @@ public class Game {
 		return settings;
 	}
 
+	public int getWidth() {
+		return gameThread.getWidth();
+	}
+	
+	public int getHeight() {
+		return gameThread.getHeight();
+	}
+	
 	public void needSound(boolean yes) {
 		if (!yes)
 			musikThread.stop();
