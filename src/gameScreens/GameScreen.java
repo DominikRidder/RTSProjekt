@@ -260,13 +260,13 @@ public class GameScreen extends Screen implements ActionListener {
 			drawRightClick(g2d, lastRightClickX, lastRightClickY);
 			lastRightClick--;
 		}
-		hud.onDraw(g2d);
 		try {
 			g2d.transform(transform.createInverse());//transform back to normal
 		} catch (NoninvertibleTransformException e) {//THIS WILL NEVER NEVER NEVER ... happen!
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		hud.onDraw(g2d);
 	}
 
 	public void drawRightClick(Graphics2D g2d, int x, int y) {
