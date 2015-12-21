@@ -12,6 +12,7 @@ import gameEngine.Screen;
 import gameEngine.ScreenFactory;
 import gui.Button;
 import gui.CompactLayout;
+import gui.EntityLayout;
 import gui.Field;
 import gui.Label;
 import gui.LayerPanel;
@@ -36,9 +37,11 @@ public class GameScreen extends Screen implements ActionListener {
 	// LinkedList<AbstractEntity>();
 	private final HashMap<AbstractEntity, Point> entitysOnMap = new HashMap<AbstractEntity, Point>();
 
+	private EntityLayout entitytodraw;
+	
 	private int viewX, viewY;
 
-//	private Button exit;
+	
 	private Panel hud;
 	
 	private int lastRightClick = 0;
@@ -52,13 +55,8 @@ public class GameScreen extends Screen implements ActionListener {
 	
 	private Label wood;
 
-	/**************************/
-	/****** Dummy Targets *******/
-
 	private int mapwidth = 2000;
 	private int mapheight = 2000;
-
-	/*************************/
 
 	public GameScreen(ScreenFactory screenFactory) {
 		super(screenFactory);
@@ -66,19 +64,22 @@ public class GameScreen extends Screen implements ActionListener {
 
 	@Override
 	public void onCreate() {
-		Field.drawBorder = false;
+		List<AbstractEntity> entitys = AbstractEntity.getEntities();
 		Random rnd = new Random();
 		System.out.println("Main Creating!");
+		
 		LayerPanel pWorld = new LayerPanel(0,0, 50*16, 50*16);
 		MapManager.loadMap(pWorld, null); // null to call JFileChooser
 		pWorld.setActualLayer(0);
-//		int width = pWorld.getWidth() / 16;
-//		int height = pWorld.getHeight() / 16;
 		mapwidth = pWorld.getWidth();
 		mapheight = pWorld.getHeight();
+		
+		Field.drawBorder = false;
+		
+		entitytodraw = new EntityLayout(getEntitys());
+		pWorld.addLayoutat(3, entitytodraw);		
 		addGuiElement(pWorld);
 		
-		List<AbstractEntity> entitys = AbstractEntity.getEntities();
 		
 		Player hum_sp = new Player(0);
 		Player comp_sp = new Player(1);
@@ -111,7 +112,7 @@ public class GameScreen extends Screen implements ActionListener {
 		hud.setLayout(new CompactLayout(hud));
 		hud.addElement(wood);
 		
-		//addGuiElement(hud);
+		addGuiElement(hud);
 	}
 
 	@Override
@@ -159,6 +160,7 @@ public class GameScreen extends Screen implements ActionListener {
 			viewY += mpl.getCurrentY() > getScreenFactory().getGame()
 					.getWindow().getWidth() / 2 ? scrollspeed : -scrollspeed;
 		}
+		
 		int wwidth = getScreenFactory().getGame().getWindow().getWidth();
 		int wheight = getScreenFactory().getGame().getWindow().getHeight();
 
@@ -216,26 +218,24 @@ public class GameScreen extends Screen implements ActionListener {
 	public void onDraw(Graphics2D g2d) {
 		MousepadListener mpl = this.getScreenFactory().getGame()
 				.getMousepadListener();
-
+		
+		
 		AffineTransform transform = new AffineTransform();
 		transform.translate(-viewX, -viewY);
 		g2d.transform(transform);
 		
-		super.onDraw(g2d);
-		
-		if (hud != null)
+		if (hud != null){
+			hud.setX(viewX);
+			hud.setY(viewY);
 			hud.repack();
+		}
 		/*
 		 * for (AbstractEntity e : AbstractEntity.getEntities()) {//linkedList
 		 * performance plus e.draw(g2d); }
 		 */
-		for (int i = 0; i < getEntitys().size(); i++) {
-			getEntitys().get(i).draw(g2d);
-		}
-		for (int i = 0; i < getEntitys().size(); i++) {
-			getEntitys().get(i).markOwn(g2d);
-		}
-
+		
+		super.onDraw(g2d);
+		
 		if (mpl.isDragging()) {
 			if (savedMarkX < savedX) {
 				setX(savedMarkX);
@@ -266,7 +266,6 @@ public class GameScreen extends Screen implements ActionListener {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		hud.onDraw(g2d);
 	}
 
 	public void drawRightClick(Graphics2D g2d, int x, int y) {
