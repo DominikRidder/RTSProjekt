@@ -1,20 +1,20 @@
 package tests;
-
-import static org.junit.Assert.*;
-
+/*
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 
+import static org.junit.Assert.*;
+
 import org.junit.Test;
 import org.junit.runner.notification.Failure;
 import org.junit.runner.*;
 
-import dataManagement.ImageManager;
+import dataManagement.ImageManager;*/
 
 public class ManagerTest {
-	public static void main(String[] agrs) {
+	/*public static void main(String[] agrs) {
 		Result rc = new Result();
 
 		rc = JUnitCore.runClasses(ManagerTest.class);
@@ -29,7 +29,7 @@ public class ManagerTest {
 				System.out.println(f.getMessage());
 			}// end of for (Failure f: fList)
 		}// end of if (!rc.wasSuccessful)
-	}// end of method ”main(String[] args)”
+	}// end of method main(String[] args)
 
 	@Test
 	public void testRelativNames() {
@@ -61,5 +61,5 @@ public class ManagerTest {
 		unit.delete();
 		empty.delete();
 		dir.delete();
-	}
+	}*/
 }

@@ -11,6 +11,10 @@ public class Field extends GuiElement {
 	private String imgname;
 	private String tileID;
 
+	
+	public Field() {
+	}
+	
 	public Field(int x, int y) {
 		setX(x);
 		setY(y);
