@@ -7,14 +7,14 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
 public class Field extends GuiElement {
+	public static boolean drawBorder;
 	private BufferedImage img;
 	private String imgname;
 	private String tileID;
 
-	
 	public Field() {
 	}
-	
+
 	public Field(int x, int y) {
 		setX(x);
 		setY(y);
@@ -22,10 +22,14 @@ public class Field extends GuiElement {
 
 	@Override
 	public void onDraw(Graphics2D g2d) {
-		g2d.drawLine(getX(), getY(), getX() + getWidth(), getY());
-		g2d.drawLine(getX(), getY(), getX(), getY() + getHeight());
-		g2d.drawLine(getX() + getWidth(), getY(), getX() + getWidth(), getY() + getHeight());
-		g2d.drawLine(getX(), getY() + getHeight(), getX() + getHeight(), getY() + getHeight());
+		if (drawBorder) {
+			g2d.drawLine(getX(), getY(), getX() + getWidth(), getY());
+			g2d.drawLine(getX(), getY(), getX(), getY() + getHeight());
+			g2d.drawLine(getX() + getWidth(), getY(), getX() + getWidth(),
+					getY() + getHeight());
+			g2d.drawLine(getX(), getY() + getHeight(), getX() + getHeight(),
+					getY() + getHeight());
+		}
 		if (img != null) {
 			g2d.drawImage(img, getX(), getY(), null);
 		}
@@ -35,7 +39,8 @@ public class Field extends GuiElement {
 	public void onUpdate(Screen screen) {
 		if (this.needUpdate()) {
 			if (imgname != null) {
-				img = Game.getImageManager().getImage(imgname, getWidth(), getHeight());
+				img = Game.getImageManager().getImage(imgname, getWidth(),
+						getHeight());
 			}
 			this.setUpdate(false);
 		}

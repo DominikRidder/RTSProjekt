@@ -32,7 +32,7 @@ import javax.swing.JFileChooser;
 import Utilitys.Point;
 
 public class WorldEditor extends Screen implements ActionListener {
-	int scale = 16;
+	int scale = 32;
 	int width = 50;
 	int height = 50;
 	LayerPanel pWorld;
@@ -52,9 +52,10 @@ public class WorldEditor extends Screen implements ActionListener {
 
 	@Override
 	public void onCreate() {
+		Field.drawBorder = true;
 		setW(this.getScreenFactory().getGame().getWindow().getWidth());
 		setH(this.getScreenFactory().getGame().getWindow().getHeight());
-		pWorld = new LayerPanel(150, 40, width * 16, height * 16);
+		pWorld = new LayerPanel(150, 40, width * scale, height * scale);
 		world = new ScrollPane(pWorld, getW() - 165, getH() - 200);
 		pWorld.addLayout(new GridLayout(width, height, pWorld));
 		pWorld.addLayout(new GridLayout(width, height, pWorld));
@@ -211,22 +212,22 @@ public class WorldEditor extends Screen implements ActionListener {
 					if (selected != -1 && selected < tiles.size()) {
 						BufferedImage selectedImage = Game.getImageManager()
 								.getImage(tiles.get(selected).getText());
-						if ((selectedImage.getWidth() > 16 || selectedImage
-								.getHeight() > 16)
-								&& (selectedImage.getWidth() / 16
+						if ((selectedImage.getWidth() > scale || selectedImage
+								.getHeight() > scale)
+								&& (selectedImage.getWidth() / scale
 										+ lastposition.getX() < pWorld
 										.getLayout().getRowSize() && selectedImage
-										.getHeight() / 16 + lastposition.getY() < pWorld
+										.getHeight() / scale + lastposition.getY() < pWorld
 										.getLayout().getColumnSize())) {
 							for (int i = lastposition.getX(); i < pWorld
 									.getLayout().getRowSize()
 									&& i < lastposition.getX()
-											+ selectedImage.getWidth() / 16; i++) {
+											+ selectedImage.getWidth() / scale; i++) {
 								for (int j = lastposition.getY(); j < pWorld
 										.getLayout().getColumnSize()
 										&& j < lastposition.getY()
 												+ selectedImage.getHeight()
-												/ 16; j++) {
+												/ scale; j++) {
 									if (pWorld.getLayout().getElement(i, j) instanceof BigField) {
 										((BigField) pWorld.getLayout()
 												.getElement(i, j)).delete();
@@ -237,22 +238,22 @@ public class WorldEditor extends Screen implements ActionListener {
 							Carrier c = new Carrier(lastposition.getX(),
 									lastposition.getY(), selectedImage,
 									pWorld.getLayout());
-							c.setX((lastposition.getX() * 16 + pWorld.getX()));
-							c.setY((lastposition.getY() * 16 + pWorld.getY()));
+							c.setX((lastposition.getX() * scale + pWorld.getX()));
+							c.setY((lastposition.getY() * scale + pWorld.getY()));
 							for (int k = lastposition.getX(); k < pWorld
 									.getLayout().getRowSize()
 									&& k < lastposition.getX()
-											+ selectedImage.getWidth() / 16; k++) {
+											+ selectedImage.getWidth() / scale; k++) {
 								for (int l = lastposition.getY(); l < pWorld
 										.getLayout().getColumnSize()
 										&& l < lastposition.getY()
 												+ selectedImage.getHeight()
-												/ 16; l++) {
-									BigField bf = new BigField(k * 16
-											+ pWorld.getX(), l * 16
+												/ scale; l++) {
+									BigField bf = new BigField(k * scale
+											+ pWorld.getX(), l * scale
 											+ pWorld.getY(), c);
-									bf.setHeight(16);
-									bf.setWidth(16);
+									bf.setHeight(scale);
+									bf.setWidth(scale);
 									pWorld.getLayout().setElement(bf, k, l);
 								}
 							}
@@ -360,8 +361,8 @@ public class WorldEditor extends Screen implements ActionListener {
 		case "Karte laden":
 			MapManager.loadMap(pWorld, null); // null to call JFileChooser
 			pWorld.setActualLayer(0);
-			width = pWorld.getWidth() / 16;
-			height = pWorld.getHeight() / 16;
+			width = pWorld.getWidth() / scale;
+			height = pWorld.getHeight() / scale;
 			loadTiles("L1", this);
 			break;
 		case "+":
@@ -495,8 +496,8 @@ public class WorldEditor extends Screen implements ActionListener {
 			tile = new Button(0, 0, Game.getImageManager()
 					.getImage(imgs.get(i)));
 			tile.setText(imgs.get(i));
-			tile.setWidth(16);
-			tile.setHeight(16);
+			tile.setWidth(scale);
+			tile.setHeight(scale);
 			tile.addActionListener(action);
 			pTiles.addElement(tile);
 			tiles.add(tile);

@@ -1,5 +1,6 @@
 package gameScreens;
 
+import dataManagement.MapManager;
 import entity.AbstractEntity;
 import entity.OrkTest;
 import entity.Tree;
@@ -11,7 +12,9 @@ import gameEngine.Screen;
 import gameEngine.ScreenFactory;
 import gui.Button;
 import gui.CompactLayout;
+import gui.Field;
 import gui.Label;
+import gui.LayerPanel;
 import gui.Panel;
 
 import java.awt.Graphics2D;
@@ -52,8 +55,8 @@ public class GameScreen extends Screen implements ActionListener {
 	/**************************/
 	/****** Dummy Targets *******/
 
-	private final int mapwidth = 2000;
-	private final int mapheight = 2000;
+	private int mapwidth = 2000;
+	private int mapheight = 2000;
 
 	/*************************/
 
@@ -63,8 +66,18 @@ public class GameScreen extends Screen implements ActionListener {
 
 	@Override
 	public void onCreate() {
+		Field.drawBorder = false;
 		Random rnd = new Random();
 		System.out.println("Main Creating!");
+		LayerPanel pWorld = new LayerPanel(0,0, 50*16, 50*16);
+		MapManager.loadMap(pWorld, null); // null to call JFileChooser
+		pWorld.setActualLayer(0);
+//		int width = pWorld.getWidth() / 16;
+//		int height = pWorld.getHeight() / 16;
+		mapwidth = pWorld.getWidth();
+		mapheight = pWorld.getHeight();
+		addGuiElement(pWorld);
+		
 		List<AbstractEntity> entitys = AbstractEntity.getEntities();
 		
 		Player hum_sp = new Player(0);
@@ -98,7 +111,7 @@ public class GameScreen extends Screen implements ActionListener {
 		hud.setLayout(new CompactLayout(hud));
 		hud.addElement(wood);
 		
-		addGuiElement(hud);
+		//addGuiElement(hud);
 	}
 
 	@Override
@@ -208,6 +221,8 @@ public class GameScreen extends Screen implements ActionListener {
 		transform.translate(-viewX, -viewY);
 		g2d.transform(transform);
 		
+		super.onDraw(g2d);
+		
 		if (hud != null)
 			hud.repack();
 		/*
@@ -245,13 +260,13 @@ public class GameScreen extends Screen implements ActionListener {
 			drawRightClick(g2d, lastRightClickX, lastRightClickY);
 			lastRightClick--;
 		}
+		hud.onDraw(g2d);
 		try {
 			g2d.transform(transform.createInverse());//transform back to normal
 		} catch (NoninvertibleTransformException e) {//THIS WILL NEVER NEVER NEVER ... happen!
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		super.onDraw(g2d);
 	}
 
 	public void drawRightClick(Graphics2D g2d, int x, int y) {

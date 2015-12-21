@@ -33,8 +33,8 @@ public class MapManager {
 			int height = Integer.parseInt(data[0]);
 			int width = Integer.parseInt(data[1]);
 			pWorld.removeAllLayouts();
-			pWorld.setWidth(width * 16);
-			pWorld.setHeight(height * 16);
+			pWorld.setWidth(width * 32);
+			pWorld.setHeight(height * 32);
 			int layouts = 0;
 			while ((line = bf.readLine()) != null) {
 				pWorld.addLayout(new GridLayout(width, height, pWorld));
