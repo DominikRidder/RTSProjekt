@@ -16,8 +16,10 @@ import gui.EntityLayout;
 import gui.Field;
 import gui.Label;
 import gui.LayerPanel;
+import gui.MiniMap;
 import gui.Panel;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -106,11 +108,17 @@ public class GameScreen extends Screen implements ActionListener {
 		wood.setWidth(150);
 		wood.setHeight(50);
 		
+		MiniMap map = new MiniMap(0, getScreenFactory().getGame().getWindow().getHeight()-200, 200, 200, pWorld);
+		Label mapback = new Label(map.getX(), map.getY()-2, map.getWidth()+5, map.getHeight()+5, "");
+		mapback.setBackgroundColor(Color.black);
+		
 		hud = new Panel(0,0, this.getScreenFactory().getGame().getWindow()
 				.getWidth(), this.getScreenFactory().getGame().getWindow()
 				.getHeight());
 		hud.setLayout(new CompactLayout(hud));
 		hud.addElement(wood);
+		hud.addElement(mapback);
+		hud.addElement(map);
 		
 		addGuiElement(hud);
 	}
@@ -235,7 +243,7 @@ public class GameScreen extends Screen implements ActionListener {
 		 */
 		
 		super.onDraw(g2d);
-		
+
 		if (mpl.isDragging()) {
 			if (savedMarkX < savedX) {
 				setX(savedMarkX);

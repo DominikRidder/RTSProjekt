@@ -71,7 +71,7 @@ public abstract class Unit extends AbstractEntity {
 		if (e != null && (getX() != next.getX() || getY() != next.getY())) {
 			next.setX(getX());
 			next.setY(getY());
-			System.out.println("i stucked at spawn :C");
+			//System.out.println("i stucked at spawn :C");
 			return;
 		}
 
