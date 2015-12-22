@@ -3,6 +3,8 @@ package entity;
 import gameEngine.MousepadListener;
 import gameEngine.Screen;
 
+import java.awt.Color;
+import java.awt.Graphics2D;
 import java.util.ArrayList;
 
 import Utilitys.Point;
@@ -12,6 +14,7 @@ public abstract class Unit extends AbstractEntity {
 	private boolean marked;
 	private int opponent = -1;
 	private boolean fight;
+	private int m_dmg = 0, m_dmgtimer = 0;
 
 	private final ArrayList<Point> wayPoints = new ArrayList<Point>();
 	//private int w, h;
@@ -106,6 +109,22 @@ public abstract class Unit extends AbstractEntity {
 
 		}
 	}
+	
+	@Override
+	public void draw(Graphics2D g2d)
+	{
+		super.draw(g2d);
+		if(m_dmgtimer > 0)
+		{
+			String dmg = "-"+m_dmg;
+			int stringwidth = g2d.getFontMetrics().stringWidth(dmg);
+			Color d = g2d.getColor();
+			g2d.setColor(Color.RED);
+			g2d.drawString(dmg, getX()-stringwidth/2, (int)this.getImageBounds().getY()-5+m_dmgtimer/2);
+			g2d.setColor(d);
+			m_dmgtimer--;
+		}
+	}
 
 	public boolean isMarked() {
 		return marked;
@@ -116,6 +135,16 @@ public abstract class Unit extends AbstractEntity {
 	}
 	
 	/* HP Amor and Damage interface stuff*/
+	
+	@Override
+	public boolean takeDamage(int dmg, AbstractEntity dmgdealer)
+	{
+		boolean a = super.takeDamage(dmg, dmgdealer);
+		m_dmg = dmg;
+		m_dmgtimer = 10;
+		return a;
+	}
+	
 	@Override
 	public boolean attack(int opponent) {
 		lastAttack = 50;

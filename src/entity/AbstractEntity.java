@@ -14,6 +14,7 @@ public abstract class AbstractEntity implements IEntity, Comparable<AbstractEnti
 	private static int entityCounter = 0;
 	private static List<AbstractEntity> l_Entities = new ArrayList<AbstractEntity>();
 	private int x, y;
+	private int m_dmgtimer, m_dmg;
 	protected int rad;
 	
 	//static BufferedImage img;
