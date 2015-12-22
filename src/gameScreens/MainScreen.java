@@ -79,7 +79,7 @@ public class MainScreen extends Screen implements ActionListener {
 			this.getScreenFactory().createScreen(new StoryScreen(this.getScreenFactory()));
 			break;
 		case "Quick Start":
-			this.getScreenFactory().createScreen(new GameScreen(this.getScreenFactory()));
+			this.getScreenFactory().createScreen(new GameScreen(this.getScreenFactory(), null));
 			break;
 		case "WorldEditor":
 			this.getScreenFactory().createScreen(new WorldEditor(this.getScreenFactory()));

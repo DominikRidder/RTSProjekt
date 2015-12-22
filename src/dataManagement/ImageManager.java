@@ -76,7 +76,11 @@ public class ImageManager {
 			BufferedImage img = getImage(imgname);//
 			if (img == imgNotFound)
 				return img;
-			img2 = deepCopy(img);
+			try {
+				img2 = deepCopy(img);
+			} catch(UnsupportedOperationException e){
+				return img;
+			}
 			int color = AbstractEntity.getOwnerColor(owner).getRGB();
 			for (int i = 0; i < img2.getHeight(); i++) {
 				for (int j = 0; j < img2.getWidth(); j++) {

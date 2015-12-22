@@ -17,8 +17,9 @@ import javax.swing.JFileChooser;
 
 public class MapManager {
 
-	public static void loadMap(LayerPanel pWorld, File fMap) {
-		if (fMap == null) {
+	public static void loadMap(LayerPanel pWorld, String maplocation) {
+		File fMap = null;
+		if (maplocation == null) {
 			JFileChooser chooser = new JFileChooser();
 			chooser.setCurrentDirectory(new File("./data/"));
 			int retrival = chooser.showOpenDialog(null);
@@ -26,6 +27,8 @@ public class MapManager {
 				return;
 			}
 			fMap = new File(chooser.getSelectedFile().getAbsolutePath());
+		}else{
+			fMap = new File(maplocation);
 		}
 		try (BufferedReader bf = new BufferedReader(new FileReader(fMap))) {
 			String line = bf.readLine();

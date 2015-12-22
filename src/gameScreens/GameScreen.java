@@ -2,6 +2,7 @@ package gameScreens;
 
 import dataManagement.MapManager;
 import entity.AbstractEntity;
+import entity.MainBuilding;
 import entity.OrkTest;
 import entity.Tree;
 import gameEngine.Game;
@@ -13,6 +14,7 @@ import gameEngine.ScreenFactory;
 import gui.Button;
 import gui.CompactLayout;
 import gui.EntityLayout;
+import gui.EntityOptions;
 import gui.Field;
 import gui.Label;
 import gui.LayerPanel;
@@ -42,7 +44,6 @@ public class GameScreen extends Screen implements ActionListener {
 	private EntityLayout entitytodraw;
 	
 	private int viewX, viewY;
-
 	
 	private Panel hud;
 	
@@ -57,11 +58,13 @@ public class GameScreen extends Screen implements ActionListener {
 	
 	private Label wood;
 
-	private int mapwidth = 2000;
-	private int mapheight = 2000;
+	private String maplocation;
+	private int mapwidth;
+	private int mapheight;
 
-	public GameScreen(ScreenFactory screenFactory) {
+	public GameScreen(ScreenFactory screenFactory, String maplocation) {
 		super(screenFactory);
+		this.maplocation = maplocation;
 	}
 
 	@Override
@@ -71,7 +74,7 @@ public class GameScreen extends Screen implements ActionListener {
 		System.out.println("Main Creating!");
 		
 		LayerPanel pWorld = new LayerPanel(0,0, 50*16, 50*16);
-		MapManager.loadMap(pWorld, null); // null to call JFileChooser
+		MapManager.loadMap(pWorld, maplocation); // null to call JFileChooser
 		pWorld.setActualLayer(0);
 		mapwidth = pWorld.getWidth();
 		mapheight = pWorld.getHeight();
@@ -98,6 +101,7 @@ public class GameScreen extends Screen implements ActionListener {
 					pointToMapConst(entitys.get(i).getX(), entitys.get(i)
 							.getY()));
 		}
+		entitys.add(new MainBuilding(100, 100,10,"Barracks.png",0));
 		
 		/*********** HUD ***********************/
 		
@@ -119,6 +123,7 @@ public class GameScreen extends Screen implements ActionListener {
 		hud.addElement(wood);
 		hud.addElement(mapback);
 		hud.addElement(map);
+		hud.addElement(EntityOptions.singleton);
 		
 		addGuiElement(hud);
 	}
@@ -237,10 +242,6 @@ public class GameScreen extends Screen implements ActionListener {
 			hud.setY(viewY);
 			hud.repack();
 		}
-		/*
-		 * for (AbstractEntity e : AbstractEntity.getEntities()) {//linkedList
-		 * performance plus e.draw(g2d); }
-		 */
 		
 		super.onDraw(g2d);
 
@@ -266,7 +267,7 @@ public class GameScreen extends Screen implements ActionListener {
 		}
 		if (lastRightClick != 0) {
 			drawRightClick(g2d, lastRightClickX, lastRightClickY);
-			lastRightClick-=2;
+			lastRightClick-=10;
 		}
 		try {
 			g2d.transform(transform.createInverse());//transform back to normal

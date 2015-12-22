@@ -41,6 +41,7 @@ public class StoryScreen extends Screen implements ActionListener {
 	private ArrayList<Button> shaB;
 
 	private final String races[] = { "Human", "Shadow", "Ancient" };
+	private String maplocation;
 
 	private int actual = RACE_HUMAN;
 
@@ -313,7 +314,7 @@ public class StoryScreen extends Screen implements ActionListener {
 			break;
 		case "Start Mission":
 			this.getScreenFactory().createScreen(
-					new GameScreen(this.getScreenFactory()));
+					new GameScreen(this.getScreenFactory(), maplocation));
 			break;
 		default:
 			String parts[] = e.getActionCommand().split(" ");
@@ -330,6 +331,7 @@ public class StoryScreen extends Screen implements ActionListener {
 			}
 			title.setText(mission.getName());
 			description.setText(mission.getDescription());
+			maplocation = mission.getMapLocation();
 			modus = 1;
 			// System.out.println("Unknown ActionEvent: " +
 			// e.getActionCommand());
