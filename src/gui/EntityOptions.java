@@ -29,6 +29,9 @@ public class EntityOptions extends GuiElement{
 		}
 		g2d.setColor(new Color(0, 0, 0, 0.5f));
 		
+		Button last = options.get(options.size()-1);
+		
+		g2d.fillRoundRect(options.get(0).getX()-20, options.get(0).getY()-20, last.getX()+last.getWidth()+20, last.getY()+last.getHeight()+20, last.getWidth()/2+10, last.getHeight()/2+10);
 		
 		for (int i=0; i<options.size(); i++){
 			options.get(i).onDraw(g2d);

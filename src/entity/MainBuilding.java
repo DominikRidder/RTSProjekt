@@ -13,6 +13,7 @@ public class MainBuilding extends Building{
 
 	private boolean wasnotmarked = true;
 	private boolean marked;
+	private boolean menueisopen;
 	
 	public MainBuilding(int x, int y, int rad, String img_name, int owner) {
 		super(x, y, rad, img_name, owner);
@@ -32,13 +33,13 @@ public class MainBuilding extends Building{
 		MousepadListener mpl = screen.getScreenFactory().getGame().getMousepadListener();
 		if (mpl.isLeftClicked()) {
 			if (mpl.isDragging()) {
-				if (screen.getDraggingZone().intersects(getBounds())) {
-					marked = true;
-				} else {
-					marked = false;
-				}
+//				if (screen.getDraggingZone().intersects(getBounds())) {
+//					marked = true;
+//				} else {
+//					marked = false;
+//				}
 			} else {
-				if ((mpl.getX() >= getX() && mpl.getX() <= getX() + getImageBounds().getWidth()) && (mpl.getY() >= getY() && mpl.getY() <= getY() + getImageBounds().getHeight())) { // 50 dynamisch machen
+				if ((mpl.getX() >= getX() && mpl.getX() <= getX() + /*getImageBounds().getWidth()*/200) && (mpl.getY() >= getY() && mpl.getY() <= getY() + /*getImageBounds().getHeight()*/200)) { // 50 dynamisch machen
 					marked = true;
 				} else {
 					marked = false;
@@ -51,14 +52,23 @@ public class MainBuilding extends Building{
 			wasnotmarked = false;
 		}else if (!marked) {
 			wasnotmarked = true;
+			
+			if (menueisopen && mpl.isLeftClicked()) {
+				EntityOptions.singleton.setOptions(null, null);
+			}
 		}
 	}
 	
 	public void openMenue(){
 		ArrayList<Button> options = new ArrayList<Button>();
 		
-		options.add(new Button(getX(), getY(), Game.getImageManager().getImage("notfound.png")));
+		for (int i=0; i<4; i++){
+			options.add(new Button(getX()+i*50, getY()-50, Game.getImageManager().getImage("notfound.png")));
+			options.get(i).setSize(30, 30);
+		}
 		
 		EntityOptions.singleton.setOptions(options, this);
+		
+		menueisopen = true;
 	}
 }
