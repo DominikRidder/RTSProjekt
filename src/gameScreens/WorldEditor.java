@@ -20,11 +20,8 @@ import gui.ScrollPane;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.swing.JFileChooser;
@@ -94,10 +91,10 @@ public class WorldEditor extends Screen implements ActionListener {
 		Button btnL3 = null;
 		Button btnL4 = null;
 
-		btnL1 = new Button("L1");
-		btnL2 = new Button("L2");
-		btnL3 = new Button("L3");
-		btnL4 = new Button("L4");
+		btnL1 = new Button("L1", true, false);
+		btnL2 = new Button("L2", true, false);
+		btnL3 = new Button("L3", true, false);
+		btnL4 = new Button("L4", true, false);
 
 		btnL1.addActionListener(this);
 		btnL2.addActionListener(this);
@@ -114,20 +111,20 @@ public class WorldEditor extends Screen implements ActionListener {
 
 		// Funktions start
 
-		Button cursorSizePlus = new Button("Cursorgroesse erhoehen");
+		Button cursorSizePlus = new Button("Cursorgroesse erhoehen", true, false);
 		cursorSizePlus.addActionListener(this);
-		Button cursorSizeMinus = new Button("Cursorgroesse verkleinern");
+		Button cursorSizeMinus = new Button("Cursorgroesse verkleinern", true, false);
 		cursorSizeMinus.addActionListener(this);
-		Button save = new Button("Karte speichern");
+		Button save = new Button("Karte speichern", true, false);
 		save.addActionListener(this);
-		Button load = new Button("Karte laden");
+		Button load = new Button("Karte laden", true, false);
 		load.addActionListener(this);
 
 		// ******** Zoom Buttons ********************
-		Button zoomin = new Button("+");
+		Button zoomin = new Button("+", true, false);
 		zoomin.addActionListener(this);
 
-		Button zoomout = new Button("-");
+		Button zoomout = new Button("-", true, false);
 		zoomout.addActionListener(this);
 		// ********************************************
 
@@ -157,6 +154,7 @@ public class WorldEditor extends Screen implements ActionListener {
 
 	}
 
+	@Override
 	public void onUpdate() {
 
 		super.onUpdate();

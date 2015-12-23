@@ -63,7 +63,7 @@ public class MainBuilding extends Building implements ActionListener{
 		ArrayList<Button> options = new ArrayList<Button>();
 		
 		for (int i=0; i<4; i++){
-			options.add(new Button(Game.getImageManager().getImage("tbutton_none.png")));
+			options.add(new Button(Game.getImageManager().getImage("tbutton_none.png"), false, false));
 			options.get(i).setSize(30, 30);
 			options.get(i).addActionListener(this);
 			options.get(i).setText(""+i);

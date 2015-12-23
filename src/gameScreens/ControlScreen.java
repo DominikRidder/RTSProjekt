@@ -26,7 +26,8 @@ public class ControlScreen extends Screen implements ActionListener{
 	public void onCreate() {
 		int width = getScreenFactory().getGame().getWindow().getWidth();
 		
-		Button placeholder = new Button(0, 0, width, getScreenFactory().getGame().getWindow().getHeight(), "");
+		Button placeholder = new Button(0, 0, width, getScreenFactory().getGame().getWindow().getHeight(), "", false, false);
+		placeholder.setImage(null);
 		placeholder.setBackgroundColor(new Color(0, 0, 0, 0.5f));
 		addGuiElement(placeholder);
 		
@@ -44,7 +45,7 @@ public class ControlScreen extends Screen implements ActionListener{
 			addGuiElement(p);
 		}
 		
-		Button back = new Button(0, 0, 50, 20, "Zurück");
+		Button back = new Button(0, 0, 50, 20, "Zurück", true, false);
 		back.addActionListener(this);
 		addGuiElement(back);
 		
@@ -57,7 +58,7 @@ public class ControlScreen extends Screen implements ActionListener{
 		KeyboardListener kbl = this.getScreenFactory().getGame().getKeyboardListener();
 		if(kbl.isOnPress("btn_ESC"))//ESC button
 		{
-			Button b = new Button("Zurück");
+			Button b = new Button("Zurück", false, false);
 			b.addActionListener(this);
 			b.callActions();
 		}

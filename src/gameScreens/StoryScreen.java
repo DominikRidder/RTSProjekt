@@ -79,8 +79,8 @@ public class StoryScreen extends Screen implements ActionListener {
 		progress[RACE_ANCIENT + 1] = Integer.parseInt(savestate
 				.get("ANCIENT2_PROGRESS"));
 
-		background = new Button(0, 0, Game.getImageManager().getImage(
-				imglocation[actual]));
+		background = new Button(Game.getImageManager().getImage(
+				imglocation[actual]), false, true);
 		background
 				.setWidth(getScreenFactory().getGame().getWindow().getWidth());
 		background.setHeight(getScreenFactory().getGame().getWindow()
@@ -138,10 +138,10 @@ public class StoryScreen extends Screen implements ActionListener {
 		}
 		/********************************************************/
 
-		Button arrowleft = new Button(30, 65, 20, 20, "<-");
+		Button arrowleft = new Button(30, 65, 20, 20, "<-", false, true);
 		arrowleft.addActionListener(this);
 		arrowleft.setImage(Game.getImageManager().getImage("ArrowLeft.png"));
-		Button arrowright = new Button(150, 65, 20, 20, "->");
+		Button arrowright = new Button(150, 65, 20, 20, "->", false, true);
 		arrowright.addActionListener(this);
 		arrowright.setImage(Game.getImageManager().getImage("ArrowRight.png"));
 		spRace = new Label(50, 50, 100, 50, "Human");
@@ -155,7 +155,7 @@ public class StoryScreen extends Screen implements ActionListener {
 
 		/************ MISSIONS PREVIEW WINDOW *************************/
 
-		Button invis = new Button("back");
+		Button invis = new Button("back", false, false);
 		invis.setWidth(width * 1 / 5);
 		invis.setX(width);
 		invis.setHeight(getScreenFactory().getGame().getWindow().getHeight());

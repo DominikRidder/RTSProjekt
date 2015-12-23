@@ -16,8 +16,9 @@ public class Button extends GuiElement {
 	//private Color textcolor = Color.YELLOW, backgroundcolor = Color.GRAY;
 	private boolean ispressed = false;
 	private BufferedImage image = Game.getImageManager().getImage("menubutton.png");
-	private boolean ImageSet = false;
 	private boolean changed = true;
+	private boolean bghighlight = false;
+	private boolean drawstring = true;
 
 	public Button(int x, int y, BufferedImage image) {
 		setX(x);
@@ -25,7 +26,6 @@ public class Button extends GuiElement {
 		setWidth(image.getWidth());
 		setHeight(image.getHeight());
 		this.image = image;
-		ImageSet = true;
 	}
 
 	public Button(int x, int y, int width, int height, String text) {
@@ -35,18 +35,42 @@ public class Button extends GuiElement {
 		setHeight(height);
 		this.text = text;
 	}
-
-	public Button(String text) {
+	
+	public Button(int x, int y, int width, int height, String text, boolean drawstring, boolean bghighlighting) {
+		setX(x);
+		setY(y);
+		setWidth(width);
+		setHeight(height);
 		this.text = text;
+		this.drawstring = drawstring;
+		this.bghighlight = bghighlighting;
+	}
+
+	public Button(String text, boolean drawstring, boolean bghighlighting) 
+	{
+		this.drawstring = drawstring;
+		this.bghighlight = bghighlighting;
+		this.text = text;
+	}
+	
+	public Button(BufferedImage img, boolean drawstring, boolean bghighligthing)
+	{
+		this.image = img;
+		if (image != null) {
+			setWidth(image.getWidth());
+			setHeight(image.getHeight());
+		}
+		this.drawstring = drawstring;
+		this.bghighlight = bghighligthing;
 	}
 
 	public Button(BufferedImage img) {
 		this.image = img;
 		if (image != null) {
-			ImageSet = true;
 			setWidth(image.getWidth());
 			setHeight(image.getHeight());
 		}
+		this.bghighlight = true;
 	}
 
 	public String getText() {
@@ -55,7 +79,6 @@ public class Button extends GuiElement {
 
 	public void setImage(BufferedImage img) {
 		this.image = img;
-		ImageSet = true;
 	}
 
 	@Override
@@ -107,16 +130,20 @@ public class Button extends GuiElement {
 		
 		g2d.setColor(backgroundcolor);
 
-		if (ImageSet) {
+		if (bghighlight) {
 			if(ispressed)
 			{
 				g2d.fillRoundRect(getX(), getY(), width, height, 5, 5);
 			}
 			g2d.drawImage(image, getX(), getY(), width, height, null);
-		} else {
-			int stringwidth = g2d.getFontMetrics().stringWidth(text);
-			int stringheight = g2d.getFontMetrics().getHeight();
-			if(text != null && text != "")
+		} 
+		else 
+		{	
+			if(image == null)
+			{
+				g2d.fill3DRect(getX(), getY(), width, height, true);
+			}
+			else
 			{
 				if(ispressed)
 				{
@@ -124,16 +151,18 @@ public class Button extends GuiElement {
 					g2d.drawImage(image, getX()+2, getY()+2, width-4, height-4, null);
 				}
 				else
-					g2d.drawImage(image, getX(), getY(), width, height, null);
-				
+				{
+					g2d.drawImage(image, getX(), getY(), width, height, null);	
+				}
+				g2d.setColor(textcolor);
+				if(text != null && text != "" && drawstring)
+				{		
+					int stringwidth = g2d.getFontMetrics().stringWidth(text);
+					int stringheight = g2d.getFontMetrics().getHeight();
+					g2d.drawString(text, getX() + width / 2 - stringwidth / 2, getY() + height / 2 + stringheight / 2);
+				}
 			}
-			else
-				g2d.fill3DRect(getX(), getY(), width, height, true);
-			//g2d.fillRoundRect(getX(), getY(), width, height, width, height);
-			
-			g2d.setColor(textcolor);
-			g2d.drawString(text, getX() + width / 2 - stringwidth / 2, getY() + height / 2 + stringheight / 2);
-	}
+		}
 		drawBorder(g2d);
 	}
 

@@ -136,7 +136,7 @@ public class GameScreen extends Screen implements ActionListener {
 		KeyboardListener kbl = this.getScreenFactory().getGame().getKeyboardListener();
 		if(kbl.isOnPress("btn_ESC"))//ESC button
 		{
-			Button b = new Button("ESC");
+			Button b = new Button("ESC", false, false);
 			b.addActionListener(this);
 			b.callActions();
 			return;

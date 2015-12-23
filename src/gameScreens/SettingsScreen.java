@@ -37,12 +37,13 @@ public class SettingsScreen extends Screen implements ActionListener {
 		p.setLayout(new GridLayout(adding.length, 1, p));
 		for (String toadd : adding) {
 			
-			Button newb = new Button(toadd);
+			Button newb = new Button(toadd, true, false);
 			newb.addActionListener(this);
 			p.addElement(newb);
 		}
 		
-		Button placeholder = new Button(0, 0, Wwidth, Wheight, "");
+		Button placeholder = new Button(0, 0, Wwidth, Wheight, "", false, false);
+		placeholder.setImage(null);
 		placeholder.setBackgroundColor(new Color(0, 0, 0, 0.5f));
 		addGuiElement(placeholder);
 		
@@ -54,7 +55,7 @@ public class SettingsScreen extends Screen implements ActionListener {
 		KeyboardListener kbl = this.getScreenFactory().getGame().getKeyboardListener();
 		if(kbl.isOnPress("btn_ESC") && tickcounter == 0)//ESC button
 		{
-			Button b = new Button("Zurück");
+			Button b = new Button("Zurück", false, false);
 			b.addActionListener(this);
 			b.callActions();
 		}
@@ -109,7 +110,7 @@ public class SettingsScreen extends Screen implements ActionListener {
 			subpanel = new Panel(Wwidth/2+width/2, Wheight/2-height/2, width, height);
 			subpanel.setLayout(new GridLayout(adding.length, 1, subpanel));
 			for (String toadd : adding) {
-				Button newb = new Button(toadd);
+				Button newb = new Button(toadd, true, false);
 				newb.addActionListener(this);
 				subpanel.addElement(newb);
 			}

@@ -39,14 +39,14 @@ public class MainScreen extends Screen implements ActionListener {
 		Panel p = new Panel(Wwidth/2-width/2, Wheight/2-height/2, width, height);
 		p.setLayout(new GridLayout(adding.length, 1, p));
 		for (String toadd : adding) {
-			Button newb = new Button(toadd);
+			Button newb = new Button(toadd, true, false);
 			newb.addActionListener(this);
 			p.addElement(newb);
 		}
 		
 		//BackgroundFiller bgf = new BackgroundFiller(0, 0, Wwidth, Wheight);
 		
-		Button placeholder = new Button(0, 0, Game.getImageManager().getImage("Hauptmenue.png"));
+		Button placeholder = new Button(Game.getImageManager().getImage("Hauptmenue.png"), false, true);
 		placeholder.setWidth(getScreenFactory().getGame().getWindow().getWidth());
 		placeholder.setHeight(getScreenFactory().getGame().getWindow().getHeight());
 		addGuiElement(placeholder);
@@ -79,7 +79,15 @@ public class MainScreen extends Screen implements ActionListener {
 			this.getScreenFactory().createScreen(new StoryScreen(this.getScreenFactory()));
 			break;
 		case "Quick Start":
-			this.getScreenFactory().createScreen(new GameScreen(this.getScreenFactory(), null));
+			try{ 
+				this.getScreenFactory().createScreen(new GameScreen(this.getScreenFactory(), null));
+			} catch(IndexOutOfBoundsException e1)
+			{
+				System.out.println("TODO: fix this!");
+				e1.printStackTrace();
+				this.getScreenFactory().activeScreen(this);
+				System.out.println("Wait! The programm still works! It's just the printed stacktrace!");
+			}
 			break;
 		case "WorldEditor":
 			this.getScreenFactory().createScreen(new WorldEditor(this.getScreenFactory()));

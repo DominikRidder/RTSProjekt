@@ -50,6 +50,7 @@ public class LayerPanel extends APanel implements CoordinateMapping {
 		((GridLayout) layouts.get(actuallayer)).addAbsoluteElement(element);
 	}
 
+	@Override
 	public void onDraw(Graphics2D g2d) {
 		for (ILayout layout : layouts) {
 			layout.onDraw(g2d);
@@ -68,6 +69,7 @@ public class LayerPanel extends APanel implements CoordinateMapping {
 		setUpdate(false);
 	}
 
+	@Override
 	public Point getCoordinate(int x, int y) {
 		ILayout layout = layouts.get(actuallayer);
 		if (getBounds().contains(x, y)) {
