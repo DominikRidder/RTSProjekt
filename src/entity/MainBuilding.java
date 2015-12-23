@@ -6,24 +6,24 @@ import gameEngine.Screen;
 import gui.Button;
 import gui.EntityOptions;
 
-import java.awt.Graphics2D;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
-public class MainBuilding extends Building{
+public class MainBuilding extends Building implements ActionListener{
 
 	private boolean wasnotmarked = true;
 	private boolean marked;
 	private boolean menueisopen;
+	private final int size = 200;
 	
 	public MainBuilding(int x, int y, int rad, String img_name, int owner) {
 		super(x, y, rad, img_name, owner);
+		setMaxLife(200);
+		setLife(200);
+		Game.getImageManager().getImage(img_name, size, size);
+		this.img_name = img_name+";"+size+";"+size;
 		// TODO Auto-generated constructor stub
-	}
-
-	public void drawImage(Graphics2D g2d)
-	{
-		//this may gets overwritten in some classes (like tree)
-		g2d.drawImage(getImg(), getX(), getY(), 200, 200, null);
 	}
 	
 	@Override
@@ -53,7 +53,7 @@ public class MainBuilding extends Building{
 		}else if (!marked) {
 			wasnotmarked = true;
 			
-			if (menueisopen && mpl.isLeftClicked()) {
+			if (menueisopen && mpl.isLeftClicked() && !EntityOptions.singleton.isMarked()) {
 				EntityOptions.singleton.setOptions(null, null);
 			}
 		}
@@ -63,12 +63,22 @@ public class MainBuilding extends Building{
 		ArrayList<Button> options = new ArrayList<Button>();
 		
 		for (int i=0; i<4; i++){
-			options.add(new Button(getX()+i*50, getY()-50, Game.getImageManager().getImage("notfound.png")));
+			options.add(new Button(Game.getImageManager().getImage("tbutton_none.png")));
 			options.get(i).setSize(30, 30);
+			options.get(i).addActionListener(this);
+			options.get(i).setText(""+i);
 		}
 		
 		EntityOptions.singleton.setOptions(options, this);
 		
 		menueisopen = true;
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		switch(e.getActionCommand()){
+		default:
+			System.out.println("Action: "+e.getActionCommand());
+		}
 	}
 }

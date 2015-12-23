@@ -14,7 +14,6 @@ public abstract class AbstractEntity implements IEntity, Comparable<AbstractEnti
 	private static int entityCounter = 0;
 	private static List<AbstractEntity> l_Entities = new ArrayList<AbstractEntity>();
 	private int x, y;
-	private int m_dmgtimer, m_dmg;
 	protected int rad;
 	
 	//static BufferedImage img;
@@ -141,7 +140,7 @@ public abstract class AbstractEntity implements IEntity, Comparable<AbstractEnti
 		return null;
 	}
 	/*Drawing Stuff*/
-	BufferedImage getImg()
+	public BufferedImage getImg()
 	{
 		return Game.getImageManager().getImage(img_name, owner);
 	}
@@ -156,6 +155,7 @@ public abstract class AbstractEntity implements IEntity, Comparable<AbstractEnti
 	public void drawImage(Graphics2D g2d)
 	{
 		//this may gets overwritten in some classes (like tree)
+		//System.out.println(img_name);
 		g2d.drawImage(getImg(), imgrg.x, imgrg.y, null);
 	}
 	

@@ -15,6 +15,16 @@ public abstract class Unit extends AbstractEntity {
 	private int opponent = -1;
 	private boolean fight;
 	private int m_dmg = 0, m_dmgtimer = 0;
+	private final task m_curtask = task.t_none;
+	
+	public enum task {
+		t_none,
+		t_wood,
+		t_stone,
+		t_attack,
+		t_defend,
+		t_mining,
+	};
 
 	private final ArrayList<Point> wayPoints = new ArrayList<Point>();
 	//private int w, h;

@@ -38,15 +38,18 @@ public class ImageManager {
 	}
 
 	public BufferedImage getImage(String imgname) {
+		BufferedImage img = data.get(imgname);
+		if(img != null)
+			return img;
+		
 		String path = relativNames.get(imgname);
-
+		
 		if (path == null) { // Image Name not found in datadir
 			relativNames.put(imgname, relativNames.get("NotFound.png"));
 			System.out.println("Image not found. Please make sure, that you dont use any Path Information! Image Name was " + imgname);
 			return imgNotFound;
 		}
-
-		BufferedImage img = data.get(path);
+		img = data.get(path); 
 
 		if (img == null) { // Image not loaded until now.
 			try {
@@ -173,8 +176,10 @@ public class ImageManager {
 
 		String key = keybuild.toString();
 		BufferedImage img = data.get(key);
+		
 
 		if (img == null) {
+			System.out.println(key);
 			BufferedImage toscale = getImage(imgname);
 
 			if (toscale == null) {
@@ -246,7 +251,7 @@ public class ImageManager {
 		// return bilinearScaleOp.filter(image, new BufferedImage(width, height,
 		// image.getType()));
 
-		BufferedImage target = new BufferedImage(width, height, image.getType());
+		BufferedImage target = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 		java.awt.Graphics gr = target.getGraphics();
 		gr.drawImage(image.getScaledInstance(target.getWidth(), target.getHeight(), BufferedImage.SCALE_FAST), 0, 0, null); // converting
 																															// Image

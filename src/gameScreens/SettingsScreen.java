@@ -130,7 +130,6 @@ public class SettingsScreen extends Screen implements ActionListener {
 			break;
 		//GameSettings:
 			
-		//Steuerrung:
 		
 		//Sound:
 		case "Ton":

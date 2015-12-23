@@ -58,7 +58,7 @@ public class GameScreen extends Screen implements ActionListener {
 	
 	private Label wood;
 
-	private String maplocation;
+	private final String maplocation;
 	private int mapwidth;
 	private int mapheight;
 
@@ -101,7 +101,7 @@ public class GameScreen extends Screen implements ActionListener {
 					pointToMapConst(entitys.get(i).getX(), entitys.get(i)
 							.getY()));
 		}
-		entitys.add(new MainBuilding(100, 100,10,"Barracks.png",0));
+		entitys.add(new MainBuilding(800, 800,10,"Barracks.png",0));
 		
 		/*********** HUD ***********************/
 		
@@ -123,6 +123,8 @@ public class GameScreen extends Screen implements ActionListener {
 		hud.addElement(wood);
 		hud.addElement(mapback);
 		hud.addElement(map);
+		EntityOptions.singleton.setHeight(getScreenFactory().getGame().getHeight());
+		EntityOptions.singleton.setWidth(getScreenFactory().getGame().getWidth());
 		hud.addElement(EntityOptions.singleton);
 		
 		addGuiElement(hud);
