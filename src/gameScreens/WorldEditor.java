@@ -419,6 +419,7 @@ public class WorldEditor extends Screen implements ActionListener {
 			tile.setWidth(scale);
 			tile.setHeight(scale);
 			tile.addActionListener(action);
+			tile.setTextShowing(false);
 			pTiles.addElement(tile);
 			tiles.add(tile);
 		}

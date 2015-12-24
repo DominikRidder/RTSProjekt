@@ -71,7 +71,7 @@ public class MapManager {
 					}
 					if (imgname.contains(",")) {
 						String[] bigImageData = imgname.split(",");
-						if (Game.getImageManager().getImage(bigImageData[0] + bigImageData[1] + bigImageData[2]) != ((Field) pWorld.getLayout().getElement(Integer.parseInt(bigImageData[1]), Integer.parseInt(bigImageData[2]))).getImg()) {
+						if (Game.getImageManager().getImage(bigImageData[0] + bigImageData[1] + bigImageData[2] + ";32;32") != ((Field) pWorld.getLayout().getElement(Integer.parseInt(bigImageData[1]), Integer.parseInt(bigImageData[2]))).getImg()) {
 							BufferedImage image = Game.getImageManager().getImage(bigImageData[0]);
 							Carrier c = new Carrier(Integer.parseInt(bigImageData[1]), Integer.parseInt(bigImageData[2]), image, pWorld.getLayout());
 							c.setX((Integer.parseInt(bigImageData[1]) * 16 + pWorld.getX()));
