@@ -2,6 +2,7 @@ package gameScreens;
 
 import dataManagement.MapManager;
 import entity.AbstractEntity;
+import entity.MainBuilding;
 import entity.OrkTest;
 import entity.Tree;
 import gameEngine.Game;
@@ -94,7 +95,7 @@ public class GameScreen extends Screen implements ActionListener {
 			entitys.add(new Tree(rnd.nextInt(700) + 40, rnd.nextInt(500) + 40, rnd.nextInt(2)));
 			entitysOnMap.put(entitys.get(i), pointToMapConst(entitys.get(i).getX(), entitys.get(i).getY()));
 		}
-		// entitys.add(new MainBuilding(800, 800, 10, "Barracks.png", 0));
+		entitys.add(new MainBuilding(800, 800, 10, "Barracks.png", 0));
 
 		/*********** HUD ***********************/
 

@@ -7,7 +7,7 @@ public class RTS {
 	private final Game game;
 
 	public RTS() {
-		game = new Game(840, 640, "Real-Time Strategy of Doom");
+		game = new Game("Real-Time Strategy of Doom");
 		game.getScreenFactory().createScreen(new MainScreen(game.getScreenFactory()));
 	}
 

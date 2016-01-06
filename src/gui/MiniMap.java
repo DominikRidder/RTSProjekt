@@ -31,10 +31,10 @@ public class MiniMap extends GuiElement {
 		g2d.transform(transform);
 		g2d.setColor(Color.black);
 		g2d.fillRect(0, 0, source.getWidth(), source.getHeight());
-		g2d.setClip(getX(), getY()-starty, widht, height);
+		//g2d.setClip(getX(), getY()-starty, widht, height);
 		
 		source.onDraw(g2d);
-		g2d.setClip(null);
+		//g2d.setClip(null);
 		g2d.setColor(Color.RED);
 		for(int i = 0; i > -20; i--)
 			g2d.draw3DRect(getX()+i, getY()-starty+i, widht-2*i, height-2*i, false);

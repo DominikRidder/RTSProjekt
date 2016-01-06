@@ -2,9 +2,12 @@ package entity;
 
 import gameEngine.MousepadListener;
 import gameEngine.Screen;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Ellipse;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.geom.Ellipse2D;
 import java.util.ArrayList;
 
 import Utilitys.Point;
@@ -123,7 +126,13 @@ public abstract class Unit extends AbstractEntity {
 	@Override
 	public void draw(Graphics2D g2d)
 	{
+		if (this.marked) {
+			g2d.setColor(Color.YELLOW);
+			g2d.draw(new Ellipse2D.Double(this.getX()-rad*3./2, this.getY()-rad*3./2,this.rad*3, this.rad*3));
+		}
+		
 		super.draw(g2d);
+		
 		if(m_dmgtimer > 0)
 		{
 			String dmg = "-"+m_dmg;
