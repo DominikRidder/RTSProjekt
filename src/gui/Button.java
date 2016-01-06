@@ -70,7 +70,15 @@ public class Button extends GuiElement {
 		}
 		this.bghighlight = true;
 	}
+	
+	public void setBgHighlight(boolean bgh) {
+		this.bghighlight = bgh;
+	}
 
+	public void setDrawText(boolean dt) {
+		this.drawstring = dt;
+	}
+	
 	public String getText() {
 		return text;
 	}

@@ -13,6 +13,9 @@ public class KeyboardListener implements KeyListener {
 
 	@Override
 	public void keyPressed(KeyEvent event) {
+		if (event.getKeyCode() >= keys.length) { // Tablett Help
+			return;
+		}
 		keys[event.getKeyCode()] = true;
 		if (!ispressed.contains(event.getKeyCode())) {
 			ispressed.add(event.getKeyCode());

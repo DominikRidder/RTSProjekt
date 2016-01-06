@@ -108,6 +108,7 @@ public class StoryScreen extends Screen implements ActionListener {
 			Button b = new Button(width / 2 - 50, relHeight
 					* (bothMission.size() - i), 100, relHeight / 2, "Both " + i);
 			b.setImage(imgloader.getImage(bothMission.get(0).getIconLocation()));
+			b.setDrawText(false);
 			this.addGuiElement(b);
 			bothB.add(b);
 			b.addActionListener(this);
@@ -120,6 +121,7 @@ public class StoryScreen extends Screen implements ActionListener {
 					* ((double) humMission.size() - i) / (humMission.size())),
 					100, relHeight / 2, "Human " + i);
 			b.setImage(imgloader.getImage(humMission.get(0).getIconLocation()));
+			b.setDrawText(false);
 			this.addGuiElement(b);
 			humB.add(b);
 			b.addActionListener(this);
@@ -132,6 +134,7 @@ public class StoryScreen extends Screen implements ActionListener {
 					* ((double) shaMission.size() - i) / (shaMission.size())),
 					100, relHeight / 2, "Shadow " + i);
 			b.setImage(imgloader.getImage(shaMission.get(0).getIconLocation()));
+			b.setDrawText(false);
 			this.addGuiElement(b);
 			shaB.add(b);
 			b.addActionListener(this);
@@ -160,6 +163,7 @@ public class StoryScreen extends Screen implements ActionListener {
 		invis.setX(width);
 		invis.setHeight(getScreenFactory().getGame().getWindow().getHeight());
 		invis.setImage(Game.getImageManager().getImage("InvisibleImage.png"));
+		invis.setBackgroundColor(new Color(0,0,0,0));
 		invis.addActionListener(this);
 
 		Button background = new Button(Game.getImageManager().getImage("MissionImage2.png"));
@@ -171,7 +175,6 @@ public class StoryScreen extends Screen implements ActionListener {
 				width * 9 / 20, getScreenFactory().getGame().getWindow()
 						.getHeight() * 1 / 10, "Start Mission");
 		startmission.addActionListener(this);
-//		startmission.setBackgroundColor(new Color(0,0,0,0));
 		startmission.setTextColor(Color.YELLOW);
 
 		description = new Monolog("");
