@@ -28,103 +28,13 @@ public abstract class Unit extends AbstractEntity {
 
 	@Override
 	public void update(Screen screen) {
-		MousepadListener mpl = screen.getScreenFactory().getGame()
-				.getMousepadListener();
-
 		doTask(screen); // New Task System
-
-		if (mpl.isLeftClicked()) {
-			if (mpl.isDragging()) {
-				if (screen.getDraggingZone().intersects(getBounds())
-						&& getOwner() == Player.MAIN_PLAYER) {
-					marked = true;
-				} else {
-					marked = false;
-				}
-			} else {
-				if ((mpl.getX() >= getX() && mpl.getX() <= getX()
-						+ getImageBounds().getWidth())
-						&& (mpl.getY() >= getY() && mpl.getY() <= getY()
-								+ getImageBounds().getHeight())
-						&& getOwner() == Player.MAIN_PLAYER) { // 50
-					// dynamisch
-					// machen
-					marked = true;
-				} else {
-					marked = false;
-				}
-			}
-		} else if (mpl.isRightClicked()) {
-			if (marked == true) {
-				wayPoints.clear();
-				int i = 0;
-				for (i = 0; i < getEntities().size(); i++) {
-
-					if (!fight
-							&& getEntities().get(i).getImageBounds()
-									.contains(mpl.getX(), mpl.getY())
-							&& this.getEntityID() != getEntities().get(i)
-									.getEntityID() && this.getLife() > 0
-							&& getEntities().get(i).getLife() > 0
-							&& getEntities().get(i).getOwner() != getOwner()) {
-						fight = true;
-						opponent = getEntities().get(i).getEntityID();
-						break;
-					}
-					fight = false;
-					opponent = -1;
-				}
-
-				wayPoints.add(new Point(mpl.getX(), mpl.getY()));
-			}
-		}
-
-		Point next;
-		if (wayPoints.size() == 0) {
-			next = new Point(getX(), getY());
-		} else {
-			next = new Point(wayPoints.get(0).getX(), wayPoints.get(0).getY());
-		}
-
-		AbstractEntity e = hasCollision();
-		if (e != null && (getX() != next.getX() || getY() != next.getY())) {
-			next.setX(getX());
-			next.setY(getY());
-			// System.out.println("i stucked at spawn :C");
-			return;
-		}
-
-		int prevx = getX();
-		int prevy = getY();
-		if (getX() != next.getX()) {// moving?
-			addX(getX() < next.getX() ? 1 : -1);
-			e = hasCollision();
-			if (e != null) {
-				setX(prevx);
-			}
-		}
-		if (getY() != next.getY()) {
-			addY(getY() < next.getY() ? 1 : -1);
-			e = hasCollision();
-			if (e != null) {
-				setY(prevy);
-			}
-		}
-
-		if (getX() == next.getX() && getY() == next.getY()
-				&& wayPoints.size() > 0) {
-			wayPoints.remove(0);
-		}
-		if (fight == true) {
-			if (lastAttack == 0) {
-				fight = attack(opponent);
-				if (!fight)
-					opponent = -1;// reset
-			} else {
-				lastAttack--;
-			}
-
-		}
+		
+		testMarked(screen);
+		
+		rightClickAction(screen);
+		
+		move(screen);
 	}
 
 	@Override
@@ -197,7 +107,35 @@ public abstract class Unit extends AbstractEntity {
 	}
 
 	public void taskAttack(Screen screen) {
-		// TODO: Implement Auto Attack search+hit
+		if (getEntity(opponent) == null){
+			opponent = -1;
+			fight = false;
+			m_curtask = task.t_none; // searching new target is missing
+		}
+		
+		if (opponent != -1) {
+			AbstractEntity enemy = getEntity(opponent);
+			if (wayPoints.size() > 0) {
+				wayPoints.remove(0);
+			}
+			wayPoints.add(new Point(enemy.getX(), enemy.getY()));
+		}
+
+		if (fight == true) {
+			AbstractEntity enemy = getEntity(opponent);
+			boolean inrange = Math.abs(enemy.getX() - getX()) < 64
+					&& Math.abs(enemy.getY() - getY()) < 64;
+			if (lastAttack == 0 && inrange) {
+				fight = attack(opponent);
+				if (!fight)
+					opponent = -1;// reset
+			} else {
+				if (lastAttack > 0) {
+					lastAttack--;
+				}
+			}
+
+		}
 	}
 
 	public void taskDefend(Screen screen) {
@@ -209,4 +147,104 @@ public abstract class Unit extends AbstractEntity {
 		// For builduing a House we should consider to make a new Task
 	}
 
+	public void taskBuild(Screen screen) {
+
+	}
+
+	private void testMarked(Screen screen) {
+		MousepadListener mpl = screen.getScreenFactory().getGame()
+				.getMousepadListener();
+
+		if (mpl.isLeftClicked()) {
+			if (mpl.isDragging()) {
+				if (screen.getDraggingZone().intersects(getBounds())
+						&& getOwner() == Player.MAIN_PLAYER) {
+					marked = true;
+				} else {
+					marked = false;
+				}
+			} else {
+				if ((mpl.getX() >= getX() && mpl.getX() <= getX()
+						+ getImageBounds().getWidth())
+						&& (mpl.getY() >= getY() && mpl.getY() <= getY()
+								+ getImageBounds().getHeight())
+						&& getOwner() == Player.MAIN_PLAYER) { // 50
+					// dynamisch
+					// machen
+					marked = true;
+				} else {
+					marked = false;
+				}
+			}
+		}
+	}
+
+	private void rightClickAction(Screen screen) {
+		MousepadListener mpl = screen.getScreenFactory().getGame()
+				.getMousepadListener();
+
+		if (mpl.isRightClicked()) {
+			if (marked == true) {
+				wayPoints.clear();
+				int i = 0;
+				for (i = 0; i < getEntities().size(); i++) {
+
+					if (!fight
+							&& getEntities().get(i).getImageBounds()
+									.contains(mpl.getX(), mpl.getY())
+							&& this.getLife() > 0
+							&& getEntities().get(i).getLife() > 0
+							&& getEntities().get(i).getOwner() != getOwner()) {
+						fight = true;
+						opponent = getEntities().get(i).getEntityID();
+						break;
+					}
+					fight = false;
+					opponent = -1;
+					m_curtask = task.t_attack;
+				}
+
+				wayPoints.add(new Point(mpl.getX(), mpl.getY()));
+			}
+		}
+	}
+
+	public void move(Screen screen) {
+		Point next;
+		if (wayPoints.size() == 0) {
+			next = new Point(getX(), getY());
+		} else {
+			next = new Point(wayPoints.get(0).getX(), wayPoints.get(0).getY());
+		}
+
+		AbstractEntity e = hasCollision();
+		if (e != null && (getX() != next.getX() || getY() != next.getY())) {
+			// unused set
+			// next.setX(getX());
+			// next.setY(getY());
+			return;
+		}
+
+		int prevx = getX();
+		int prevy = getY();
+		if (getX() != next.getX()) {// moving?
+			addX(getX() < next.getX() ? 1 : -1);
+			e = hasCollision();
+			if (e != null) {
+				setX(prevx);
+			}
+		}
+		if (getY() != next.getY()) {
+			addY(getY() < next.getY() ? 1 : -1);
+			e = hasCollision();
+			if (e != null) {
+				setY(prevy);
+			}
+		}
+
+		if (getX() == next.getX() && getY() == next.getY()
+				&& wayPoints.size() > 0) {
+			wayPoints.remove(0);
+		}
+	}
 }

@@ -53,4 +53,8 @@ public abstract class Building extends AbstractEntity {
 	public void taskSpawn(Screen screen) {
 		// Override this in case your Builduing can spawn Units.
 	}
+	
+	public void taskBuild(Screen screen) {
+		// This task is used to build buildings.
+	}
 }

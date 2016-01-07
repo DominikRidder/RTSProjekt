@@ -109,4 +109,7 @@ public class Tree extends AbstractEntity {
 	@Override
 	public void taskSpawn(Screen screen) {
 	}
+	
+	public void taskBuild(Screen screen) {
+	}
 }

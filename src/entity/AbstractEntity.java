@@ -310,6 +310,9 @@ public abstract class AbstractEntity implements IEntity,
 		case t_spawn:
 			taskSpawn(screen);
 			break;
+		case t_build:
+			taskBuild(screen);
+			break;
 		default:
 			System.out.println("Not handeld task: " + m_curtask);
 			break;
