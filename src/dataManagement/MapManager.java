@@ -13,6 +13,7 @@ import javax.swing.JFileChooser;
 import entity.AbstractEntity;
 import entity.MainBuilding;
 import gameEngine.Game;
+import gameEngine.Player;
 import gui.BigField;
 import gui.Carrier;
 import gui.Field;
@@ -69,7 +70,8 @@ public class MapManager {
 					String imgname = imgData.substring(0, imgData.length() - 1);
 					if (imgname.startsWith("s_")) {
 						defaultEntitys.add(new MainBuilding(containerI * 32,
-								containerJ * 32, 10, "Barracks.png", 0));
+								containerJ * 32, 10, "Barracks.png",
+								Player.MAIN_PLAYER));
 					}
 					if (imgname.contains(",")) {
 						String[] bigImageData = imgname.split(",");

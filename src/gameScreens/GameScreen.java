@@ -85,7 +85,8 @@ public class GameScreen extends Screen implements ActionListener {
 		pWorld.addLayoutat(3, entitytodraw);
 		addGuiElement(pWorld);
 
-		Player hum_sp = new Player(0);
+		Player.dropAllPlayer();
+		Player hum_sp = new Player(Player.MAIN_PLAYER);
 		Player comp_sp = new Player(1);
 
 		for (int i = 0; i < 10; i++) {
@@ -342,7 +343,6 @@ public class GameScreen extends Screen implements ActionListener {
 			}
 		}
 		if (own != -1) {
-			Player.dropAllPlayer(); // as long we don't have a Screen for stats
 			this.getScreenFactory().createScreen(
 					new MainScreen(this.getScreenFactory()));
 		}

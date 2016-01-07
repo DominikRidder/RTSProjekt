@@ -1,6 +1,7 @@
 package entity;
 
 import gameEngine.MousepadListener;
+import gameEngine.Player;
 import gameEngine.Screen;
 
 import java.awt.Color;
@@ -34,7 +35,8 @@ public abstract class Unit extends AbstractEntity {
 
 		if (mpl.isLeftClicked()) {
 			if (mpl.isDragging()) {
-				if (screen.getDraggingZone().intersects(getBounds())) {
+				if (screen.getDraggingZone().intersects(getBounds())
+						&& getOwner() == Player.MAIN_PLAYER) {
 					marked = true;
 				} else {
 					marked = false;
@@ -43,9 +45,10 @@ public abstract class Unit extends AbstractEntity {
 				if ((mpl.getX() >= getX() && mpl.getX() <= getX()
 						+ getImageBounds().getWidth())
 						&& (mpl.getY() >= getY() && mpl.getY() <= getY()
-								+ getImageBounds().getHeight())) { // 50
-																	// dynamisch
-																	// machen
+								+ getImageBounds().getHeight())
+						&& getOwner() == Player.MAIN_PLAYER) { // 50
+					// dynamisch
+					// machen
 					marked = true;
 				} else {
 					marked = false;
@@ -62,7 +65,8 @@ public abstract class Unit extends AbstractEntity {
 									.contains(mpl.getX(), mpl.getY())
 							&& this.getEntityID() != getEntities().get(i)
 									.getEntityID() && this.getLife() > 0
-							&& getEntities().get(i).getLife() > 0) {
+							&& getEntities().get(i).getLife() > 0
+							&& getEntities().get(i).getOwner() != getOwner()) {
 						fight = true;
 						opponent = getEntities().get(i).getEntityID();
 						break;
