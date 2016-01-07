@@ -1,12 +1,10 @@
 package entity;
 
-
-
 public class OrkTest extends Unit {
 
-	//private static BufferedImage img;
-	//private final Rectangle rg;
-	//private final Rectangle imgrg;
+	// private static BufferedImage img;
+	// private final Rectangle rg;
+	// private final Rectangle imgrg;
 	private static final int rad = 6;
 	private static final String img_name = "Orc.png";
 	private static final int life = 8;

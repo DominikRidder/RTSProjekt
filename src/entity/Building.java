@@ -12,18 +12,45 @@ public abstract class Building extends AbstractEntity {
 	@Override
 	public void update() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void update(Screen sc) {
-		// TODO Auto-generated method stub
-		
+		doTask(sc); // New Task System
 	}
 
 	@Override
 	public boolean attack(int opponentID) {
 		// TODO Auto-generated method stub
-		return false;//wow, this is automated right, a NORMAL building should not attack
+		return false;// wow, this is automated right, a NORMAL building should
+						// not attack
+	}
+
+	/*************** Task Section ****************/
+
+	public void taskWood(Screen screen) {
+		// Builduings cant collect Wood (Normally)
+	}
+
+	public void taskStone(Screen screen) {
+		// Builduings cant collect Stone (Normally)
+	}
+
+	public void taskMining(Screen screen) {
+		// Builduings cant go Mining (Normally)
+	}
+
+	public void taskAttack(Screen screen) {
+		// Not all Builduings can attack. Override to implement attacks
+	}
+
+	public void taskDefend(Screen screen) {
+		// Not all Builduings can do something, to Defend. Override to implement
+		// defend behaivior
+	}
+
+	public void taskSpawn(Screen screen) {
+		// Override this in case your Builduing can spawn Units.
 	}
 }
