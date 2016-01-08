@@ -148,7 +148,7 @@ public abstract class Unit extends AbstractEntity {
 	}
 
 	public void taskBuild(Screen screen) {
-
+		
 	}
 
 	private void testMarked(Screen screen) {

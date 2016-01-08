@@ -19,6 +19,7 @@ public class Button extends GuiElement {
 	private boolean changed = true;
 	private boolean bghighlight = false;
 	private boolean drawstring = true;
+	private boolean simulateClick = false;
 
 	public Button(int x, int y, BufferedImage image) {
 		setX(x);
@@ -70,6 +71,10 @@ public class Button extends GuiElement {
 		}
 		this.bghighlight = true;
 	}
+	
+	public void simulatePressed(boolean simulateClick) {
+		this.simulateClick = simulateClick;
+	} 
 	
 	public void setBgHighlight(boolean bgh) {
 		this.bghighlight = bgh;
@@ -137,7 +142,7 @@ public class Button extends GuiElement {
 		g2d.setColor(backgroundcolor);
 
 		if (bghighlight) {
-			if (ispressed) {
+			if (ispressed || simulateClick) {
 				g2d.fillRoundRect(getX(), getY(), width, height, 5, 5);
 			}
 			g2d.drawImage(image, getX(), getY(), width, height, null);

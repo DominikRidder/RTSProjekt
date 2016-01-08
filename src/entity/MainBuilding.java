@@ -83,9 +83,8 @@ public class MainBuilding extends Building implements ActionListener {
 		ArrayList<Button> options = new ArrayList<Button>();
 
 		for (int i = 0; i < 4; i++) {
-			options.add(new Button(Game.getImageManager().getImage(
-					"tbutton_none.png"), false, false));
-			options.get(i).setSize(30, 30);
+			options.add(new Button(Game.getImageManager().getImage("Orc.png"),
+					false, false));
 			options.get(i).addActionListener(this);
 			options.get(i).setText("Spawn Ork");
 		}
@@ -122,23 +121,28 @@ public class MainBuilding extends Building implements ActionListener {
 					Player.getPlayer(getEntityID()).getWood() - 20);
 		}
 
-		for (int i = 0; i < 50; i++) { // Limited to 50 trys
+		for (int i = 0; i < 6; i++) {
+			for (int j = 0; j < 6; j++) { // Limited to 50 trys
 
-			if (!gamescreen.getEntityWithMap().containsValue( // I have space to
-																// spawn him
-																// here?
-					Screen.pointToMapConst(getX() - 100 + 25 * i, getY() + 25))) {
+				if (!gamescreen.getEntityWithMap().containsValue( // I have
+																	// space to
+																	// spawn him
+																	// here?
+						Screen.pointToMapConst(getX() - 100 + 25 * i,
+								getY() + 25*(j+1)))) {
 
-				OrkTest ork = new OrkTest(getX() - 100 + 25 * i, getY() + 25, // Spawn
-						// a
-						// new
-						// Ork
-						getEntityID());
+					OrkTest ork = new OrkTest(getX() - 100 + 25 * i,
+							getY() + 25*(j+1), // Spawn
+							// a
+							// new
+							// Ork
+							getEntityID());
 
-				screen.getEntitys().add(ork);
-				gamescreen.getEntityWithMap().put(ork,
-						Screen.pointToMapConst(ork.getX(), ork.getY()));
-				break;
+					screen.getEntitys().add(ork);
+					gamescreen.getEntityWithMap().put(ork,
+							Screen.pointToMapConst(ork.getX(), ork.getY()));
+					break;
+				}
 			}
 		}
 
