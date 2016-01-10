@@ -34,7 +34,10 @@ public class EntityOptions extends GuiElement {
 			for (int i = 0; i < options.size(); i++) {
 				options.get(i).setSize(30, 30);
 			}
-		}
+		} 
+//		else if (entity != calledby ){
+//			return; // only delete options when entity is the owner
+//		}
 
 		calledby = entity;
 		this.options = options;

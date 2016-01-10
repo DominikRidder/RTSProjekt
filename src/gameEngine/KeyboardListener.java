@@ -24,6 +24,9 @@ public class KeyboardListener implements KeyListener {
 
 	@Override
 	public void keyReleased(KeyEvent event) {
+		if (event.getKeyCode() >= keys.length) { // Tablett Help
+			return;
+		}
 		keys[event.getKeyCode()] = false;
 		postfire[event.getKeyCode()] = true;
 		ispressed.remove(new Integer(event.getKeyCode()));
