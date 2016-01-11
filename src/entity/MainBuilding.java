@@ -124,7 +124,7 @@ public class MainBuilding extends Building implements ActionListener {
 		GameScreen gamescreen = (GameScreen) screen; // needed for
 														// pointToMapConst
 
-		if (Player.getPlayer(getEntityID()).getWood() < 20) {
+		if (Player.getPlayer(getOwner()).getWood() < 20) {
 			System.out.println("Get at least 20 Wood to Spawn a Unit!");
 			System.out
 					.println("This is an example of using Resources to spawn Units.");
