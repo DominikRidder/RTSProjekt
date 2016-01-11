@@ -8,6 +8,7 @@ import gameScreens.GameScreen;
 import gui.Button;
 import gui.EntityOptions;
 
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -30,6 +31,12 @@ public class MainBuilding extends Building implements ActionListener {
 
 	@Override
 	public void update(Screen screen) {
+		if (current_status != STATUS_FINISHED) {
+			if (life >= maxLife) {
+				current_status = STATUS_FINISHED; 
+			}
+			return;
+		}
 		super.update(screen);
 
 		MousepadListener mpl = screen.getScreenFactory().getGame()
@@ -103,6 +110,14 @@ public class MainBuilding extends Building implements ActionListener {
 		}
 	}
 
+	@Override
+	public Rectangle getImageBounds() {
+		super.getImageBounds();
+		imgrg.width = size;
+		imgrg.height = size;
+		return imgrg;
+	}
+	
 	/*************** Task Section ****************/
 
 	public void taskSpawn(Screen screen) {

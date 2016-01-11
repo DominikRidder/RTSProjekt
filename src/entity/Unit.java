@@ -26,7 +26,7 @@ public abstract class Unit extends AbstractEntity implements ActionListener {
 	private int opponent = -1;
 	private boolean fight;
 	private int m_dmg = 0, m_dmgtimer = 0;
-	private Point target;
+	private MainBuilding target;
 
 	private final ArrayList<Point> wayPoints = new ArrayList<Point>();
 	// private int w, h;
@@ -155,28 +155,38 @@ public abstract class Unit extends AbstractEntity implements ActionListener {
 	}
 
 	public void taskBuild(Screen screen) {
+		MousepadListener mpl = screen.getScreenFactory().getGame().getMousepadListener();
+		GameScreen gamesc = (GameScreen) screen;
+		
 		if (target == null){
-
-			MousepadListener mpl = screen.getScreenFactory().getGame().getMousepadListener();
-			if (mpl.isLeftClicked()){
-				target = new Point((mpl.getX()/25)*25, (mpl.getY()/25)*25);
-				System.out.println(target.getX()+" "+target.getY());
+			target = new MainBuilding(mpl.getCurrentX(), mpl.getCurrentY(), 10, "Barracks.png",getOwner());
+			target.setLife(1);
+			target.setStatus(Building.STATUS_PREVIEW_NOT_FIXED);
+		}else if (target.getStatus() == Building.STATUS_PREVIEW_NOT_FIXED){
+			target.setX(mpl.getCurrentX()+gamesc.getViewX());
+			target.setY(mpl.getCurrentY()+gamesc.getViewY());
+			if (mpl.isLeftClicked()) {
+				target.setStatus(Building.STATUS_PREVIEW_FIXED);
 			}
-			return;
 		}
 
+		if (target.getStatus() == Building.STATUS_PREVIEW_NOT_FIXED) {
+			return;
+		}
+		
+		
 		boolean inrange = Math.abs(target.getX() - getX()) < 64 && Math.abs(target.getY() - getY()) < 64;
 		if (!inrange) {
 			if (wayPoints.size() > 0) {
 				wayPoints.remove(0);
 			}
 			wayPoints.add(new Point(target.getX(), target.getY()));
-		}else {
-			screen.getEntitys().add(new MainBuilding(target.getX(),
-					target.getY(), 10, "Barracks.png",
-					getOwner()));
+		}else if(target.getStatus() == Building.STATUS_PREVIEW_FIXED){
+			target.setStatus(Building.STATUS_BUIDLING);
+			opponent = target.getEntityID();
+			m_curtask = task.t_attack;
 			target = null;
-			m_curtask = task.t_none;
+			fight = true;
 		}
 		
 		
@@ -223,6 +233,7 @@ public abstract class Unit extends AbstractEntity implements ActionListener {
 			if (menueisopen && mpl.isLeftClicked()
 					&& !EntityOptions.singleton.isMarked()) {
 				EntityOptions.singleton.setOptions(null, null);
+				menueisopen = false;
 			}
 		}
 	}
@@ -253,7 +264,7 @@ public abstract class Unit extends AbstractEntity implements ActionListener {
 
 					if (!fight && getEntities().get(i).getImageBounds().contains(mpl.getX(), mpl.getY())
 							&& this.getLife() > 0 && getEntities().get(i).getLife() > 0
-							&& getEntities().get(i).getOwner() != getOwner()) {
+							&& (getEntities().get(i).getOwner() != getOwner() || repairable(getEntities().get(i)))) {
 						fight = true;
 						opponent = getEntities().get(i).getEntityID();
 						break;
@@ -266,6 +277,10 @@ public abstract class Unit extends AbstractEntity implements ActionListener {
 				wayPoints.add(new Point(mpl.getX(), mpl.getY()));
 			}
 		}
+	}
+
+	private boolean repairable(AbstractEntity ent) {
+		return ent.getOwner() == getOwner() && ent instanceof Building;
 	}
 
 	public void move(Screen screen) {

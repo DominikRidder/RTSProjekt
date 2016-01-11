@@ -315,6 +315,14 @@ public class GameScreen extends Screen implements ActionListener {
 	public HashMap<AbstractEntity, Point> getEntityWithMap() {
 		return entitysOnMap;
 	}
+	
+	public int getViewX() {
+		return viewX;
+	}
+	
+	public int getViewY() {
+		return viewY;
+	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {

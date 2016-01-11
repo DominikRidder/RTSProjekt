@@ -1,18 +1,45 @@
 package entity;
 
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.Rectangle;
+
 import gameEngine.Screen;
 
 public abstract class Building extends AbstractEntity {
+
+	public static final int STATUS_PREVIEW_NOT_FIXED = 0, STATUS_PREVIEW_FIXED = 1, STATUS_BUIDLING = 2,
+			STATUS_FINISHED = 3;
+	protected int current_status = 3;
 
 	public Building(int x, int y, int rad, String img_name, int owner) {
 		super(x, y, rad, img_name, owner);
 		// TODO Auto-generated constructor stub
 	}
 
+	public void setStatus(int status) {
+		current_status = status;
+	}
+
+	public int getStatus() {
+		return current_status;
+	}
+
 	@Override
 	public void update() {
-		// TODO Auto-generated method stub
+	}
 
+	public void draw(Graphics2D g2d) {
+		if (current_status != STATUS_PREVIEW_FIXED && current_status != STATUS_PREVIEW_NOT_FIXED) {
+			getImageBounds();// Update the image position
+			drawImage(g2d);
+			drawLifeBar(g2d);
+		} else {
+			Rectangle rect = getImageBounds();// Update the image position
+			drawImage(g2d);
+			g2d.setColor(new Color(1, 0, 0, 0.5f));
+			g2d.fillRect(rect.x, rect.y, getImageBounds().width, getImageBounds().height);
+		}
 	}
 
 	@Override
@@ -25,6 +52,22 @@ public abstract class Building extends AbstractEntity {
 		// TODO Auto-generated method stub
 		return false;// wow, this is automated right, a NORMAL building should
 						// not attack
+	}
+
+	@Override
+	public boolean takeDamage(int dmg, AbstractEntity dmgdealer) {
+		if (dmgdealer.getOwner() == getOwner()) {
+			System.out.println("healing house");
+			boolean ans = super.takeDamage(-dmg, dmgdealer);
+			if (life > maxLife) {
+				life = maxLife;
+				return false;
+			}else{
+				return ans;
+			}
+		} else {
+			return super.takeDamage(dmg, dmgdealer);
+		}
 	}
 
 	/*************** Task Section ****************/
@@ -53,7 +96,7 @@ public abstract class Building extends AbstractEntity {
 	public void taskSpawn(Screen screen) {
 		// Override this in case your Builduing can spawn Units.
 	}
-	
+
 	public void taskBuild(Screen screen) {
 		// This task is used to build buildings.
 	}

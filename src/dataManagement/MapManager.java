@@ -70,7 +70,7 @@ public class MapManager {
 					String imgname = imgData.substring(0, imgData.length() - 1);
 					if (imgname.startsWith("s_")) {
 						defaultEntitys.add(new MainBuilding(containerI * 32,
-								containerJ * 32, 10, "Barracks.png",
+								(containerJ+2) * 32, 10, "Barracks.png",
 								Player.MAIN_PLAYER));
 					}
 					if (imgname.contains(",")) {
