@@ -34,10 +34,9 @@ public class EntityOptions extends GuiElement {
 			for (int i = 0; i < options.size(); i++) {
 				options.get(i).setSize(30, 30);
 			}
-		} 
-//		else if (entity != calledby ){
-//			return; // only delete options when entity is the owner
-//		}
+		} else if (entity != calledby ){
+			return; // only delete options when entity is the owner
+		}
 
 		calledby = entity;
 		this.options = options;
@@ -71,7 +70,6 @@ public class EntityOptions extends GuiElement {
 			g2d.drawImage(quadr, next.getX() - next.getWidth() / 2 + 3,
 					next.getY() - next.getHeight() / 2 + 3,
 					next.getWidth() * 7 / 4 + 3, next.getHeight() * 7 / 4, null);
-			g2d.setColor(Color.red);
 			options.get(i).onDraw(g2d);
 		}
 
