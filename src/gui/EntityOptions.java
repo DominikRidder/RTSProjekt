@@ -14,6 +14,7 @@ import gameEngine.Screen;
 
 public class EntityOptions extends GuiElement {
 	private ArrayList<Button> options;
+	private ArrayList<Button> buffer;
 	private AbstractEntity calledby;
 	private final String img_name;
 	private final Rectangle m_bounds = new Rectangle(0, 0, 0, 0);
@@ -39,14 +40,17 @@ public class EntityOptions extends GuiElement {
 		}
 
 		calledby = entity;
-		this.options = options;
+		buffer = options;
 	}
 
 	@Override
 	public void onDraw(Graphics2D g2d) {
-		if (options == null || options.size() == 0) {
+		if (buffer == null || buffer.size() == 0) {
 			return;
+		}else{
+			options = buffer;
 		}
+		
 		g2d.setColor(new Color(0, 0, 0, 0.5f));
 
 		BufferedImage quadr = new BufferedImage(30, 30,
