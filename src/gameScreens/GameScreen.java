@@ -68,13 +68,17 @@ public class GameScreen extends Screen implements ActionListener {
 
 	@Override
 	public void onCreate() {
-		List<AbstractEntity> entitys = AbstractEntity.getEntities();
+		AbstractEntity.resetEntities();
+		List<AbstractEntity>entitys = AbstractEntity.getEntities();
+				
 		Random rnd = new Random();
 		System.out.println("Main Creating!");
 
 		LayerPanel pWorld = new LayerPanel(0, 0, 50 * 16, 50 * 16);
-		entitys.addAll(MapManager.loadMap(pWorld, maplocation)); // null to call
-																	// JFileChooser
+		//entitys.addAll(MapManager.loadMap(pWorld, maplocation)); // null to call
+		
+		MapManager.loadMap(pWorld, maplocation);// null to call JFileChooser
+		
 		pWorld.setActualLayer(0);
 		mapwidth = pWorld.getWidth();
 		mapheight = pWorld.getHeight();
@@ -90,13 +94,13 @@ public class GameScreen extends Screen implements ActionListener {
 		Player comp_sp = new Player(1);
 
 		for (int i = 0; i < 10; i++) {
-			entitys.add(new OrkTest(rnd.nextInt(700) + 40,
-					rnd.nextInt(500) + 40, rnd.nextInt(2)));// TODO get(i)
+					new OrkTest(rnd.nextInt(700) + 40,
+					rnd.nextInt(500) + 40, rnd.nextInt(2));// TODO get(i)
 															// funktion
 			// vermeiden, weil
 			// LinkedList
-			entitys.add(new Tree(rnd.nextInt(700) + 40, rnd.nextInt(500) + 40,
-					rnd.nextInt(2)));
+new Tree(rnd.nextInt(700) + 40, rnd.nextInt(500) + 40,
+					rnd.nextInt(2));
 			entitysOnMap.put(
 					entitys.get(i),
 					pointToMapConst(entitys.get(i).getX(), entitys.get(i)

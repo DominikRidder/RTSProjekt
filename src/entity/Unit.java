@@ -45,6 +45,7 @@ public abstract class Unit extends AbstractEntity implements ActionListener {
 		rightClickAction(screen);
 		
 		move(screen);
+		move(screen); // twice for a tmp solution
 	}
 
 	@Override

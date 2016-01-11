@@ -77,6 +77,10 @@ public abstract class AbstractEntity implements IEntity,
 	public static List<AbstractEntity> getEntities() {
 		return l_Entities;
 	}
+	
+	public static void resetEntities() {
+		l_Entities = new ArrayList<AbstractEntity>();
+	}
 
 	public Rectangle getBounds() {
 		Rectangle rg = new Rectangle(getX() - rad / 2, getY() - rad / 2, rad,

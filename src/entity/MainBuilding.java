@@ -136,9 +136,8 @@ public class MainBuilding extends Building implements ActionListener {
 					Player.getPlayer(getOwner()).getWood() - 20);
 		}
 
-		loop: for (int i = 0; i < 6; i++) {
-			for (int j = 0; j < 6; j++) { // Limited to 50 trys
-
+		loop: for (int j = 0; j < 6; j++) { // Limited to 36 tries
+				for (int i = 0; i < 6; i++) {
 				if (!gamescreen.getEntityWithMap().containsValue( // I have
 																	// space to
 																	// spawn him
