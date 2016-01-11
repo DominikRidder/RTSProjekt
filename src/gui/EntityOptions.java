@@ -14,7 +14,6 @@ import gameEngine.Screen;
 
 public class EntityOptions extends GuiElement {
 	private ArrayList<Button> options;
-	private ArrayList<Button> buffer;
 	private AbstractEntity calledby;
 	private final String img_name;
 	private final Rectangle m_bounds = new Rectangle(0, 0, 0, 0);
@@ -30,7 +29,7 @@ public class EntityOptions extends GuiElement {
 		return Game.getImageManager().getImage(img_name);
 	}
 
-	public void setOptions(ArrayList<Button> options, AbstractEntity entity) {
+	public synchronized void setOptions(ArrayList<Button> options, AbstractEntity entity) {
 		if (options != null) {
 			for (int i = 0; i < options.size(); i++) {
 				options.get(i).setSize(30, 30);
@@ -40,15 +39,13 @@ public class EntityOptions extends GuiElement {
 		}
 
 		calledby = entity;
-		buffer = options;
+		this.options = options;
 	}
 
 	@Override
-	public void onDraw(Graphics2D g2d) {
-		if (buffer == null || buffer.size() == 0) {
+	public synchronized void onDraw(Graphics2D g2d) {
+		if (options == null || options.size() == 0) {
 			return;
-		}else{
-			options = buffer;
 		}
 		
 		g2d.setColor(new Color(0, 0, 0, 0.5f));

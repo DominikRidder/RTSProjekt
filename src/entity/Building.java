@@ -57,7 +57,6 @@ public abstract class Building extends AbstractEntity {
 	@Override
 	public boolean takeDamage(int dmg, AbstractEntity dmgdealer) {
 		if (dmgdealer.getOwner() == getOwner()) {
-			System.out.println("healing house");
 			boolean ans = super.takeDamage(-dmg, dmgdealer);
 			if (life > maxLife) {
 				life = maxLife;
