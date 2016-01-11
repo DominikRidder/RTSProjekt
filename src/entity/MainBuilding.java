@@ -132,11 +132,11 @@ public class MainBuilding extends Building implements ActionListener {
 			m_curtask = task.t_none;
 			return;
 		} else {
-			Player.getPlayer(getEntityID()).setWood(
-					Player.getPlayer(getEntityID()).getWood() - 20);
+			Player.getPlayer(getOwner()).setWood(
+					Player.getPlayer(getOwner()).getWood() - 20);
 		}
 
-		for (int i = 0; i < 6; i++) {
+		loop: for (int i = 0; i < 6; i++) {
 			for (int j = 0; j < 6; j++) { // Limited to 50 trys
 
 				if (!gamescreen.getEntityWithMap().containsValue( // I have
@@ -151,16 +151,15 @@ public class MainBuilding extends Building implements ActionListener {
 							// a
 							// new
 							// Ork
-							getEntityID());
+							getOwner());
 
-					screen.getEntitys().add(ork);
 					gamescreen.getEntityWithMap().put(ork,
 							Screen.pointToMapConst(ork.getX(), ork.getY()));
-					break;
+					break loop;
 				}
 			}
 		}
-
+		
 		m_curtask = task.t_none; // Task complete
 	}
 }
