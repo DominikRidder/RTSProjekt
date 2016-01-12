@@ -297,7 +297,7 @@ public abstract class Unit extends AbstractEntity implements ActionListener {
 	public void move(Screen screen) {
 		Point next;
 		if (wayPoints.size() == 0) {
-			next = new Point(getX(), getY());
+			return;
 		} else {
 			next = new Point(wayPoints.get(0).getX(), wayPoints.get(0).getY());
 		}

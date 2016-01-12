@@ -29,13 +29,15 @@ public class EntityOptions extends GuiElement {
 		return Game.getImageManager().getImage(img_name);
 	}
 
-	public synchronized void setOptions(ArrayList<Button> options, AbstractEntity entity) {
+	public synchronized void setOptions(ArrayList<Button> options,
+			AbstractEntity entity) {
+		// if (this.options != null && entity != calledby) {
+		// return; // only delete options when entity is the owner
+		// }
 		if (options != null) {
 			for (int i = 0; i < options.size(); i++) {
 				options.get(i).setSize(30, 30);
 			}
-		} else if (entity != calledby ){
-			return; // only delete options when entity is the owner
 		}
 
 		calledby = entity;
@@ -47,7 +49,7 @@ public class EntityOptions extends GuiElement {
 		if (options == null || options.size() == 0) {
 			return;
 		}
-		
+
 		g2d.setColor(new Color(0, 0, 0, 0.5f));
 
 		BufferedImage quadr = new BufferedImage(30, 30,

@@ -69,16 +69,17 @@ public class GameScreen extends Screen implements ActionListener {
 	@Override
 	public void onCreate() {
 		AbstractEntity.resetEntities();
-		List<AbstractEntity>entitys = AbstractEntity.getEntities();
-				
+		List<AbstractEntity> entitys = AbstractEntity.getEntities();
+
 		Random rnd = new Random();
 		System.out.println("Main Creating!");
 
 		LayerPanel pWorld = new LayerPanel(0, 0, 50 * 16, 50 * 16);
-		//entitys.addAll(MapManager.loadMap(pWorld, maplocation)); // null to call
-		
+		// entitys.addAll(MapManager.loadMap(pWorld, maplocation)); // null to
+		// call
+
 		MapManager.loadMap(pWorld, maplocation);// null to call JFileChooser
-		
+
 		pWorld.setActualLayer(0);
 		mapwidth = pWorld.getWidth();
 		mapheight = pWorld.getHeight();
@@ -94,12 +95,12 @@ public class GameScreen extends Screen implements ActionListener {
 		Player comp_sp = new Player(1);
 
 		for (int i = 0; i < 10; i++) {
-					new OrkTest(rnd.nextInt(700) + 40,
-					rnd.nextInt(500) + 40, rnd.nextInt(2));// TODO get(i)
-															// funktion
+			new OrkTest(rnd.nextInt(700) + 40, rnd.nextInt(500) + 40,
+					rnd.nextInt(2));// TODO get(i)
+									// funktion
 			// vermeiden, weil
 			// LinkedList
-new Tree(rnd.nextInt(700) + 40, rnd.nextInt(500) + 40,
+			new Tree(rnd.nextInt(700) + 40, rnd.nextInt(500) + 40,
 					rnd.nextInt(2));
 			entitysOnMap.put(
 					entitys.get(i),
@@ -116,8 +117,11 @@ new Tree(rnd.nextInt(700) + 40, rnd.nextInt(500) + 40,
 		wood.setWidth(150);
 		wood.setHeight(50);
 
-		MiniMap map = new MiniMap(5,
-				getScreenFactory().getGame().getHeight() - 205, 200, 200,
+		MiniMap map = new MiniMap(5, getScreenFactory().getGame().getHeight()
+				- this.getScreenFactory().getGame().getWindow().getWidth() / 4
+				- 5,
+				this.getScreenFactory().getGame().getWindow().getWidth() / 4,
+				this.getScreenFactory().getGame().getWindow().getHeight() / 3,
 				pWorld);
 		Label mapback = new Label(map.getX() - 5, map.getY() - 5,
 				map.getWidth() + 10, map.getHeight() + 10, "");
@@ -130,6 +134,7 @@ new Tree(rnd.nextInt(700) + 40, rnd.nextInt(500) + 40,
 		hud.addElement(wood);
 		hud.addElement(mapback);
 		hud.addElement(map);
+
 		EntityOptions.singleton.setHeight(getScreenFactory().getGame()
 				.getHeight());
 		EntityOptions.singleton.setWidth(getScreenFactory().getGame()
@@ -319,11 +324,11 @@ new Tree(rnd.nextInt(700) + 40, rnd.nextInt(500) + 40,
 	public HashMap<AbstractEntity, Point> getEntityWithMap() {
 		return entitysOnMap;
 	}
-	
+
 	public int getViewX() {
 		return viewX;
 	}
-	
+
 	public int getViewY() {
 		return viewY;
 	}
