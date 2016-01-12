@@ -33,7 +33,7 @@ public class MainBuilding extends Building implements ActionListener {
 	public void update(Screen screen) {
 		if (current_status != STATUS_FINISHED) {
 			if (life >= maxLife) {
-				current_status = STATUS_FINISHED; 
+				current_status = STATUS_FINISHED;
 			}
 			return;
 		}
@@ -49,23 +49,10 @@ public class MainBuilding extends Building implements ActionListener {
 				// marked = false;
 				// }
 			} else {
-				if ((mpl.getX() >= getX() && mpl.getX() <= getX() + /*
-																	 * getImageBounds
-																	 * (
-																	 * ).getWidth
-																	 * ()
-																	 */200)
-						&& (mpl.getY() >= getY() && mpl.getY() <= getY() + /*
-																			 * getImageBounds
-																			 * (
-																			 * )
-																			 * .
-																			 * getHeight
-																			 * (
-																			 * )
-																			 */200)) { // 50
-																						// dynamisch
-																						// machen
+				if (getImageBounds().contains(mpl.getX(), mpl.getY())
+						&& getOwner() == Player.MAIN_PLAYER) { // 50
+																// dynamisch
+																// machen
 					marked = true;
 				} else {
 					marked = false;
@@ -117,7 +104,7 @@ public class MainBuilding extends Building implements ActionListener {
 		imgrg.height = size;
 		return imgrg;
 	}
-	
+
 	/*************** Task Section ****************/
 
 	public void taskSpawn(Screen screen) {
@@ -137,16 +124,16 @@ public class MainBuilding extends Building implements ActionListener {
 		}
 
 		loop: for (int j = 0; j < 6; j++) { // Limited to 36 tries
-				for (int i = 0; i < 6; i++) {
+			for (int i = 0; i < 6; i++) {
 				if (!gamescreen.getEntityWithMap().containsValue( // I have
 																	// space to
 																	// spawn him
 																	// here?
-						Screen.pointToMapConst(getX() - 100 + 25 * i,
-								getY() + 25*(j+1)))) {
+						Screen.pointToMapConst(getX() - 100 + 25 * i, getY()
+								+ 25 * (j + 1)))) {
 
-					OrkTest ork = new OrkTest(getX() - 100 + 25 * i,
-							getY() + 25*(j+1), // Spawn
+					OrkTest ork = new OrkTest(getX() - 100 + 25 * i, getY()
+							+ 25 * (j + 1), // Spawn
 							// a
 							// new
 							// Ork
@@ -158,7 +145,7 @@ public class MainBuilding extends Building implements ActionListener {
 				}
 			}
 		}
-		
+
 		m_curtask = task.t_none; // Task complete
 	}
 }

@@ -16,7 +16,6 @@ import java.awt.geom.Ellipse2D;
 import java.util.ArrayList;
 
 import Utilitys.Point;
-import entity.ITasks.task;
 
 public abstract class Unit extends AbstractEntity implements ActionListener {
 
@@ -43,7 +42,7 @@ public abstract class Unit extends AbstractEntity implements ActionListener {
 		testMarked(screen);
 
 		rightClickAction(screen);
-		
+
 		move(screen);
 		move(screen); // twice for a tmp solution
 	}
@@ -52,8 +51,8 @@ public abstract class Unit extends AbstractEntity implements ActionListener {
 	public void draw(Graphics2D g2d) {
 		if (this.marked) {
 			g2d.setColor(Color.YELLOW);
-			g2d.draw(new Ellipse2D.Double(this.getX() - rad * 3. / 2, this.getY() - rad * 3. / 2, this.rad * 3,
-					this.rad * 3));
+			g2d.draw(new Ellipse2D.Double(this.getX() - rad * 3. / 2, this
+					.getY() - rad * 3. / 2, this.rad * 3, this.rad * 3));
 		}
 
 		super.draw(g2d);
@@ -63,7 +62,8 @@ public abstract class Unit extends AbstractEntity implements ActionListener {
 			int stringwidth = g2d.getFontMetrics().stringWidth(dmg);
 			Color d = g2d.getColor();
 			g2d.setColor(Color.RED);
-			g2d.drawString(dmg, getX() - stringwidth / 2, (int) this.getImageBounds().getY() - 5 + m_dmgtimer / 2);
+			g2d.drawString(dmg, getX() - stringwidth / 2, (int) this
+					.getImageBounds().getY() - 5 + m_dmgtimer / 2);
 			g2d.setColor(d);
 			m_dmgtimer--;
 		}
@@ -91,7 +91,8 @@ public abstract class Unit extends AbstractEntity implements ActionListener {
 	public boolean attack(int opponent) {
 		lastAttack = 50;
 		AbstractEntity e = getEntity(opponent);
-		if (opponent != -1 && e != null && opponent != this.getEntityID() && Math.abs(e.getX() - getX()) < 64
+		if (opponent != -1 && e != null && opponent != this.getEntityID()
+				&& Math.abs(e.getX() - getX()) < 64
 				&& Math.abs(e.getY() - getY()) < 64)
 			return e.takeDamage(getRandDmg(), this);
 		return false;
@@ -132,7 +133,8 @@ public abstract class Unit extends AbstractEntity implements ActionListener {
 
 		if (fight == true) {
 			AbstractEntity enemy = getEntity(opponent);
-			boolean inrange = Math.abs(enemy.getX() - getX()) < 64 && Math.abs(enemy.getY() - getY()) < 64;
+			boolean inrange = Math.abs(enemy.getX() - getX()) < 64
+					&& Math.abs(enemy.getY() - getY()) < 64;
 			if (lastAttack == 0 && inrange) {
 				fight = attack(opponent);
 				if (!fight)
@@ -156,16 +158,18 @@ public abstract class Unit extends AbstractEntity implements ActionListener {
 	}
 
 	public void taskBuild(Screen screen) {
-		MousepadListener mpl = screen.getScreenFactory().getGame().getMousepadListener();
+		MousepadListener mpl = screen.getScreenFactory().getGame()
+				.getMousepadListener();
 		GameScreen gamesc = (GameScreen) screen;
-		
-		if (target == null){
-			target = new MainBuilding(mpl.getCurrentX(), mpl.getCurrentY(), 10, "Barracks.png",getOwner());
+
+		if (target == null) {
+			target = new MainBuilding(mpl.getCurrentX(), mpl.getCurrentY(), 10,
+					"Barracks.png", getOwner());
 			target.setLife(1);
 			target.setStatus(Building.STATUS_PREVIEW_NOT_FIXED);
-		}else if (target.getStatus() == Building.STATUS_PREVIEW_NOT_FIXED){
-			target.setX(mpl.getCurrentX()+gamesc.getViewX());
-			target.setY(mpl.getCurrentY()+gamesc.getViewY());
+		} else if (target.getStatus() == Building.STATUS_PREVIEW_NOT_FIXED) {
+			target.setX(mpl.getCurrentX() + gamesc.getViewX());
+			target.setY(mpl.getCurrentY() + gamesc.getViewY());
 			if (mpl.isLeftClicked()) {
 				target.setStatus(Building.STATUS_PREVIEW_FIXED);
 			}
@@ -174,31 +178,32 @@ public abstract class Unit extends AbstractEntity implements ActionListener {
 		if (target.getStatus() == Building.STATUS_PREVIEW_NOT_FIXED) {
 			return;
 		}
-		
-		
-		boolean inrange = Math.abs(target.getX() - getX()) < 64 && Math.abs(target.getY() - getY()) < 64;
+
+		boolean inrange = Math.abs(target.getX() - getX()) < 64
+				&& Math.abs(target.getY() - getY()) < 64;
 		if (!inrange) {
 			if (wayPoints.size() > 0) {
 				wayPoints.remove(0);
 			}
 			wayPoints.add(new Point(target.getX(), target.getY()));
-		}else if(target.getStatus() == Building.STATUS_PREVIEW_FIXED){
+		} else if (target.getStatus() == Building.STATUS_PREVIEW_FIXED) {
 			target.setStatus(Building.STATUS_BUIDLING);
 			opponent = target.getEntityID();
 			m_curtask = task.t_attack;
 			target = null;
 			fight = true;
 		}
-		
-		
+
 	}
 
 	private void testMarked(Screen screen) {
-		MousepadListener mpl = screen.getScreenFactory().getGame().getMousepadListener();
+		MousepadListener mpl = screen.getScreenFactory().getGame()
+				.getMousepadListener();
 
 		if (mpl.isLeftClicked()) {
 			if (mpl.isDragging()) {
-				if (screen.getDraggingZone().intersects(getBounds()) && getOwner() == Player.MAIN_PLAYER) {
+				if (screen.getDraggingZone().intersects(getImageBounds())
+						&& getOwner() == Player.MAIN_PLAYER) {
 					if (wasnotmarked) {
 						openMenue();
 					}
@@ -209,8 +214,7 @@ public abstract class Unit extends AbstractEntity implements ActionListener {
 					wasnotmarked = false;
 				}
 			} else {
-				if ((mpl.getX() >= getX() && mpl.getX() <= getX() + getImageBounds().getWidth())
-						&& (mpl.getY() >= getY() && mpl.getY() <= getY() + getImageBounds().getHeight())
+				if (getImageBounds().contains(mpl.getX(), mpl.getY())
 						&& getOwner() == Player.MAIN_PLAYER) { // 50
 					// dynamisch
 					// machen
@@ -224,7 +228,7 @@ public abstract class Unit extends AbstractEntity implements ActionListener {
 				}
 			}
 		}
-		
+
 		if (marked && wasnotmarked) {
 			openMenue();
 			wasnotmarked = false;
@@ -243,7 +247,8 @@ public abstract class Unit extends AbstractEntity implements ActionListener {
 		ArrayList<Button> options = new ArrayList<Button>();
 
 		for (int i = 0; i < 1; i++) {
-			options.add(new Button(Game.getImageManager().getImage("Barracks.png"), false, false));
+			options.add(new Button(Game.getImageManager().getImage(
+					"Barracks.png"), false, false));
 			options.get(i).addActionListener(this);
 			options.get(i).setText("MainBuilding");
 		}
@@ -255,7 +260,8 @@ public abstract class Unit extends AbstractEntity implements ActionListener {
 	}
 
 	private void rightClickAction(Screen screen) {
-		MousepadListener mpl = screen.getScreenFactory().getGame().getMousepadListener();
+		MousepadListener mpl = screen.getScreenFactory().getGame()
+				.getMousepadListener();
 
 		if (mpl.isRightClicked()) {
 			if (marked == true) {
@@ -263,9 +269,13 @@ public abstract class Unit extends AbstractEntity implements ActionListener {
 				int i = 0;
 				for (i = 0; i < getEntities().size(); i++) {
 
-					if (!fight && getEntities().get(i).getImageBounds().contains(mpl.getX(), mpl.getY())
-							&& this.getLife() > 0 && getEntities().get(i).getLife() > 0
-							&& (getEntities().get(i).getOwner() != getOwner() || repairable(getEntities().get(i)))) {
+					if (!fight
+							&& getEntities().get(i).getImageBounds()
+									.contains(mpl.getX(), mpl.getY())
+							&& this.getLife() > 0
+							&& getEntities().get(i).getLife() > 0
+							&& (getEntities().get(i).getOwner() != getOwner() || repairable(getEntities()
+									.get(i)))) {
 						fight = true;
 						opponent = getEntities().get(i).getEntityID();
 						break;
@@ -317,7 +327,8 @@ public abstract class Unit extends AbstractEntity implements ActionListener {
 			}
 		}
 
-		if (getX() == next.getX() && getY() == next.getY() && wayPoints.size() > 0) {
+		if (getX() == next.getX() && getY() == next.getY()
+				&& wayPoints.size() > 0) {
 			wayPoints.remove(0);
 		}
 	}
