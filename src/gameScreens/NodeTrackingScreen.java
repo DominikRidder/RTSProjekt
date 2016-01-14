@@ -11,12 +11,10 @@ import java.util.Random;
 
 import Utilitys.Graph;
 import Utilitys.Node;
-import Utilitys.Point;
 
 public class NodeTrackingScreen extends Screen {
 
 	private Graph g = new Graph();
-	private Node shortWay;
 	private ArrayList<Node> zeichnen = new ArrayList<Node>();
 
 	public NodeTrackingScreen(ScreenFactory screenFactory) {
@@ -26,29 +24,30 @@ public class NodeTrackingScreen extends Screen {
 	@Override
 	public void onCreate() {
 		System.out.println("Start Creating");
-		int id = 0;
-		for (int i = 0; i < getScreenFactory().getGame().getWindow().getWidth(); i += 25) {
-			for (int j = 0; j < getScreenFactory().getGame().getWindow().getHeight(); j += 25) {
-				Point map = pointToMapConst(i, j);
-				Node n = new Node(map.getX(), map.getY(), 0, 1, null);
-				if (g.getNode(n.getX(), n.getY()) == null) {
-					Random r = new Random();
-					if (n.getX() == 0 && n.getY() == 0) {
-					} else if (n.getX() == 4 && n.getY() == 4) {
-						id = g.getSize();
-					} else {
-						if (i % (r.nextInt(9) + 1) == 0) {
-							n.setBegehbar(false);
-						}
-					}
-					g.addNode(n);
+		for (int i = 0; i < getScreenFactory().getGame().getWindow().getWidth(); i += 16) {
+			for (int j = 0; j < getScreenFactory().getGame().getWindow().getHeight(); j += 16) {
+				Node n = new Node();
+				n.setX(i);
+				n.setY(j);
+				n.setBegehbar(true);
+				//if (g.getNode(n.getX(), n.getY()) == null) {
+				Random r = new Random();
+				//if (n.getX() == 0 && n.getY() == 0) {
+				//} else if (n.getX() == 4 && n.getY() == 4) {
+
+				//} else {
+				if (i % (r.nextInt(9) + 1) == 0) {
+					n.setBegehbar(false);
 				}
+
+				//}
+				//}
+				g.addNode(n);
 			}
 		}
-		System.out.println("End Creating");
-		System.out.println("Start Searching");
-		shortWay = g.search(0, 0, 4, 4);
-		System.out.println("End Searching");
+
+		g.createMatrix();
+		System.out.println("End Creating ");
 
 	}
 
@@ -60,33 +59,23 @@ public class NodeTrackingScreen extends Screen {
 	@Override
 	public void onDraw(Graphics2D g2d) {
 		for (int i = 0; i < g.getSize(); i++) {
-			if (g.getNodeWithID(i).isBegehbar()) {
-				g2d.drawRect((g.getNodeWithID(i).getX() - 1) * 25, (g.getNodeWithID(i).getY() - 1) * 25, 25, 25);
-			} else {
-				g2d.drawRect((g.getNodeWithID(i).getX() - 1) * 25, (g.getNodeWithID(i).getY() - 1) * 25, 25, 25);
+			//if (g.getNodeWithID(i).isBegehbar()) {
+			g2d.drawRect((g.getNodeWithID(i).getX()) * 16, (g.getNodeWithID(i).getY()) * 16, 16, 16);
+			/*} else {
+				g2d.drawRect((g.getNodeWithID(i).getX()) * 16, (g.getNodeWithID(i).getY()) * 16, 16, 16);
 				g2d.setColor(Color.BLUE);
-				g2d.drawLine((g.getNodeWithID(i).getX() - 1) * 25, (g.getNodeWithID(i).getY() - 1) * 25, (g.getNodeWithID(i).getX()) * 25, (g.getNodeWithID(i).getY()) * 25);
+				g2d.drawLine((g.getNodeWithID(i).getX() - 1) * 16, (g.getNodeWithID(i).getY() - 1) * 16, (g.getNodeWithID(i).getX()) * 16, (g.getNodeWithID(i).getY()) * 16);
 				g2d.setColor(Color.RED);
-				g2d.drawLine((g.getNodeWithID(i).getX()) * 25, (g.getNodeWithID(i).getY() - 1) * 25, (g.getNodeWithID(i).getX() - 1) * 25, (g.getNodeWithID(i).getY()) * 25);
+				g2d.drawLine((g.getNodeWithID(i).getX()) * 16, (g.getNodeWithID(i).getY() - 1) * 16, (g.getNodeWithID(i).getX() - 1) * 16, (g.getNodeWithID(i).getY()) * 16);
 				g2d.setColor(Color.BLACK);
-			}
+			}*/
 		}
 		g2d.setColor(Color.BLACK);
 
-		if (shortWay != null) {
-
-			while (shortWay.getFrom() != null) {
-				zeichnen.add(shortWay);
-				shortWay = shortWay.getFrom();
-				System.out.println(shortWay);
-			}
-			zeichnen.add(shortWay);
-		}
-		shortWay = null;
-		for (int i = zeichnen.size() - 2; i > 0; i--) {
+		/*for (int i = zeichnen.size() - 2; i > 0; i--) {
 			int j = i - 1;
 			g2d.drawLine((zeichnen.get(i).getX() - 1) * 25 + 12, (zeichnen.get(i).getY() - 1) * 25 + 12, (zeichnen.get(j).getX() - 1) * 25 + 12, (zeichnen.get(j).getY() - 1) * 25 + 12);
-		}
+		}*/
 
 	}
 

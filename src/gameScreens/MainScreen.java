@@ -22,30 +22,30 @@ public class MainScreen extends Screen implements ActionListener {
 	@Override
 	public void onCreate() {
 
-		String adding[] = { "Einzelspieler","Quick Start", "Spiel Laden", "Archievments", "Highscore", "Einstellungen", "WorldEditor", "Exit" };
+		String adding[] = { "Einzelspieler", "Quick Start", "Spiel Laden", "Archievments", "Highscore", "Einstellungen", "WorldEditor", "Exit" };
 
-		while(getScreenFactory().getGame().getWindow().getWidth() < 50 || getScreenFactory().getGame().getWindow().getHeight( ) <50){
+		while (getScreenFactory().getGame().getWindow().getWidth() < 50 || getScreenFactory().getGame().getWindow().getHeight() < 50) {
 			try {
 				Thread.sleep(10);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 		}
-		
+
 		int Wwidth = getScreenFactory().getGame().getWindow().getWidth();
 		int Wheight = getScreenFactory().getGame().getWindow().getHeight();
-		int width = Wwidth/5;
-		int height = Wheight*2/5;
-		Panel p = new Panel(Wwidth/2-width/2, Wheight/2-height/2, width, height);
+		int width = Wwidth / 5;
+		int height = Wheight * 2 / 5;
+		Panel p = new Panel(Wwidth / 2 - width / 2, Wheight / 2 - height / 2, width, height);
 		p.setLayout(new GridLayout(adding.length, 1, p));
 		for (String toadd : adding) {
 			Button newb = new Button(toadd, true, false);
 			newb.addActionListener(this);
 			p.addElement(newb);
 		}
-		
+
 		//BackgroundFiller bgf = new BackgroundFiller(0, 0, Wwidth, Wheight);
-		
+
 		Button placeholder = new Button(Game.getImageManager().getImage("Hauptmenue.png"), false, true);
 		placeholder.setWidth(getScreenFactory().getGame().getWindow().getWidth());
 		placeholder.setHeight(getScreenFactory().getGame().getWindow().getHeight());
@@ -79,10 +79,9 @@ public class MainScreen extends Screen implements ActionListener {
 			this.getScreenFactory().createScreen(new StoryScreen(this.getScreenFactory()));
 			break;
 		case "Quick Start":
-			try{ 
+			try {
 				this.getScreenFactory().createScreen(new GameScreen(this.getScreenFactory(), null));
-			} catch(IndexOutOfBoundsException e1)
-			{
+			} catch (IndexOutOfBoundsException e1) {
 				System.out.println("TODO: fix this!");
 				e1.printStackTrace();
 				this.getScreenFactory().activeScreen(this);

@@ -1,134 +1,120 @@
 package Utilitys;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 public class Graph {
-	private final LinkedList<Node> nodes;
-	private LinkedList<Node> openList;
-	private LinkedList<Node> closedList;
-	private Node finish;
+	private LinkedList<Node> nodes;
+	private int[][] matrix;
 
 	public Graph() {
 		nodes = new LinkedList<Node>();
-		openList = new LinkedList<Node>();
-		// openList.add(new Node(this.playerX, this.playerY, 1, this.heuristik(this.playerX, this.playerY), null));
-		closedList = new LinkedList<Node>();
-	}
-
-	private int getFirstBestListEntry(LinkedList<Node> list) {
-		int best = list.get(0).getTotalCost();
-
-		for (int i = 1; i < list.size(); i++) {
-			if (list.get(i).getTotalCost() < best) {
-				best = list.get(i).getTotalCost();
-			}
-		}
-		// get first element with best costs
-		for (int i = 0; i < list.size(); i++) {
-			if (list.get(i).getTotalCost() == best) {
-				return i;
-			}
-		}
-		return 0;
-	}
-
-	public Node search(int startX, int startY, int endX, int endY) {
-		openList.add(new Node(startX, startY, 1, this.heuristik(startX, startY, endX, endY), null));
-		return astar(startX, startY, endX, endY);
-	}
-
-	public Node astar(int startX, int startY, int endX, int endY) {
-		Node bestNode;
-		bestNode = openList.get(this.getFirstBestListEntry(openList));
-		closedList.add(openList.remove(this.getFirstBestListEntry(openList)));
-
-		if (bestNode.getX() == endX && bestNode.getY() == endY) {
-			this.finish = bestNode;
-			return bestNode;
-		}
-
-		// oberhalb
-		this.openListAddHelper(bestNode.getX(), bestNode.getY() - 1, openList, closedList, bestNode, endX, endY);
-
-		// rechts
-		this.openListAddHelper(bestNode.getX() + 1, bestNode.getY(), openList, closedList, bestNode, endX, endY);
-
-		// unterhalb
-		this.openListAddHelper(bestNode.getX(), bestNode.getY() + 1, openList, closedList, bestNode, endX, endY);
-
-		// links
-		this.openListAddHelper(bestNode.getX() - 1, bestNode.getY(), openList, closedList, bestNode, endX, endY);
-
-		if (openList.size() != 0) {
-			return astar(bestNode.getX(), bestNode.getY(), endX, endY);
-		} else {
-			return null;
-		}
-
-	}
-
-	public Node getNode(int x, int y) {
-		for (int i = 0; i < nodes.size(); i++) {
-			if (nodes.get(i).getX() == x && nodes.get(i).getY() == y) {
-				return nodes.get(i);
-			}
-		}
-		return null;
-
-	}
-
-	private void openListAddHelper(int x, int y, LinkedList<Node> openList, LinkedList<Node> closedList, Node vorher, int endX, int endY) {
-		if (x < 0 || y < 0 || x >= 25 || y >= 25 || !getNode(x, y).isBegehbar()) {
-			// nichts
-		} else {
-			if (getNode(x, y) != null) {
-				if (this.isPointInList(x, y, closedList) == false && this.isPointInList(x, y, openList) == false) {
-					openList.add(new Node(x, y, 1, this.heuristik(x, y, endX, endY), vorher));
-				}
-			}
-		}
-	}
-
-	private boolean isPointInList(int x, int y, LinkedList<Node> list) {
-		for (int i = 0; i < list.size(); i++) {
-			if (list.get(i).getX() == x && list.get(i).getY() == y) {
-				return true;
-			}
-		}
-
-		return false;
-	}
-
-	private int heuristik(int x, int y, int endX, int endY) {
-		int dx = x - endX;
-		if (dx < 0) {
-			dx = -dx;
-		}
-
-		int dy = y - endY;
-		if (dy < 0) {
-			dy = -dy;
-		}
-
-		return dx + dy;
 	}
 
 	public int getSize() {
 		return nodes.size();
 	}
 
+	public void addBorder(int from, int to) {
+		matrix[from][to] = 1;
+		matrix[to][from] = 1;
+	}
+
+	public void addNode(Node node) {
+		nodes.add(node);
+	}
+
+	public int getNodeID(int x, int y) {
+		for (int i = 0; i < nodes.size(); i++) {
+			if (nodes.get(i).getX() == (x / 16) * 16 && nodes.get(i).getY() == (y / 16) * 16)
+				return i;
+		}
+		System.out.println("X " + (x / 16) + "  x " + (x / 16) * 16);
+		return -1;
+	}
+
+	public Node getNode(int x, int y) {
+		for (int i = 0; i < nodes.size(); i++) {
+			if (nodes.get(i).getX() == x && nodes.get(i).getY() == y)
+				return nodes.get(i);
+		}
+		return null;
+	}
+
+	public void createMatrix() {
+		matrix = new int[nodes.size()][nodes.size()];
+		System.out.println("Start Bordering ");
+		int counter = 0;
+		for (int i = 0; i < nodes.size(); i++) {
+			for (int j = 0; j < nodes.size(); j++) {
+				int absx = nodes.get(i).getX() - nodes.get(j).getX();
+				int absy = nodes.get(i).getY() - nodes.get(j).getY();
+				if (absx <= 16 && absy <= 16 && nodes.get(j).isBegehbar() && nodes.get(i).isBegehbar())
+					addBorder(i, j);
+				counter++;
+				System.out.println(counter);
+			}
+		}
+		System.out.println("end Bordering ");
+	}
+
+	private int getNextNode() {
+		int id = -1;
+		int value = Integer.MAX_VALUE;
+		for (int i = 0; i < nodes.size(); i++) {
+			if (!nodes.get(i).isVisited() && nodes.get(i).getValue() < value) {
+				id = i;
+				value = nodes.get(i).getValue();
+			}
+		}
+
+		return id;
+	}
+
+	public ArrayList<Node> astar(int startnode, int endnode) {
+		int id, newDis;
+		int maxValue = Integer.MAX_VALUE - 2000; //Diagonale statt 200 abziehen von der Welt
+		for (int i = 0; i < nodes.size(); i++) {
+			int absx = nodes.get(i).getX() - nodes.get(endnode).getX();
+			int absy = nodes.get(i).getY() - nodes.get(endnode).getY();
+			nodes.get(i).setHeuristic((int) Math.sqrt(absx * absx + absy * absy));
+			nodes.get(i).setVisited(false);
+			nodes.get(i).setRange(maxValue);
+		}
+
+		nodes.get(startnode).setRange(0);
+		for (int i = 0; i < nodes.size(); i++) {
+			id = getNextNode();
+			if (id == -1)
+				break;
+			nodes.get(id).setVisited(true);
+
+			outer: for (int ab = 0; ab < nodes.size(); ab++) {
+				if (!nodes.get(ab).isVisited() && matrix[id][ab] > 0) {
+					newDis = nodes.get(id).getRange() + matrix[id][ab];
+					if (newDis < nodes.get(id).getRange()) {
+						nodes.get(ab).setRange(newDis);
+						nodes.get(ab).setFrom(id);
+
+						if (ab == endnode)
+							break outer;
+					}
+				}
+			}
+		}
+
+		ArrayList<Node> way = new ArrayList<Node>();
+		id = endnode;
+		way.add(nodes.get(id));
+		while (id != startnode) {
+			id = nodes.get(id).getFrom();
+			way.add(nodes.get(id));
+		}
+		return way;
+
+	}
+
 	public Node getNodeWithID(int i) {
 		return nodes.get(i);
-	}
-
-	public void reset() {
-		openList = new LinkedList<Node>();
-		// openList.add(new Node(this.playerX, this.playerY, 1, this.heuristik(this.playerX, this.playerY), null));
-		closedList = new LinkedList<Node>();
-		this.finish = null;
-	}
-
-	public void addNode(Node n) {
-		nodes.add(n);
 	}
 }

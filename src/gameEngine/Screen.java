@@ -22,7 +22,7 @@ public abstract class Screen {
 		this.screenFactory = screenFactory;
 		prevscreen = prev;
 	}
-	
+
 	public Screen(ScreenFactory screenFactory) {
 		this.screenFactory = screenFactory;
 		prevscreen = null;
@@ -32,7 +32,7 @@ public abstract class Screen {
 
 	public void onUpdate() {
 		if (guiElemens.size() != 0) {
-			try{
+			try {
 				for (GuiElement guiElem : guiElemens) {
 					guiElem.onUpdate(this);
 				}
@@ -51,7 +51,7 @@ public abstract class Screen {
 				}
 			} catch (ConcurrentModificationException e) {
 				// I guess that's a multithreading problem.
-				
+
 			}
 		}
 	}
@@ -106,7 +106,7 @@ public abstract class Screen {
 		guiElemens.add(guielem);
 		updateGuiElementOrder();
 	}
-	
+
 	public void rmGuiElement(GuiElement guielem) {
 		guiElemens.remove(guielem);
 		updateGuiElementOrder();
@@ -119,4 +119,5 @@ public abstract class Screen {
 	public Screen getPrevscreen() {
 		return prevscreen;
 	}
+
 }
