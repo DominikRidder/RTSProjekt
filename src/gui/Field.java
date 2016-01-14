@@ -11,6 +11,7 @@ public class Field extends GuiElement {
 	private BufferedImage img;
 	private String imgname;
 	private String tileID;
+	private boolean loaded = false;
 
 	public Field() {
 	}
@@ -25,10 +26,8 @@ public class Field extends GuiElement {
 		if (drawBorder) {
 			g2d.drawLine(getX(), getY(), getX() + getWidth(), getY());
 			g2d.drawLine(getX(), getY(), getX(), getY() + getHeight());
-			g2d.drawLine(getX() + getWidth(), getY(), getX() + getWidth(),
-					getY() + getHeight());
-			g2d.drawLine(getX(), getY() + getHeight(), getX() + getHeight(),
-					getY() + getHeight());
+			g2d.drawLine(getX() + getWidth(), getY(), getX() + getWidth(), getY() + getHeight());
+			g2d.drawLine(getX(), getY() + getHeight(), getX() + getHeight(), getY() + getHeight());
 		}
 		if (img != null) {
 			g2d.drawImage(img, getX(), getY(), null);
@@ -39,8 +38,7 @@ public class Field extends GuiElement {
 	public void onUpdate(Screen screen) {
 		if (this.needUpdate()) {
 			if (imgname != null) {
-				img = Game.getImageManager().getImage(imgname, getWidth(),
-						getHeight());
+				img = Game.getImageManager().getImage(imgname, getWidth(), getHeight());
 			}
 			this.setUpdate(false);
 		}
@@ -61,6 +59,14 @@ public class Field extends GuiElement {
 
 	public String getTileID() {
 		return tileID;
+	}
+
+	public boolean isLoaded() {
+		return loaded;
+	}
+
+	public void setLoaded(boolean loaded) {
+		this.loaded = loaded;
 	}
 
 }

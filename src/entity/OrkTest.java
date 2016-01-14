@@ -7,8 +7,8 @@ public class OrkTest extends Unit {
 	// private final Rectangle imgrg;
 	private static final int rad = 6;
 	private static final String img_name = "Orc.png";
-	private static final int life = 8;
 	private static final int maxlife = 20;
+	private static final int life = maxlife;
 	private static final int mindmg = 1;
 	private static final int maxdmg = 3;
 

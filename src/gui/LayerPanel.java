@@ -34,7 +34,7 @@ public class LayerPanel extends APanel implements CoordinateMapping {
 		this.layouts.add(layout);
 	}
 	
-	public void addLayoutat(int index, ILayout layout) {
+	public void addLayoutAt(int index, ILayout layout) {
 		layouts.add(index, layout);
 	}
 

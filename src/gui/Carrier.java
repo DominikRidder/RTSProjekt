@@ -47,6 +47,19 @@ public class Carrier extends GuiElement {
 		}
 	}
 
+	public void prepareToSave() {
+		for (int i = x1; i < x2; i++) {
+			for (int j = y1; j < y2; j++) {
+				if (!(i == x1 && j == y1)) {
+					Field f = new Field(i, j);
+					f.setWidth(16);
+					f.setHeight(16);
+					gl.setElement(f, i, j);
+				}
+			}
+		}
+	}
+
 	public void onDraw(Graphics2D g2d, int x, int y) {
 		if (x == getX() && y == getY()) {
 			onDraw(g2d);

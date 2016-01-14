@@ -3,7 +3,6 @@ package gameScreens;
 import dataManagement.MapManager;
 import entity.AbstractEntity;
 import entity.OrkTest;
-import entity.Tree;
 import gameEngine.Game;
 import gameEngine.KeyboardListener;
 import gameEngine.MousepadListener;
@@ -77,7 +76,6 @@ public class GameScreen extends Screen implements ActionListener {
 		LayerPanel pWorld = new LayerPanel(0, 0, 50 * 16, 50 * 16);
 		// entitys.addAll(MapManager.loadMap(pWorld, maplocation)); // null to
 		// call
-
 		MapManager.loadMap(pWorld, maplocation);// null to call JFileChooser
 
 		pWorld.setActualLayer(0);
@@ -87,7 +85,7 @@ public class GameScreen extends Screen implements ActionListener {
 		Field.drawBorder = false;
 
 		entitytodraw = new EntityLayout(getEntitys());
-		pWorld.addLayoutat(3, entitytodraw);
+		pWorld.addLayoutAt(3, entitytodraw);
 		addGuiElement(pWorld);
 
 		Player.dropAllPlayer();
@@ -95,17 +93,12 @@ public class GameScreen extends Screen implements ActionListener {
 		Player comp_sp = new Player(1);
 
 		for (int i = 0; i < 10; i++) {
-			new OrkTest(rnd.nextInt(700) + 40, rnd.nextInt(500) + 40,
-					rnd.nextInt(2));// TODO get(i)
-									// funktion
+			new OrkTest(rnd.nextInt(700) + 40, rnd.nextInt(500) + 40, rnd.nextInt(2));// TODO get(i)
+			// funktion
 			// vermeiden, weil
 			// LinkedList
-			new Tree(rnd.nextInt(700) + 40, rnd.nextInt(500) + 40,
-					rnd.nextInt(2));
-			entitysOnMap.put(
-					entitys.get(i),
-					pointToMapConst(entitys.get(i).getX(), entitys.get(i)
-							.getY()));
+			//new Tree(rnd.nextInt(700) + 40, rnd.nextInt(500) + 40, rnd.nextInt(2));
+			entitysOnMap.put(entitys.get(i), pointToMapConst(entitys.get(i).getX(), entitys.get(i).getY()));
 		}
 		// entitys.add(new MainBuilding(800, 800, 10, "Barracks.png", 0));
 
@@ -117,28 +110,18 @@ public class GameScreen extends Screen implements ActionListener {
 		wood.setWidth(150);
 		wood.setHeight(50);
 
-		MiniMap map = new MiniMap(5, getScreenFactory().getGame().getHeight()
-				- this.getScreenFactory().getGame().getWindow().getWidth() / 4
-				- 5,
-				this.getScreenFactory().getGame().getWindow().getWidth() / 4,
-				this.getScreenFactory().getGame().getWindow().getHeight() / 3,
-				pWorld);
-		Label mapback = new Label(map.getX() - 5, map.getY() - 5,
-				map.getWidth() + 10, map.getHeight() + 10, "");
+		MiniMap map = new MiniMap(5, getScreenFactory().getGame().getHeight() - this.getScreenFactory().getGame().getWindow().getWidth() / 4 - 5, this.getScreenFactory().getGame().getWindow().getWidth() / 4, this.getScreenFactory().getGame().getWindow().getHeight() / 3, pWorld);
+		Label mapback = new Label(map.getX() - 5, map.getY() - 5, map.getWidth() + 10, map.getHeight() + 10, "");
 		mapback.setBackgroundColor(Color.black);
 
-		hud = new Panel(0, 0, this.getScreenFactory().getGame().getWindow()
-				.getWidth(), this.getScreenFactory().getGame().getWindow()
-				.getHeight());
+		hud = new Panel(0, 0, this.getScreenFactory().getGame().getWindow().getWidth(), this.getScreenFactory().getGame().getWindow().getHeight());
 		hud.setLayout(new CompactLayout(hud));
 		hud.addElement(wood);
 		hud.addElement(mapback);
 		hud.addElement(map);
 
-		EntityOptions.singleton.setHeight(getScreenFactory().getGame()
-				.getHeight());
-		EntityOptions.singleton.setWidth(getScreenFactory().getGame()
-				.getWidth());
+		EntityOptions.singleton.setHeight(getScreenFactory().getGame().getHeight());
+		EntityOptions.singleton.setWidth(getScreenFactory().getGame().getWidth());
 		hud.addElement(EntityOptions.singleton);
 
 		addGuiElement(hud);
@@ -147,8 +130,7 @@ public class GameScreen extends Screen implements ActionListener {
 	@Override
 	public void onUpdate() {
 		int scrollspeed = Game.getSetting().getValueInt("cl_g_scrollspeed");
-		KeyboardListener kbl = this.getScreenFactory().getGame()
-				.getKeyboardListener();
+		KeyboardListener kbl = this.getScreenFactory().getGame().getKeyboardListener();
 		if (kbl.isOnPress("btn_ESC"))// ESC button
 		{
 			Button b = new Button("ESC", false, false);
@@ -170,21 +152,14 @@ public class GameScreen extends Screen implements ActionListener {
 			viewY += scrollspeed;
 		}
 
-		MousepadListener mpl = this.getScreenFactory().getGame()
-				.getMousepadListener();
+		MousepadListener mpl = this.getScreenFactory().getGame().getMousepadListener();
 		wood.setText("Wood: " + Player.getPlayer(0).getWood());
 
-		if (mpl.getCurrentX() > getScreenFactory().getGame().getWindow()
-				.getWidth() - 30
-				|| mpl.getCurrentX() - 30 < 0) {
-			viewX += mpl.getCurrentX() > getScreenFactory().getGame()
-					.getWidth() / 2 ? scrollspeed : -scrollspeed;
+		if (mpl.getCurrentX() > getScreenFactory().getGame().getWindow().getWidth() - 30 || mpl.getCurrentX() - 30 < 0) {
+			viewX += mpl.getCurrentX() > getScreenFactory().getGame().getWidth() / 2 ? scrollspeed : -scrollspeed;
 		}
-		if (mpl.getCurrentY() > getScreenFactory().getGame().getWindow()
-				.getHeight() - 60
-				|| mpl.getCurrentY() - 30 < 0) {
-			viewY += mpl.getCurrentY() > getScreenFactory().getGame()
-					.getWidth() / 2 ? scrollspeed : -scrollspeed;
+		if (mpl.getCurrentY() > getScreenFactory().getGame().getWindow().getHeight() - 60 || mpl.getCurrentY() - 30 < 0) {
+			viewY += mpl.getCurrentY() > getScreenFactory().getGame().getWidth() / 2 ? scrollspeed : -scrollspeed;
 		}
 
 		int wwidth = getScreenFactory().getGame().getWidth();
@@ -242,8 +217,7 @@ public class GameScreen extends Screen implements ActionListener {
 
 	@Override
 	public void onDraw(Graphics2D g2d) {
-		MousepadListener mpl = this.getScreenFactory().getGame()
-				.getMousepadListener();
+		MousepadListener mpl = this.getScreenFactory().getGame().getMousepadListener();
 
 		AffineTransform transform = new AffineTransform();
 		transform.translate(-viewX, -viewY);
@@ -291,25 +265,13 @@ public class GameScreen extends Screen implements ActionListener {
 	}
 
 	public void drawRightClick(Graphics2D g2d, int x, int y) {
-		g2d.drawLine(x - (int) (6 * lastRightClick / 100.), y
-				- (int) (3 * lastRightClick / 100.), x
-				+ (int) (6 * lastRightClick / 100.), y
-				+ (int) (3 * lastRightClick / 100.));
-		g2d.drawLine(x + (int) (6 * lastRightClick / 100.), y
-				- (int) (3 * lastRightClick / 100.), x
-				- (int) (6 * lastRightClick / 100.), y
-				+ (int) (3 * lastRightClick / 100.));
+		g2d.drawLine(x - (int) (6 * lastRightClick / 100.), y - (int) (3 * lastRightClick / 100.), x + (int) (6 * lastRightClick / 100.), y + (int) (3 * lastRightClick / 100.));
+		g2d.drawLine(x + (int) (6 * lastRightClick / 100.), y - (int) (3 * lastRightClick / 100.), x - (int) (6 * lastRightClick / 100.), y + (int) (3 * lastRightClick / 100.));
 	}
 
 	public void drawDraggingZone(Graphics2D g2d) {
-		if (this.getScreenFactory().getGame().getMousepadListener()
-				.isDragging()
-				&& this.getScreenFactory().getGame().getMousepadListener()
-						.isLeftClicked()) {
-			if (this.getScreenFactory().getGame().getMousepadListener()
-					.getMarkX() != -1
-					&& this.getScreenFactory().getGame().getMousepadListener()
-							.getMarkY() != -1) {
+		if (this.getScreenFactory().getGame().getMousepadListener().isDragging() && this.getScreenFactory().getGame().getMousepadListener().isLeftClicked()) {
+			if (this.getScreenFactory().getGame().getMousepadListener().getMarkX() != -1 && this.getScreenFactory().getGame().getMousepadListener().getMarkY() != -1) {
 				g2d.drawRect(getX(), getY(), getW(), getH());
 			}
 		}
@@ -337,8 +299,7 @@ public class GameScreen extends Screen implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		switch (e.getActionCommand()) { // name of the button
 		case "ESC":
-			this.getScreenFactory().createScreen(
-					new SettingsScreen(this.getScreenFactory(), this));
+			this.getScreenFactory().createScreen(new SettingsScreen(this.getScreenFactory(), this));
 			break;
 		default:
 			System.out.println("Unknown ActionEvent: " + e.getActionCommand());
@@ -360,8 +321,7 @@ public class GameScreen extends Screen implements ActionListener {
 			}
 		}
 		if (own != -1) {
-			this.getScreenFactory().createScreen(
-					new MainScreen(this.getScreenFactory()));
+			this.getScreenFactory().createScreen(new MainScreen(this.getScreenFactory()));
 		}
 	}
 }

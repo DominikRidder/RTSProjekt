@@ -29,7 +29,7 @@ import javax.swing.JFileChooser;
 import Utilitys.Point;
 
 public class WorldEditor extends Screen implements ActionListener {
-	int scale = 32;
+	int scale = 16;
 	int width = 50;
 	int height = 50;
 	LayerPanel pWorld;
@@ -354,6 +354,9 @@ public class WorldEditor extends Screen implements ActionListener {
 			StringBuffer map = new StringBuffer();
 			for (int j = 0; j < pWorld.getLayout().getRowSize(); j++) {
 				for (int k = 0; k < pWorld.getLayout().getColumnSize(); k++) {
+					if (pWorld.getLayout().getElement(k, j) instanceof BigField) {
+						((BigField) pWorld.getLayout().getElement(k, j)).prepare();
+					}
 					if (((Field) pWorld.getLayout().getElement(k, j)).getTileID() != null) {
 						map.append("(" + ((Field) pWorld.getLayout().getElement(k, j)).getTileID() + ")");
 					} else {

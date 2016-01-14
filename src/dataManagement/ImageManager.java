@@ -39,17 +39,17 @@ public class ImageManager {
 
 	public BufferedImage getImage(String imgname) {
 		BufferedImage img = data.get(imgname);
-		if(img != null)
+		if (img != null)
 			return img;
-		
+
 		String path = relativNames.get(imgname);
-		
+
 		if (path == null) { // Image Name not found in datadir
 			relativNames.put(imgname, relativNames.get("NotFound.png"));
 			System.out.println("Image not found. Please make sure, that you dont use any Path Information! Image Name was " + imgname);
 			return imgNotFound;
 		}
-		img = data.get(path); 
+		img = data.get(path);
 
 		if (img == null) { // Image not loaded until now.
 			try {
@@ -81,7 +81,7 @@ public class ImageManager {
 				return img;
 			try {
 				img2 = deepCopy(img);
-			} catch(UnsupportedOperationException e){
+			} catch (UnsupportedOperationException e) {
 				return img;
 			}
 			int color = AbstractEntity.getOwnerColor(owner).getRGB();
@@ -176,7 +176,6 @@ public class ImageManager {
 
 		String key = keybuild.toString();
 		BufferedImage img = data.get(key);
-		
 
 		if (img == null) {
 			System.out.println(key);

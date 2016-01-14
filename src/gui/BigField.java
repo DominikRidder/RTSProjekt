@@ -24,4 +24,8 @@ public class BigField extends Field {
 		carry.delete();
 	}
 
+	public void prepare() {
+		carry.prepareToSave();
+	}
+
 }

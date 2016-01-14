@@ -33,6 +33,14 @@ public class Tree extends AbstractEntity {
 		setLife(life);
 	}
 
+	public Tree(int x, int y, int type, String imgname) {
+		super(x, y, rad, imgname, -1);// Trees have no owner, and
+		// no aura
+		m_type = type;
+		setMaxLife(life);
+		setLife(life);
+	}
+
 	public int getType() {
 		return m_type;
 	}
@@ -109,7 +117,7 @@ public class Tree extends AbstractEntity {
 	@Override
 	public void taskSpawn(Screen screen) {
 	}
-	
+
 	public void taskBuild(Screen screen) {
 	}
 }
