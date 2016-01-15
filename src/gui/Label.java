@@ -59,11 +59,11 @@ public class Label extends GuiElement {
 	public void setBackgroundColor(Color c) {
 		backgroundcolor = c;
 	}
-	
+
 	public void setFont(Font font) {
 		this.font = font;
 	}
-	
+
 	public void turnOffDecorator() {
 		image = null;
 	}
@@ -73,8 +73,7 @@ public class Label extends GuiElement {
 		int width = getWidth();
 		int height = getHeight();
 		Font swap = null;
-		
-		if (ImageSet) {
+		if (ImageSet && text == null) {
 			g2d.drawImage(image, getX(), getY(), width, height, null);
 		} else {
 			if (font != null) {
@@ -84,15 +83,14 @@ public class Label extends GuiElement {
 			int stringwidth = g2d.getFontMetrics().stringWidth(text);
 			int stringheight = g2d.getFontMetrics().getHeight();
 			g2d.setColor(backgroundcolor);
-			if(image != null){
+			if (image != null) {
 				g2d.drawImage(image, getX(), getY(), width, height, null);
-			}else{
+			} else {
 				g2d.fill3DRect(getX(), getY(), width, height, true);
 			}
 			g2d.setColor(textcolor);
-			g2d.drawString(text, getX() + width / 2 - stringwidth / 2,
-						getY() + height / 2 + stringheight / 2);
-			if (swap != null){
+			g2d.drawString(text, getX() + width / 2 - stringwidth / 2, getY() + height / 2 + stringheight / 2);
+			if (swap != null) {
 				g2d.setFont(swap);
 			}
 		}

@@ -109,7 +109,7 @@ public class MapManager {
 						}
 					}
 					if (imgname.startsWith("s_")) {
-						defaultEntitys.add(new MainBuilding(containerI * 16, (containerJ + 2) * 16, 10, "Barracks.png", Player.MAIN_PLAYER));
+						defaultEntitys.add(new MainBuilding(containerI * 16, (containerJ + 2) * 16, 10, "M_MainBuilding_1.png", Player.MAIN_PLAYER));
 					} else if (imgname.startsWith("res_")) {
 						String res = imgname.substring(4, imgname.length());
 						if (res.startsWith("w")) {

@@ -19,13 +19,14 @@ public class MainBuilding extends Building implements ActionListener {
 	private boolean marked;
 	private boolean menueisopen;
 	private final int size = 200;
+	private int level = 1;
 
 	public MainBuilding(int x, int y, int rad, String img_name, int owner) {
 		super(x, y, rad, img_name, owner);
 		setMaxLife(200);
 		setLife(200);
-		Game.getImageManager().getImage(img_name, size, size);
-		this.img_name = img_name + ";" + size + ";" + size;
+		Game.getImageManager().getImage(img_name);
+		this.img_name = img_name;
 		// TODO Auto-generated constructor stub
 	}
 
@@ -39,8 +40,7 @@ public class MainBuilding extends Building implements ActionListener {
 		}
 		super.update(screen);
 
-		MousepadListener mpl = screen.getScreenFactory().getGame()
-				.getMousepadListener();
+		MousepadListener mpl = screen.getScreenFactory().getGame().getMousepadListener();
 		if (mpl.isLeftClicked()) {
 			if (mpl.isDragging()) {
 				// if (screen.getDraggingZone().intersects(getBounds())) {
@@ -49,10 +49,9 @@ public class MainBuilding extends Building implements ActionListener {
 				// marked = false;
 				// }
 			} else {
-				if (getImageBounds().contains(mpl.getX(), mpl.getY())
-						&& getOwner() == Player.MAIN_PLAYER) { // 50
-																// dynamisch
-																// machen
+				if (getImageBounds().contains(mpl.getX(), mpl.getY()) && getOwner() == Player.MAIN_PLAYER) { // 50
+																												// dynamisch
+																												// machen
 					marked = true;
 				} else {
 					marked = false;
@@ -66,8 +65,7 @@ public class MainBuilding extends Building implements ActionListener {
 		} else if (!marked) {
 			wasnotmarked = true;
 
-			if (menueisopen && mpl.isLeftClicked()
-					&& !EntityOptions.singleton.isMarked()) {
+			if (menueisopen && mpl.isLeftClicked() && !EntityOptions.singleton.isMarked()) {
 				EntityOptions.singleton.setOptions(null, null);
 			}
 		}
@@ -76,11 +74,13 @@ public class MainBuilding extends Building implements ActionListener {
 	public void openMenue() {
 		ArrayList<Button> options = new ArrayList<Button>();
 
-		for (int i = 0; i < 4; i++) {
-			options.add(new Button(Game.getImageManager().getImage("Orc.png"),
-					false, false));
-			options.get(i).addActionListener(this);
-			options.get(i).setText("Spawn Ork");
+		options.add(new Button(Game.getImageManager().getImage("worker.png"), false, false));
+		options.get(0).addActionListener(this);
+		options.get(0).setText("Worker");
+		if (level < 3) {
+			options.add(new Button(Game.getImageManager().getImage("M_MainBuilding_" + (level + 1) + ".png"), false, false));
+			options.get(1).addActionListener(this);
+			options.get(1).setText("Upgrade");
 		}
 
 		EntityOptions.singleton.setOptions(options, this);
@@ -91,8 +91,20 @@ public class MainBuilding extends Building implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		switch (e.getActionCommand()) {
+		case "Worker":
+			m_curtask = task.t_spawn;
+			toSpawn = 1;
+			break;
+		case "Upgrade":
+			System.out.println("Upgrade");
+			m_curtask = task.t_upgrading;
+			Game.getImageManager().getImage(img_name, size, size);
+			img_name = "M_MainBuilding_" + (level + 1) + ".png";
+			setMaxLife(getMaxLife() * 3);
+			setStatus(STATUS_BUIDLING);
+			break;
 		default:
-			m_curtask = task.t_spawn; // Test
+			m_curtask = task.t_none;
 			System.out.println("Action: " + e.getActionCommand());
 		}
 	}
@@ -111,41 +123,47 @@ public class MainBuilding extends Building implements ActionListener {
 		GameScreen gamescreen = (GameScreen) screen; // needed for
 														// pointToMapConst
 
-		if (Player.getPlayer(getOwner()).getWood() < 20) {
-			System.out.println("Get at least 20 Wood to Spawn a Unit!");
-			System.out
-					.println("This is an example of using Resources to spawn Units.");
+		if (Player.getPlayer(getOwner()).getWood() < 50 || Player.getPlayer(getOwner()).getWood() < 25) {
+			System.out.println("Get at least 50 Wood and 25 Stone to Spawn a Unit!");
+			System.out.println("This is an example of using Resources to spawn Units.");
 
 			m_curtask = task.t_none;
 			return;
 		} else {
-			Player.getPlayer(getOwner()).setWood(
-					Player.getPlayer(getOwner()).getWood() - 20);
+			Player.getPlayer(getOwner()).setWood(Player.getPlayer(getOwner()).getWood() - 50);
+			Player.getPlayer(getOwner()).setStone(Player.getPlayer(getOwner()).getStone() - 25);
 		}
 
 		loop: for (int j = 0; j < 6; j++) { // Limited to 36 tries
 			for (int i = 0; i < 6; i++) {
-				if (!gamescreen.getEntityWithMap().containsValue( // I have
-																	// space to
-																	// spawn him
-																	// here?
-						Screen.pointToMapConst(getX() - 100 + 25 * i, getY()
-								+ 25 * (j + 1)))) {
+				// I havespace to spawn him here?
+				if (!gamescreen.getEntityWithMap().containsValue(Screen.pointToMapConst(getX() - 100 + 25 * i, getY() + 25 * (j + 1)))) {
 
-					OrkTest ork = new OrkTest(getX() - 100 + 25 * i, getY()
-							+ 25 * (j + 1), // Spawn
-							// a
-							// new
-							// Ork
-							getOwner());
+					if (toSpawn == 1) {
+						Worker work = new Worker(getX() - 100 + 25 * i, getY() + 25 * (j + 1), getOwner());
 
-					gamescreen.getEntityWithMap().put(ork,
-							Screen.pointToMapConst(ork.getX(), ork.getY()));
+						gamescreen.getEntityWithMap().put(work, Screen.pointToMapConst(work.getX(), work.getY()));
+					}
+
 					break loop;
 				}
 			}
 		}
 
 		m_curtask = task.t_none; // Task complete
+	}
+
+	@Override
+	public void taskUpgrading(Screen screen) {
+		if (life == getMaxLife()) {
+			setStatus(STATUS_FINISHED);
+			m_curtask = task.t_none;
+			level++;
+		}
+
+		if (life != maxLife) {
+			setLife(getLife() + 1);
+		}
+
 	}
 }

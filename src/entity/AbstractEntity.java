@@ -10,8 +10,7 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class AbstractEntity implements IEntity,
-		Comparable<AbstractEntity>, IHealth, ITasks {
+public abstract class AbstractEntity implements IEntity, Comparable<AbstractEntity>, IHealth, ITasks {
 
 	private final int entityID;
 	private static int entityCounter = 0;
@@ -40,9 +39,7 @@ public abstract class AbstractEntity implements IEntity,
 		entityID = entityCounter;
 		entityCounter++;
 		img_name = imgname;
-		imgrg = new Rectangle(getX() - getImg().getWidth() / 2, getY()
-				- getImg().getHeight(), getImg().getWidth(), getImg()
-				.getHeight());
+		imgrg = new Rectangle(getX() - getImg().getWidth() / 2, getY() - getImg().getHeight(), getImg().getWidth(), getImg().getHeight());
 		l_Entities.add(this);
 	}
 
@@ -77,14 +74,13 @@ public abstract class AbstractEntity implements IEntity,
 	public static List<AbstractEntity> getEntities() {
 		return l_Entities;
 	}
-	
+
 	public static void resetEntities() {
 		l_Entities = new ArrayList<AbstractEntity>();
 	}
 
 	public Rectangle getBounds() {
-		Rectangle rg = new Rectangle(getX() - rad / 2, getY() - rad / 2, rad,
-				rad);
+		Rectangle rg = new Rectangle(getX() - rad / 2, getY() - rad / 2, rad, rad);
 		return rg;
 	}
 
@@ -122,8 +118,7 @@ public abstract class AbstractEntity implements IEntity,
 	}
 
 	public double distance(AbstractEntity b) {
-		return Math.sqrt(Math.pow(Math.abs(this.getX() - b.getX()), 2)
-				+ Math.pow(Math.abs(this.getY() - b.getY()), 2));
+		return Math.sqrt(Math.pow(Math.abs(this.getX() - b.getX()), 2) + Math.pow(Math.abs(this.getY() - b.getY()), 2));
 	}
 
 	public int getEntityID() {
@@ -180,20 +175,16 @@ public abstract class AbstractEntity implements IEntity,
 		g2d.setColor(Color.BLACK);
 		g2d.drawRect(imgrg.x, imgrg.y + img.getHeight() + 3, img.getWidth(), 4);
 		g2d.setColor(Color.GREEN);
-		g2d.fillRect(imgrg.x + 1, imgrg.y + img.getHeight() + 4,
-				img.getWidth() - 1, 3);
+		g2d.fillRect(imgrg.x + 1, imgrg.y + img.getHeight() + 4, img.getWidth() - 1, 3);
 		g2d.setColor(Color.RED);
 		double lost = (getLife() * 1.) / getMaxLife() * img.getWidth();
-		g2d.fillRect(imgrg.x + 1 + (int) lost, imgrg.y + img.getHeight() + 4,
-				img.getWidth() - 1 - (int) lost, 3);
+		g2d.fillRect(imgrg.x + 1 + (int) lost, imgrg.y + img.getHeight() + 4, img.getWidth() - 1 - (int) lost, 3);
 	}
 
-	public static void drawAura(Graphics2D g2d, int x, int y, String imgname,
-			int owner) {
+	public static void drawAura(Graphics2D g2d, int x, int y, String imgname, int owner) {
 		if (owner == -1)// no owner? has no aura
 			return;
-		g2d.drawImage(Game.getImageManager().getImageAura(imgname, owner), x,
-				y, null);
+		g2d.drawImage(Game.getImageManager().getImageAura(imgname, owner), x, y, null);
 	}
 
 	public static Color getOwnerColor(int owner) {
@@ -229,8 +220,7 @@ public abstract class AbstractEntity implements IEntity,
 	@Override
 	public int getRandDmg() {
 		// TODO Auto-generated method stub
-		return getMinDmg()
-				+ ((int) (Math.random() * ((getMaxDmg() - getMinDmg()) + 1)));
+		return getMinDmg() + ((int) (Math.random() * ((getMaxDmg() - getMinDmg()) + 1)));
 	}
 
 	@Override
@@ -268,7 +258,8 @@ public abstract class AbstractEntity implements IEntity,
 
 	@Override
 	public void setLife(int life) {
-		this.life = life;
+		if (life <= maxLife)
+			this.life = life;
 	}
 
 	@Override
@@ -316,6 +307,9 @@ public abstract class AbstractEntity implements IEntity,
 			break;
 		case t_build:
 			taskBuild(screen);
+			break;
+		case t_upgrading:
+			taskUpgrading(screen);
 			break;
 		default:
 			System.out.println("Not handeld task: " + m_curtask);

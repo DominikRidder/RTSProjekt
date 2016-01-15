@@ -120,4 +120,10 @@ public class Materials extends AbstractEntity {
 
 	}
 
+	@Override
+	public void taskUpgrading(Screen screen) {
+		// TODO Auto-generated method stub
+
+	}
+
 }

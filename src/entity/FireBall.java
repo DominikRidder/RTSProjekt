@@ -110,8 +110,7 @@ public class FireBall extends AbstractEntity {
 			}
 		}
 
-		if (getX() == next.getX() && getY() == next.getY()
-				&& wayPoints.size() > 0) {
+		if (getX() == next.getX() && getY() == next.getY() && wayPoints.size() > 0) {
 			wayPoints.remove(0);
 		}
 	}
@@ -125,5 +124,11 @@ public class FireBall extends AbstractEntity {
 
 	@Override
 	public void taskCast(Screen screen) {
+	}
+
+	@Override
+	public void taskUpgrading(Screen screen) {
+		// TODO Auto-generated method stub
+
 	}
 }

@@ -5,7 +5,7 @@ import gameEngine.Screen;
 public interface ITasks {
 
 	public enum task {
-		t_none, t_wood, t_stone, t_attack, t_defend, t_mining, t_spawn, t_build, t_cast
+		t_none, t_wood, t_stone, t_attack, t_defend, t_mining, t_spawn, t_build, t_cast, t_upgrading
 	};
 
 	public void taskNone(Screen screen); // Do Nothing. Should still be a
@@ -27,6 +27,8 @@ public interface ITasks {
 											// Builduings)
 
 	public void taskBuild(Screen screen);
-	
+
 	public void taskCast(Screen screen);
+
+	public void taskUpgrading(Screen screen);
 }
