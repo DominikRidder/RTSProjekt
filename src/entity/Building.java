@@ -1,15 +1,15 @@
 package entity;
 
+import gameEngine.Screen;
+
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 
-import gameEngine.Screen;
-
 public abstract class Building extends AbstractEntity {
 
-	public static final int STATUS_PREVIEW_NOT_FIXED = 0, STATUS_PREVIEW_FIXED = 1, STATUS_BUIDLING = 2,
-			STATUS_FINISHED = 3;
+	public static final int STATUS_PREVIEW_NOT_FIXED = 0,
+			STATUS_PREVIEW_FIXED = 1, STATUS_BUIDLING = 2, STATUS_FINISHED = 3;
 	protected int current_status = 3;
 
 	public Building(int x, int y, int rad, String img_name, int owner) {
@@ -30,7 +30,8 @@ public abstract class Building extends AbstractEntity {
 	}
 
 	public void draw(Graphics2D g2d) {
-		if (current_status != STATUS_PREVIEW_FIXED && current_status != STATUS_PREVIEW_NOT_FIXED) {
+		if (current_status != STATUS_PREVIEW_FIXED
+				&& current_status != STATUS_PREVIEW_NOT_FIXED) {
 			getImageBounds();// Update the image position
 			drawImage(g2d);
 			drawLifeBar(g2d);
@@ -38,7 +39,8 @@ public abstract class Building extends AbstractEntity {
 			Rectangle rect = getImageBounds();// Update the image position
 			drawImage(g2d);
 			g2d.setColor(new Color(1, 0, 0, 0.5f));
-			g2d.fillRect(rect.x, rect.y, getImageBounds().width, getImageBounds().height);
+			g2d.fillRect(rect.x, rect.y, getImageBounds().width,
+					getImageBounds().height);
 		}
 	}
 
@@ -61,7 +63,7 @@ public abstract class Building extends AbstractEntity {
 			if (life > maxLife) {
 				life = maxLife;
 				return false;
-			}else{
+			} else {
 				return ans;
 			}
 		} else {
@@ -98,5 +100,8 @@ public abstract class Building extends AbstractEntity {
 
 	public void taskBuild(Screen screen) {
 		// This task is used to build buildings.
+	}
+
+	public void taskCast(Screen screen) {
 	}
 }

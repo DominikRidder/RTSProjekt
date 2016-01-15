@@ -116,6 +116,12 @@ public abstract class Unit extends AbstractEntity implements ActionListener {
 		// selection (some kind of Crooshair Cursor)
 	}
 
+	public void taskCast(Screen screen) {
+		new FireBall(this.getX(), this.getY(), m_dmg, "notfound.png",
+				this.getOwner());
+		m_curtask = task.t_none;
+	}
+
 	public void taskAttack(Screen screen) {
 		if (getEntity(opponent) == null) {
 			opponent = -1;
@@ -336,8 +342,13 @@ public abstract class Unit extends AbstractEntity implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		switch (e.getActionCommand()) {
+		case "MainBuilding":
+			m_curtask = task.t_build;
+			break;
+		case "Cast":
+			m_curtask = task.t_cast;
+			break;
 		default:
-			m_curtask = task.t_build; // Test
 			System.out.println("Action: " + e.getActionCommand());
 		}
 	}

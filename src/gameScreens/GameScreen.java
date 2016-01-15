@@ -35,8 +35,6 @@ import Utilitys.Point;
 
 public class GameScreen extends Screen implements ActionListener {
 
-	// private final List<AbstractEntity> entitys = new
-	// LinkedList<AbstractEntity>();
 	private final HashMap<AbstractEntity, Point> entitysOnMap = new HashMap<AbstractEntity, Point>();
 
 	private EntityLayout entitytodraw;
@@ -76,8 +74,6 @@ public class GameScreen extends Screen implements ActionListener {
 		System.out.println("Main Creating!");
 
 		LayerPanel pWorld = new LayerPanel(0, 0, 50 * 16, 50 * 16);
-		// entitys.addAll(MapManager.loadMap(pWorld, maplocation)); // null to
-		// call
 		MapManager.loadMap(pWorld, maplocation);// null to call JFileChooser
 
 		pWorld.setActualLayer(0);
@@ -88,6 +84,7 @@ public class GameScreen extends Screen implements ActionListener {
 
 		entitytodraw = new EntityLayout(getEntitys());
 		pWorld.addLayoutAt(3, entitytodraw);
+		pWorld.removeLayout(4);
 		addGuiElement(pWorld);
 
 		Player.dropAllPlayer();
@@ -95,14 +92,9 @@ public class GameScreen extends Screen implements ActionListener {
 		Player comp_sp = new Player(1);
 
 		for (int i = 0; i < 10; i++) {
-			new OrkTest(rnd.nextInt(700) + 40, rnd.nextInt(500) + 40, rnd.nextInt(2));// TODO get(i)
-			// funktion
-			// vermeiden, weil
-			// LinkedList
-			//new Tree(rnd.nextInt(700) + 40, rnd.nextInt(500) + 40, rnd.nextInt(2));
+			new OrkTest(rnd.nextInt(700) + 40, rnd.nextInt(500) + 40, rnd.nextInt(2));
 			entitysOnMap.put(entitys.get(i), pointToMapConst(entitys.get(i).getX(), entitys.get(i).getY()));
 		}
-		// entitys.add(new MainBuilding(800, 800, 10, "Barracks.png", 0));
 
 		/*********** HUD ***********************/
 

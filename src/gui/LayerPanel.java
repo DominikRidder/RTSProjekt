@@ -33,13 +33,17 @@ public class LayerPanel extends APanel implements CoordinateMapping {
 	public void addLayout(ILayout layout) {
 		this.layouts.add(layout);
 	}
-	
+
 	public void addLayoutAt(int index, ILayout layout) {
 		layouts.add(index, layout);
 	}
 
 	public void removeAllLayouts() {
 		layouts = new ArrayList<ILayout>();
+	}
+
+	public void removeLayout(int i) {
+		layouts.remove(i);
 	}
 
 	public void addElement(GuiElement element) {
@@ -76,7 +80,8 @@ public class LayerPanel extends APanel implements CoordinateMapping {
 			if (layout instanceof CoordinateMapping) {
 				return ((CoordinateMapping) layout).getCoordinate(x, y);
 			} else {
-				throw new RuntimeException("Layout don't support the CoordinateMapping!");
+				throw new RuntimeException(
+						"Layout don't support the CoordinateMapping!");
 			}
 		}
 		return null;
@@ -104,7 +109,8 @@ public class LayerPanel extends APanel implements CoordinateMapping {
 			for (ILayout layout : layouts) {
 				layout.repack();
 			}
-			this.setUpdate(false); // Udpating the layouts should be finished here
+			this.setUpdate(false); // Udpating the layouts should be finished
+									// here
 		}
 	}
 }
