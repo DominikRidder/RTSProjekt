@@ -55,6 +55,8 @@ public class GameScreen extends Screen implements ActionListener {
 	private int savedMarkY;
 
 	private Label wood;
+	private Label stone;
+	private Label iron;
 
 	private final String maplocation;
 	private int mapwidth;
@@ -110,6 +112,18 @@ public class GameScreen extends Screen implements ActionListener {
 		wood.setWidth(150);
 		wood.setHeight(50);
 
+		stone = new Label("stone: " + hum_sp.getStone());
+		stone.setX(this.getScreenFactory().getGame().getWindow().getWidth() - 300);
+		stone.setY(0);
+		stone.setWidth(150);
+		stone.setHeight(50);
+
+		iron = new Label("iron: " + hum_sp.getStone());
+		iron.setX(this.getScreenFactory().getGame().getWindow().getWidth() - 450);
+		iron.setY(0);
+		iron.setWidth(150);
+		iron.setHeight(50);
+
 		MiniMap map = new MiniMap(5, getScreenFactory().getGame().getHeight() - this.getScreenFactory().getGame().getWindow().getWidth() / 4 - 5, this.getScreenFactory().getGame().getWindow().getWidth() / 4, this.getScreenFactory().getGame().getWindow().getHeight() / 3, pWorld);
 		Label mapback = new Label(map.getX() - 5, map.getY() - 5, map.getWidth() + 10, map.getHeight() + 10, "");
 		mapback.setBackgroundColor(Color.black);
@@ -117,6 +131,8 @@ public class GameScreen extends Screen implements ActionListener {
 		hud = new Panel(0, 0, this.getScreenFactory().getGame().getWindow().getWidth(), this.getScreenFactory().getGame().getWindow().getHeight());
 		hud.setLayout(new CompactLayout(hud));
 		hud.addElement(wood);
+		hud.addElement(stone);
+		hud.addElement(iron);
 		hud.addElement(mapback);
 		hud.addElement(map);
 
@@ -154,6 +170,8 @@ public class GameScreen extends Screen implements ActionListener {
 
 		MousepadListener mpl = this.getScreenFactory().getGame().getMousepadListener();
 		wood.setText("Wood: " + Player.getPlayer(0).getWood());
+		stone.setText("Stone " + Player.getPlayer(0).getStone());
+		iron.setText("Iron " + Player.getPlayer(0).getIron());
 
 		if (mpl.getCurrentX() > getScreenFactory().getGame().getWindow().getWidth() - 30 || mpl.getCurrentX() - 30 < 0) {
 			viewX += mpl.getCurrentX() > getScreenFactory().getGame().getWidth() / 2 ? scrollspeed : -scrollspeed;

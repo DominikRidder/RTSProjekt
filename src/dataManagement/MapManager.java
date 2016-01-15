@@ -11,7 +11,9 @@ import java.util.List;
 import javax.swing.JFileChooser;
 
 import entity.AbstractEntity;
+import entity.Iron;
 import entity.MainBuilding;
+import entity.Stone;
 import entity.Tree;
 import gameEngine.Game;
 import gameEngine.Player;
@@ -111,7 +113,17 @@ public class MapManager {
 					} else if (imgname.startsWith("res_")) {
 						String res = imgname.substring(4, imgname.length());
 						if (res.startsWith("w")) {
-							defaultEntitys.add(new Tree(containerI * 16, (containerJ + 2) * 16, 0, imgname.split(",")[0]));
+							res = res.split("\\.")[0];
+							res = res.substring(2, res.length());
+							defaultEntitys.add(new Tree(containerI * 16, (containerJ + 2) * 16, 16, imgname.split(",")[0], Integer.parseInt(res), 1));
+						} else if (res.startsWith("s")) {
+							res = res.split("\\.")[0];
+							res = res.substring(2, res.length());
+							defaultEntitys.add(new Stone(containerI * 16, (containerJ + 2) * 16, 16, imgname.split(",")[0], Integer.parseInt(res), 2));
+						} else if (res.startsWith("i")) {
+							res = res.split("\\.")[0];
+							res = res.substring(2, res.length());
+							defaultEntitys.add(new Iron(containerI * 16, (containerJ + 2) * 16, 16, imgname.split(",")[0], Integer.parseInt(res), 3));
 						}
 					}
 				}
