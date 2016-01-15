@@ -120,4 +120,8 @@ public class Tree extends AbstractEntity {
 
 	public void taskBuild(Screen screen) {
 	}
+
+	@Override
+	public void taskCast(Screen screen) {
+	}
 }
