@@ -110,6 +110,7 @@ public abstract class Unit extends AbstractEntity implements ActionListener {
 	public void taskMining(Screen screen) {
 		// TODO: Implement Auto Mining search+hit or add a tmp gui to screen for
 		// selection (some kind of Crooshair Cursor)
+		taskAttack(screen);
 	}
 
 	public void taskCast(Screen screen) {
@@ -263,6 +264,9 @@ public abstract class Unit extends AbstractEntity implements ActionListener {
 					if (!fight && getEntities().get(i).getImageBounds().contains(mpl.getX(), mpl.getY()) && this.getLife() > 0 && getEntities().get(i).getLife() > 0 && (getEntities().get(i).getOwner() != getOwner() || repairable(getEntities().get(i)))) {
 						fight = true;
 						opponent = getEntities().get(i).getEntityID();
+						if (getEntities().get(i) instanceof Materials) {
+							m_curtask = task.t_mining;
+						}
 						break;
 					}
 					fight = false;

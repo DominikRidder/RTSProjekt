@@ -320,4 +320,12 @@ public abstract class AbstractEntity implements IEntity, Comparable<AbstractEnti
 	public void taskNone(Screen screen) {
 
 	}
+
+	public void taskUpgrading(Screen screen) {
+
+	}
+
+	public task getCurTask() {
+		return m_curtask;
+	}
 }

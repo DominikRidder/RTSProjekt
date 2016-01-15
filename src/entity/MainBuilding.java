@@ -77,10 +77,21 @@ public class MainBuilding extends Building implements ActionListener {
 		options.add(new Button(Game.getImageManager().getImage("worker.png"), false, false));
 		options.get(0).addActionListener(this);
 		options.get(0).setText("Worker");
-		if (level < 3) {
+		if (level < 2) {
 			options.add(new Button(Game.getImageManager().getImage("M_MainBuilding_" + (level + 1) + ".png"), false, false));
 			options.get(1).addActionListener(this);
 			options.get(1).setText("Upgrade");
+		} else if (level < 3) {
+			options.add(new Button(Game.getImageManager().getImage("Soldier.png"), false, false));
+			options.get(1).addActionListener(this);
+			options.get(1).setText("Soldier");
+			options.add(new Button(Game.getImageManager().getImage("M_MainBuilding_" + (level + 1) + ".png"), false, false));
+			options.get(2).addActionListener(this);
+			options.get(2).setText("Upgrade");
+		} else if (level == 3) {
+			options.add(new Button(Game.getImageManager().getImage("Soldier.png"), false, false));
+			options.get(1).addActionListener(this);
+			options.get(1).setText("Soldier");
 		}
 
 		EntityOptions.singleton.setOptions(options, this);
@@ -95,12 +106,16 @@ public class MainBuilding extends Building implements ActionListener {
 			m_curtask = task.t_spawn;
 			toSpawn = 1;
 			break;
+		case "Soldier":
+			m_curtask = task.t_spawn;
+			toSpawn = 2;
+			break;
 		case "Upgrade":
 			System.out.println("Upgrade");
 			m_curtask = task.t_upgrading;
 			Game.getImageManager().getImage(img_name, size, size);
 			img_name = "M_MainBuilding_" + (level + 1) + ".png";
-			setMaxLife(getMaxLife() * 3);
+			setMaxLife(getMaxLife() * 2);
 			setStatus(STATUS_BUIDLING);
 			break;
 		default:
@@ -122,16 +137,29 @@ public class MainBuilding extends Building implements ActionListener {
 	public void taskSpawn(Screen screen) {
 		GameScreen gamescreen = (GameScreen) screen; // needed for
 														// pointToMapConst
+		if (toSpawn == 1) {
+			if (Player.getPlayer(getOwner()).getWood() < 50 || Player.getPlayer(getOwner()).getStone() < 25) {
+				System.out.println("Get at least 50 Wood and 25 Stone to Spawn a Unit!");
+				System.out.println("This is an example of using Resources to spawn Units.");
 
-		if (Player.getPlayer(getOwner()).getWood() < 50 || Player.getPlayer(getOwner()).getWood() < 25) {
-			System.out.println("Get at least 50 Wood and 25 Stone to Spawn a Unit!");
-			System.out.println("This is an example of using Resources to spawn Units.");
+				m_curtask = task.t_none;
+				return;
+			} else {
+				Player.getPlayer(getOwner()).setWood(Player.getPlayer(getOwner()).getWood() - 50);
+				Player.getPlayer(getOwner()).setStone(Player.getPlayer(getOwner()).getStone() - 25);
+			}
+		} else if (toSpawn == 2) {
+			if (Player.getPlayer(getOwner()).getWood() < 100 || Player.getPlayer(getOwner()).getStone() < 75 || Player.getPlayer(getOwner()).getIron() < 50) {
+				System.out.println("Get at least 100 Wood and 75 Stone and 50 Iron to Spawn a Unit!");
+				System.out.println("This is an example of using Resources to spawn Units.");
 
-			m_curtask = task.t_none;
-			return;
-		} else {
-			Player.getPlayer(getOwner()).setWood(Player.getPlayer(getOwner()).getWood() - 50);
-			Player.getPlayer(getOwner()).setStone(Player.getPlayer(getOwner()).getStone() - 25);
+				m_curtask = task.t_none;
+				return;
+			} else {
+				Player.getPlayer(getOwner()).setWood(Player.getPlayer(getOwner()).getWood() - 100);
+				Player.getPlayer(getOwner()).setStone(Player.getPlayer(getOwner()).getStone() - 75);
+				Player.getPlayer(getOwner()).setStone(Player.getPlayer(getOwner()).getIron() - 50);
+			}
 		}
 
 		loop: for (int j = 0; j < 6; j++) { // Limited to 36 tries
@@ -141,8 +169,10 @@ public class MainBuilding extends Building implements ActionListener {
 
 					if (toSpawn == 1) {
 						Worker work = new Worker(getX() - 100 + 25 * i, getY() + 25 * (j + 1), getOwner());
-
 						gamescreen.getEntityWithMap().put(work, Screen.pointToMapConst(work.getX(), work.getY()));
+					} else if (toSpawn == 2) {
+						Soldier sol = new Soldier(getX() - 100 + 25 * i, getY() + 25 * (j + 1), getOwner());
+						gamescreen.getEntityWithMap().put(sol, Screen.pointToMapConst(sol.getX(), sol.getY()));
 					}
 
 					break loop;

@@ -46,11 +46,14 @@ public class Materials extends AbstractEntity {
 			m_hit += 4;
 
 		int before = this.getLife();
-		boolean isalive = super.takeDamage(dmg, dmgdealer);
-
+		boolean isalive = true;
 		if (dmgdealer.getOwner() != -1) {
 			Player togift = Player.getPlayer(dmgdealer.getOwner());
-			togift.setRes(res, togift.getRes(res) + before - getLife());
+			if (dmgdealer.getCurTask() == task.t_mining) {
+				isalive = super.takeDamage(dmg, dmgdealer);
+				togift.setRes(res, togift.getRes(res) + before - getLife());
+
+			}
 		}
 
 		return isalive;

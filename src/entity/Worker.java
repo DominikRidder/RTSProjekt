@@ -1,7 +1,5 @@
 package entity;
 
-import gameEngine.Screen;
-
 public class Worker extends Unit {
 
 	private static final int rad = 6;
@@ -21,12 +19,6 @@ public class Worker extends Unit {
 
 	@Override
 	public void update() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void taskUpgrading(Screen screen) {
 		// TODO Auto-generated method stub
 
 	}

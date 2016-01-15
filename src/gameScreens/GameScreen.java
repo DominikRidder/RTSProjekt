@@ -92,7 +92,7 @@ public class GameScreen extends Screen implements ActionListener {
 		Player comp_sp = new Player(1);
 
 		for (int i = 0; i < 10; i++) {
-			new OrkTest(rnd.nextInt(700) + 40, rnd.nextInt(500) + 40, rnd.nextInt(2));
+			new OrkTest(rnd.nextInt(700) + 40, rnd.nextInt(500) + 40, 1);
 			entitysOnMap.put(entitys.get(i), pointToMapConst(entitys.get(i).getX(), entitys.get(i).getY()));
 		}
 

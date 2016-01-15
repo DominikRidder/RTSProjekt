@@ -28,13 +28,8 @@ public class OrkTest extends Unit {
 	}
 
 	@Override
-	public void taskUpgrading(Screen screen) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
 	public void taskMining(Screen screen) {
 
 	}
+
 }
