@@ -66,7 +66,7 @@ public class MainBuilding extends Building implements ActionListener {
 			wasnotmarked = true;
 
 			if (menueisopen && mpl.isLeftClicked() && !EntityOptions.singleton.isMarked()) {
-				EntityOptions.singleton.setOptions(null, null);
+				EntityOptions.singleton.setOptions(null,null, null);
 			}
 		}
 	}
@@ -94,7 +94,7 @@ public class MainBuilding extends Building implements ActionListener {
 			options.get(1).setText("Soldier");
 		}
 
-		EntityOptions.singleton.setOptions(options, this);
+		EntityOptions.singleton.setOptions(options,null, this);
 
 		menueisopen = true;
 	}
@@ -124,13 +124,13 @@ public class MainBuilding extends Building implements ActionListener {
 		}
 	}
 
-	@Override
-	public Rectangle getImageBounds() {
-		super.getImageBounds();
-		imgrg.width = size;
-		imgrg.height = size;
-		return imgrg;
-	}
+//	@Override
+//	public Rectangle getImageBounds() {
+//		super.getImageBounds();
+//		imgrg.width = size;
+//		imgrg.height = size;
+//		return imgrg;
+//	}
 
 	/*************** Task Section ****************/
 
@@ -164,7 +164,7 @@ public class MainBuilding extends Building implements ActionListener {
 
 		loop: for (int j = 0; j < 6; j++) { // Limited to 36 tries
 			for (int i = 0; i < 6; i++) {
-				// I havespace to spawn him here?
+				// I have space to spawn him here?
 				if (!gamescreen.getEntityWithMap().containsValue(Screen.pointToMapConst(getX() - 100 + 25 * i, getY() + 25 * (j + 1)))) {
 
 					if (toSpawn == 1) {

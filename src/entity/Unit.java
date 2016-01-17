@@ -231,7 +231,7 @@ public abstract class Unit extends AbstractEntity implements ActionListener {
 			wasnotmarked = true;
 
 			if (menueisopen && mpl.isLeftClicked() && !EntityOptions.singleton.isMarked()) {
-				EntityOptions.singleton.setOptions(null, null);
+				EntityOptions.singleton.setOptions(null,null, null);
 				menueisopen = false;
 			}
 		}
@@ -239,14 +239,16 @@ public abstract class Unit extends AbstractEntity implements ActionListener {
 
 	private void openMenue() {
 		ArrayList<Button> options = new ArrayList<Button>();
+		ArrayList<ResourceInfo> res = new ArrayList<ResourceInfo>();
 
 		for (int i = 0; i < 1; i++) {
 			options.add(new Button(Game.getImageManager().getImage("M_MainBuilding_1.png"), false, false));
 			options.get(i).addActionListener(this);
 			options.get(i).setText("MainBuilding");
 		}
+		res.add(new ResourceInfo(0,0,0));
 
-		EntityOptions.singleton.setOptions(options, this);
+		EntityOptions.singleton.setOptions(options,res, this);
 
 		menueisopen = true;
 
