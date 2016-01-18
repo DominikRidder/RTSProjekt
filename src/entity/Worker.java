@@ -2,6 +2,9 @@ package entity;
 
 public class Worker extends Unit {
 
+	protected static final ResourceInfo res = new ResourceInfo(250, 50, 0);
+	protected static final ProduceInfomation produceInformation = new ProduceInfomation(res, description());
+	
 	private static final int rad = 6;
 	private static final String img_name = "worker.png";
 	private static final int maxlife = 35;

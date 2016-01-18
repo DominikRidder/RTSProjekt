@@ -27,9 +27,13 @@ public abstract class AbstractEntity implements IEntity, Comparable<AbstractEnti
 	protected int minDmg = 0;// default value
 	protected int maxDmg = 0;// default value
 	protected String img_name;// will maybe set, or imgnotfound.png
+	protected boolean marked;
 
 	protected int owner;
 	static int counter = 0;
+	
+	protected static final ResourceInfo res = new ResourceInfo(0, 0, 0);
+	protected static final ProduceInfomation produceInformation = new ProduceInfomation(res, description());
 
 	public AbstractEntity(int x, int y, int rad, String imgname, int ownr) {
 		this.x = x;
@@ -41,6 +45,10 @@ public abstract class AbstractEntity implements IEntity, Comparable<AbstractEnti
 		img_name = imgname;
 		imgrg = new Rectangle(getX() - getImg().getWidth() / 2, getY() - getImg().getHeight(), getImg().getWidth(), getImg().getHeight());
 		l_Entities.add(this);
+	}
+	
+	protected static String description() {
+		return "Default Description";
 	}
 
 	@Override
@@ -71,6 +79,10 @@ public abstract class AbstractEntity implements IEntity, Comparable<AbstractEnti
 		this.y += y;
 	}
 
+	public boolean isMarked() {
+		return marked;
+	}
+	
 	public static List<AbstractEntity> getEntities() {
 		return l_Entities;
 	}

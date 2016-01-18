@@ -7,15 +7,18 @@ import gameEngine.Screen;
 import gameScreens.GameScreen;
 import gui.Button;
 import gui.EntityOptions;
+import gui.Monolog;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 public class MainBuilding extends Building implements ActionListener {
-
+	
+	protected static final ResourceInfo res = new ResourceInfo(250, 50, 0);
+	protected static final ProduceInfomation produceInformation = new ProduceInfomation(res, description());
+	
 	private boolean wasnotmarked = true;
-	private boolean marked;
 	private boolean menueisopen;
 	private final int size = 200;
 	private int level = 1;
@@ -60,35 +63,36 @@ public class MainBuilding extends Building implements ActionListener {
 			wasnotmarked = true;
 
 			if (menueisopen && mpl.isLeftClicked() && !EntityOptions.singleton.isMarked()) {
-				EntityOptions.singleton.setOptions(null, null, null);
+				EntityOptions.singleton.setOptions(null, null);
 			}
 		}
 	}
 
 	public void openMenue() {
-		ArrayList<Button> options = new ArrayList<Button>();
+		ArrayList<Option> options = new ArrayList<Option>();
 
-		options.add(new Button(Game.getImageManager().getImage("worker.png"), false, false));
+		options.add(new Option(Game.getImageManager().getImage("worker.png"), false ,false));
 		options.get(0).addActionListener(this);
 		options.get(0).setText("Worker");
+		options.get(0).setToolTip(Monolog.createToolTip(200, 100, Worker.produceInformation));
 		if (level < 2) {
-			options.add(new Button(Game.getImageManager().getImage("M_MainBuilding_" + (level + 1) + ".png"), false, false));
+			options.add(new Option(Game.getImageManager().getImage("M_MainBuilding_" + (level + 1) + ".png"), false, false));
 			options.get(1).addActionListener(this);
 			options.get(1).setText("Upgrade");
 		} else if (level < 3) {
-			options.add(new Button(Game.getImageManager().getImage("Soldier.png"), false, false));
+			options.add(new Option(Game.getImageManager().getImage("Soldier.png"), false, false));
 			options.get(1).addActionListener(this);
 			options.get(1).setText("Soldier");
-			options.add(new Button(Game.getImageManager().getImage("M_MainBuilding_" + (level + 1) + ".png"), false, false));
+			options.add(new Option(Game.getImageManager().getImage("M_MainBuilding_" + (level + 1) + ".png"), false, false));
 			options.get(2).addActionListener(this);
 			options.get(2).setText("Upgrade");
 		} else if (level == 3) {
-			options.add(new Button(Game.getImageManager().getImage("Soldier.png"), false, false));
+			options.add(new Option(Game.getImageManager().getImage("Soldier.png"), false, false));
 			options.get(1).addActionListener(this);
 			options.get(1).setText("Soldier");
 		}
 
-		EntityOptions.singleton.setOptions(options, null, this);
+		EntityOptions.singleton.setOptions(options, this);
 
 		menueisopen = true;
 	}
@@ -201,5 +205,9 @@ public class MainBuilding extends Building implements ActionListener {
 	public boolean die() {
 		Player.getPlayer(getOwner()).freeSpace(FOOD);
 		return l_Entities.remove(this);// This should be dead now!
+	}
+	
+	public static String description() {
+		return "Main Buidling";
 	}
 }

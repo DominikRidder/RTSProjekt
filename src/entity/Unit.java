@@ -1,12 +1,13 @@
 package entity;
 
-import gameEngine.Game;
+import gameEngine.Game; 
 import gameEngine.MousepadListener;
 import gameEngine.Player;
 import gameEngine.Screen;
 import gameScreens.GameScreen;
 import gui.Button;
 import gui.EntityOptions;
+import gui.Monolog;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -19,7 +20,6 @@ import Utilitys.Point;
 
 public abstract class Unit extends AbstractEntity implements ActionListener {
 
-	private boolean marked;
 	private boolean wasnotmarked = true;
 	private boolean menueisopen;
 	private int opponent = -1;
@@ -169,14 +169,14 @@ public abstract class Unit extends AbstractEntity implements ActionListener {
 
 		if (target == null) {
 			if (toBuild == 0) {
-				if (Player.getPlayer(getOwner()).getWood() >= 250 && Player.getPlayer(getOwner()).getStone() >= 100) {
+				if (Player.getPlayer(getOwner()).hasResources(MainBuilding.res)) {
 					target = new MainBuilding(mpl.getCurrentX(), mpl.getCurrentY(), 10, "M_MainBuilding_1.png", getOwner());
 				} else {
 					m_curtask = task.t_none;
 					return;
 				}
 			} else if (toBuild == 1) {
-				if (Player.getPlayer(getOwner()).getWood() >= 50 && Player.getPlayer(getOwner()).getStone() >= 10) {
+				if (Player.getPlayer(getOwner()).hasResources(Farm.res)) {
 					target = new Farm(mpl.getCurrentX(), mpl.getCurrentY(), 10, "M_Farm.png", getOwner());
 				} else {
 					m_curtask = task.t_none;
@@ -238,26 +238,21 @@ public abstract class Unit extends AbstractEntity implements ActionListener {
 		if (mpl.isLeftClicked()) {
 			if (mpl.isDragging()) {
 				if (screen.getDraggingZone().intersects(getImageBounds()) && getOwner() == Player.MAIN_PLAYER) {
-					if (wasnotmarked) {
-						openMenue();
-					}
 					marked = true;
 					wasnotmarked = true;
 				} else {
 					marked = false;
-					wasnotmarked = false;
+					wasnotmarked = true;
 				}
 			} else {
 				if (getImageBounds().contains(mpl.getX(), mpl.getY()) && getOwner() == Player.MAIN_PLAYER) { // 50
 					// dynamisch
 					// machen
-					if (wasnotmarked) {
-						openMenue();
-					}
 					marked = true;
-					wasnotmarked = false;
+					wasnotmarked = true;
 				} else {
 					marked = false;
+					wasnotmarked = true;
 				}
 			}
 		}
@@ -269,24 +264,25 @@ public abstract class Unit extends AbstractEntity implements ActionListener {
 			wasnotmarked = true;
 
 			if (menueisopen && mpl.isLeftClicked() && !EntityOptions.singleton.isMarked()) {
-				EntityOptions.singleton.setOptions(null, null, target);
+				EntityOptions.singleton.setOptions(null, target);
 				menueisopen = false;
 			}
 		}
 	}
 
 	public void openMenue() {
-		ArrayList<Button> options = new ArrayList<Button>();
+		ArrayList<Option> options = new ArrayList<Option>();
 
-		options.add(new Button(Game.getImageManager().getImage("M_MainBuilding_1.png"), false, false));
+		options.add(new Option(Game.getImageManager().getImage("M_MainBuilding_1.png"), false, false));
 		options.get(0).addActionListener(this);
 		options.get(0).setText("MainBuilding");
-		options.add(new Button(Game.getImageManager().getImage("M_Farm.png"), false, false));
+		options.get(0).setToolTip(Monolog.createToolTip(200, 100, MainBuilding.produceInformation));
+		options.add(new Option(Game.getImageManager().getImage("M_Farm.png"), false, false));
 		options.get(1).addActionListener(this);
 		options.get(1).setText("Farm");
-		//res.add(new ResourceInfo(0,0,0)); SOrry Megre verkackt 
+		options.get(1).setToolTip(Monolog.createToolTip(200, 100, Farm.produceInformation));
 
-		//EntityOptions.singleton.setOptions(options,res, this);
+		EntityOptions.singleton.setOptions(options, this);
 
 		menueisopen = true;
 

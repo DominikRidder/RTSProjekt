@@ -5,6 +5,9 @@ import gameEngine.Player;
 
 public class Farm extends Building {
 
+	protected static ResourceInfo res = new ResourceInfo(50, 10, 0);
+	protected static final ProduceInfomation produceInformation = new ProduceInfomation(res, description());
+	
 	private final int FOOD = 5;
 
 	public Farm(int x, int y, int rad, String img_name, int owner) {
@@ -26,6 +29,10 @@ public class Farm extends Building {
 			Player.getPlayer(owner).addToUnitLimit(FOOD);
 		}
 		current_status = status;
+	}
+	
+	protected static String description() {
+		return "Farm";
 	}
 
 }

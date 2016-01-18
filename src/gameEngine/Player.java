@@ -3,6 +3,7 @@ package gameEngine;
 import java.util.ArrayList;
 
 import entity.Materials;
+import entity.ResourceInfo;
 
 public class Player {
 
@@ -128,5 +129,9 @@ public class Player {
 
 	public int getActualUnitCOunter() {
 		return actualUnits;
+	}
+	
+	public boolean hasResources(ResourceInfo res) {
+		return wood >= res.wood && iron >= res.iron && stone >= res.stone;
 	}
 }
