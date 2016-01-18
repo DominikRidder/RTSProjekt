@@ -7,6 +7,7 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 import entity.AbstractEntity;
+import entity.ResourceInfo;
 import gameEngine.Game;
 import gameEngine.KeyboardListener;
 import gameEngine.MousepadListener;
@@ -29,7 +30,7 @@ public class EntityOptions extends GuiElement {
 		return Game.getImageManager().getImage(img_name);
 	}
 
-	public synchronized void setOptions(ArrayList<Button> options, AbstractEntity entity) {
+	public synchronized void setOptions(ArrayList<Button> options,ArrayList<ResourceInfo> neededRes, AbstractEntity entity) {
 		// if (this.options != null && entity != calledby) {
 		// return; // only delete options when entity is the owner
 		// }

@@ -60,7 +60,7 @@ public class MainBuilding extends Building implements ActionListener {
 			wasnotmarked = true;
 
 			if (menueisopen && mpl.isLeftClicked() && !EntityOptions.singleton.isMarked()) {
-				EntityOptions.singleton.setOptions(null, null);
+				EntityOptions.singleton.setOptions(null, null, null);
 			}
 		}
 	}
@@ -88,7 +88,7 @@ public class MainBuilding extends Building implements ActionListener {
 			options.get(1).setText("Soldier");
 		}
 
-		EntityOptions.singleton.setOptions(options, this);
+		EntityOptions.singleton.setOptions(options, null, this);
 
 		menueisopen = true;
 	}

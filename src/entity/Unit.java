@@ -269,7 +269,7 @@ public abstract class Unit extends AbstractEntity implements ActionListener {
 			wasnotmarked = true;
 
 			if (menueisopen && mpl.isLeftClicked() && !EntityOptions.singleton.isMarked()) {
-				EntityOptions.singleton.setOptions(null, null);
+				EntityOptions.singleton.setOptions(null, null, target);
 				menueisopen = false;
 			}
 		}
@@ -284,8 +284,9 @@ public abstract class Unit extends AbstractEntity implements ActionListener {
 		options.add(new Button(Game.getImageManager().getImage("M_Farm.png"), false, false));
 		options.get(1).addActionListener(this);
 		options.get(1).setText("Farm");
+		//res.add(new ResourceInfo(0,0,0)); SOrry Megre verkackt 
 
-		EntityOptions.singleton.setOptions(options, this);
+		//EntityOptions.singleton.setOptions(options,res, this);
 
 		menueisopen = true;
 
