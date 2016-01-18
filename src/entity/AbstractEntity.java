@@ -14,7 +14,7 @@ public abstract class AbstractEntity implements IEntity, Comparable<AbstractEnti
 
 	private final int entityID;
 	private static int entityCounter = 0;
-	private static List<AbstractEntity> l_Entities = new ArrayList<AbstractEntity>();
+	protected static List<AbstractEntity> l_Entities = new ArrayList<AbstractEntity>();
 	private int x, y;
 	protected task m_curtask = task.t_none;
 	protected int rad;

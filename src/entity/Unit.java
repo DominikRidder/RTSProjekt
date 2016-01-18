@@ -25,7 +25,8 @@ public abstract class Unit extends AbstractEntity implements ActionListener {
 	private int opponent = -1;
 	private boolean fight;
 	private int m_dmg = 0, m_dmgtimer = 0;
-	private MainBuilding target;
+	private Building target;
+	private int toBuild;
 
 	private final ArrayList<Point> wayPoints = new ArrayList<Point>();
 	// private int w, h;
@@ -33,6 +34,10 @@ public abstract class Unit extends AbstractEntity implements ActionListener {
 
 	public Unit(int x, int y, int rad, String img_name, int owner) {
 		super(x, y, rad, img_name, owner);
+		if (!Player.getPlayer(owner).hasSpace(1)) {
+			die();
+		}
+
 	}
 
 	@Override
@@ -163,7 +168,21 @@ public abstract class Unit extends AbstractEntity implements ActionListener {
 		GameScreen gamesc = (GameScreen) screen;
 
 		if (target == null) {
-			target = new MainBuilding(mpl.getCurrentX(), mpl.getCurrentY(), 10, "M_MainBuilding_1.png", getOwner());
+			if (toBuild == 0) {
+				if (Player.getPlayer(getOwner()).getWood() >= 250 && Player.getPlayer(getOwner()).getStone() >= 100) {
+					target = new MainBuilding(mpl.getCurrentX(), mpl.getCurrentY(), 10, "M_MainBuilding_1.png", getOwner());
+				} else {
+					m_curtask = task.t_none;
+					return;
+				}
+			} else if (toBuild == 1) {
+				if (Player.getPlayer(getOwner()).getWood() >= 50 && Player.getPlayer(getOwner()).getStone() >= 10) {
+					target = new Farm(mpl.getCurrentX(), mpl.getCurrentY(), 10, "M_Farm.png", getOwner());
+				} else {
+					m_curtask = task.t_none;
+					return;
+				}
+			}
 			target.setLife(1);
 			target.setStatus(Building.STATUS_PREVIEW_NOT_FIXED);
 		} else if (target.getStatus() == Building.STATUS_PREVIEW_NOT_FIXED) {
@@ -171,6 +190,25 @@ public abstract class Unit extends AbstractEntity implements ActionListener {
 			target.setY(mpl.getCurrentY() + gamesc.getViewY());
 			if (mpl.isLeftClicked()) {
 				target.setStatus(Building.STATUS_PREVIEW_FIXED);
+				if (toBuild == 0) {
+					if (Player.getPlayer(getOwner()).getWood() >= 250 && Player.getPlayer(getOwner()).getStone() >= 100) {
+						Player.getPlayer(getOwner()).setWood(Player.getPlayer(getOwner()).getWood() - 250);
+						Player.getPlayer(getOwner()).setStone(Player.getPlayer(getOwner()).getStone() - 100);
+					} else {
+						m_curtask = task.t_none;
+						target.die();
+						return;
+					}
+				} else if (toBuild == 1) {
+					if (Player.getPlayer(getOwner()).getWood() >= 50 && Player.getPlayer(getOwner()).getStone() >= 10) {
+						Player.getPlayer(getOwner()).setWood(Player.getPlayer(getOwner()).getWood() - 50);
+						Player.getPlayer(getOwner()).setStone(Player.getPlayer(getOwner()).getStone() - 10);
+					} else {
+						m_curtask = task.t_none;
+						target.die();
+						return;
+					}
+				}
 			}
 		}
 
@@ -237,14 +275,15 @@ public abstract class Unit extends AbstractEntity implements ActionListener {
 		}
 	}
 
-	private void openMenue() {
+	public void openMenue() {
 		ArrayList<Button> options = new ArrayList<Button>();
 
-		for (int i = 0; i < 1; i++) {
-			options.add(new Button(Game.getImageManager().getImage("M_MainBuilding_1.png"), false, false));
-			options.get(i).addActionListener(this);
-			options.get(i).setText("MainBuilding");
-		}
+		options.add(new Button(Game.getImageManager().getImage("M_MainBuilding_1.png"), false, false));
+		options.get(0).addActionListener(this);
+		options.get(0).setText("MainBuilding");
+		options.add(new Button(Game.getImageManager().getImage("M_Farm.png"), false, false));
+		options.get(1).addActionListener(this);
+		options.get(1).setText("Farm");
 
 		EntityOptions.singleton.setOptions(options, this);
 
@@ -326,6 +365,11 @@ public abstract class Unit extends AbstractEntity implements ActionListener {
 		switch (e.getActionCommand()) {
 		case "MainBuilding":
 			m_curtask = task.t_build;
+			toBuild = 0;
+			break;
+		case "Farm":
+			m_curtask = task.t_build;
+			toBuild = 1;
 			break;
 		case "Cast":
 			m_curtask = task.t_cast;

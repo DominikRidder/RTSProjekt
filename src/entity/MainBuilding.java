@@ -8,7 +8,6 @@ import gameScreens.GameScreen;
 import gui.Button;
 import gui.EntityOptions;
 
-import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -20,6 +19,7 @@ public class MainBuilding extends Building implements ActionListener {
 	private boolean menueisopen;
 	private final int size = 200;
 	private int level = 1;
+	private final int FOOD = 10;
 
 	public MainBuilding(int x, int y, int rad, String img_name, int owner) {
 		super(x, y, rad, img_name, owner);
@@ -32,12 +32,6 @@ public class MainBuilding extends Building implements ActionListener {
 
 	@Override
 	public void update(Screen screen) {
-		if (current_status != STATUS_FINISHED) {
-			if (life >= maxLife) {
-				current_status = STATUS_FINISHED;
-			}
-			return;
-		}
 		super.update(screen);
 
 		MousepadListener mpl = screen.getScreenFactory().getGame().getMousepadListener();
@@ -59,7 +53,7 @@ public class MainBuilding extends Building implements ActionListener {
 			}
 		}
 
-		if (marked && wasnotmarked) {
+		if (marked && wasnotmarked && current_status == STATUS_FINISHED) {
 			openMenue();
 			wasnotmarked = false;
 		} else if (!marked) {
@@ -125,15 +119,13 @@ public class MainBuilding extends Building implements ActionListener {
 	}
 
 	@Override
-	public Rectangle getImageBounds() {
-		super.getImageBounds();
-		imgrg.width = size;
-		imgrg.height = size;
-		return imgrg;
-	}
-
+	/*	public Rectangle getImageBounds() {
+			super.getImageBounds();
+			imgrg.width = size;
+			imgrg.height = size;
+			return imgrg;
+		}*/
 	/*************** Task Section ****************/
-
 	public void taskSpawn(Screen screen) {
 		GameScreen gamescreen = (GameScreen) screen; // needed for
 														// pointToMapConst
@@ -192,8 +184,22 @@ public class MainBuilding extends Building implements ActionListener {
 		}
 
 		if (life != maxLife) {
-			setLife(getLife() + 1);
+			setLife(getLife() + 10);
 		}
 
+	}
+
+	@Override
+	public void changeStatus(int status) {
+		if (status == STATUS_FINISHED && current_status != status) {
+			Player.getPlayer(owner).addToUnitLimit(FOOD);
+		}
+		current_status = status;
+	}
+
+	@Override
+	public boolean die() {
+		Player.getPlayer(getOwner()).freeSpace(FOOD);
+		return l_Entities.remove(this);// This should be dead now!
 	}
 }

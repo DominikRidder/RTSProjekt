@@ -15,6 +15,9 @@ public class Player {
 	private int wood;
 	private int stone;
 	private int iron;
+	private int unitLimit = 10;
+	private int realUnitLimit = 10;
+	private int actualUnits = 0;
 
 	public static Player getPlayer(int owner) {
 		for (Player sp : allplayer) {
@@ -95,5 +98,35 @@ public class Player {
 			;
 		}
 
+	}
+
+	public int getUnitLimit() {
+		return unitLimit;
+	}
+
+	public void addToUnitLimit(int toAdd) {
+		realUnitLimit += toAdd;
+		if (realUnitLimit < 50) {
+			unitLimit = realUnitLimit;
+		} else {
+			unitLimit = 50;
+		}
+	}
+
+	public boolean hasSpace(int i) {
+		if (actualUnits + i <= unitLimit) {
+			actualUnits += i;
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public void freeSpace(int i) {
+		actualUnits -= i;
+	}
+
+	public int getActualUnitCOunter() {
+		return actualUnits;
 	}
 }

@@ -55,6 +55,7 @@ public class GameScreen extends Screen implements ActionListener {
 	private Label wood;
 	private Label stone;
 	private Label iron;
+	private Label unitLimit;
 
 	private final String maplocation;
 	private int mapwidth;
@@ -74,6 +75,11 @@ public class GameScreen extends Screen implements ActionListener {
 		System.out.println("Main Creating!");
 
 		LayerPanel pWorld = new LayerPanel(0, 0, 50 * 16, 50 * 16);
+
+		Player.dropAllPlayer();
+		Player hum_sp = new Player(Player.MAIN_PLAYER);
+		Player comp_sp = new Player(1);
+
 		MapManager.loadMap(pWorld, maplocation);// null to call JFileChooser
 
 		pWorld.setActualLayer(0);
@@ -87,10 +93,6 @@ public class GameScreen extends Screen implements ActionListener {
 		pWorld.removeLayout(4);
 		addGuiElement(pWorld);
 
-		Player.dropAllPlayer();
-		Player hum_sp = new Player(Player.MAIN_PLAYER);
-		Player comp_sp = new Player(1);
-
 		for (int i = 0; i < 10; i++) {
 			new OrkTest(rnd.nextInt(700) + 40, rnd.nextInt(500) + 40, 1);
 			entitysOnMap.put(entitys.get(i), pointToMapConst(entitys.get(i).getX(), entitys.get(i).getY()));
@@ -98,20 +100,26 @@ public class GameScreen extends Screen implements ActionListener {
 
 		/*********** HUD ***********************/
 
+		unitLimit = new Label("unitLimit: " + hum_sp.getStone());
+		unitLimit.setX(this.getScreenFactory().getGame().getWindow().getWidth() - 100);
+		unitLimit.setY(0);
+		unitLimit.setWidth(100);
+		unitLimit.setHeight(50);
+
 		wood = new Label("Wood: " + hum_sp.getWood());
-		wood.setX(this.getScreenFactory().getGame().getWindow().getWidth() - 150);
+		wood.setX(this.getScreenFactory().getGame().getWindow().getWidth() - 250);
 		wood.setY(0);
 		wood.setWidth(150);
 		wood.setHeight(50);
 
 		stone = new Label("stone: " + hum_sp.getStone());
-		stone.setX(this.getScreenFactory().getGame().getWindow().getWidth() - 300);
+		stone.setX(this.getScreenFactory().getGame().getWindow().getWidth() - 400);
 		stone.setY(0);
 		stone.setWidth(150);
 		stone.setHeight(50);
 
 		iron = new Label("iron: " + hum_sp.getStone());
-		iron.setX(this.getScreenFactory().getGame().getWindow().getWidth() - 450);
+		iron.setX(this.getScreenFactory().getGame().getWindow().getWidth() - 550);
 		iron.setY(0);
 		iron.setWidth(150);
 		iron.setHeight(50);
@@ -125,6 +133,7 @@ public class GameScreen extends Screen implements ActionListener {
 		hud.addElement(wood);
 		hud.addElement(stone);
 		hud.addElement(iron);
+		hud.addElement(unitLimit);
 		hud.addElement(mapback);
 		hud.addElement(map);
 
@@ -164,6 +173,7 @@ public class GameScreen extends Screen implements ActionListener {
 		wood.setText("Wood: " + Player.getPlayer(0).getWood());
 		stone.setText("Stone " + Player.getPlayer(0).getStone());
 		iron.setText("Iron " + Player.getPlayer(0).getIron());
+		unitLimit.setText("Units " + Player.getPlayer(0).getActualUnitCOunter() + "/" + Player.getPlayer(0).getUnitLimit());
 
 		if (mpl.getCurrentX() > getScreenFactory().getGame().getWindow().getWidth() - 30 || mpl.getCurrentX() - 30 < 0) {
 			viewX += mpl.getCurrentX() > getScreenFactory().getGame().getWidth() / 2 ? scrollspeed : -scrollspeed;

@@ -22,7 +22,7 @@ public class MainScreen extends Screen implements ActionListener {
 	@Override
 	public void onCreate() {
 
-		String adding[] = { "Einzelspieler", "Quick Start", "Spiel Laden", "Archievments", "Highscore", "Einstellungen", "WorldEditor", "Exit" };
+		String adding[] = { "Einzelspieler", "Quick Start", "Spiel Laden", "Einstellungen", "WorldEditor", "Exit" };
 
 		while (getScreenFactory().getGame().getWindow().getWidth() < 50 || getScreenFactory().getGame().getWindow().getHeight() < 50) {
 			try {

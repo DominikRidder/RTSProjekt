@@ -44,6 +44,12 @@ public abstract class Building extends AbstractEntity {
 
 	@Override
 	public void update(Screen sc) {
+		if (current_status != STATUS_FINISHED) {
+			if (life >= maxLife) {
+				changeStatus(STATUS_FINISHED);
+			}
+			return;
+		}
 		doTask(sc); // New Task System
 	}
 
@@ -67,6 +73,10 @@ public abstract class Building extends AbstractEntity {
 		} else {
 			return super.takeDamage(dmg, dmgdealer);
 		}
+	}
+
+	public void changeStatus(int status) {
+		current_status = status;
 	}
 
 	/*************** Task Section ****************/
