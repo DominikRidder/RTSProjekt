@@ -31,7 +31,7 @@ public class Farm extends Building {
 		current_status = status;
 	}
 	
-	protected static String description() {
+	public static String description() {
 		return "Farm";
 	}
 

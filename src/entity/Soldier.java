@@ -4,6 +4,10 @@ import gameEngine.Screen;
 
 public class Soldier extends Unit {
 
+	protected static final ResourceInfo res = new ResourceInfo(100, 75, 50);
+	protected static final ProduceInfomation produceInformation = new ProduceInfomation(
+			res, description());
+	
 	private static final int rad = 6;
 	private static final String img_name = "Soldier.png";
 	private static final int maxlife = 100;
@@ -32,6 +36,10 @@ public class Soldier extends Unit {
 	@Override
 	public void taskMining(Screen screen) { //SOMIT KANN DER SOLDAT NICHT NICHT NICHT ABBAUEN !!!
 		// TODO Auto-generated method stub
+	}
+	
+	public static String description() {
+		return "Soldier";
 	}
 
 }

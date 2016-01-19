@@ -80,7 +80,8 @@ public class Player {
 		if (getPlayer(owner) == null) {
 			allplayer.add(this);
 		} else {
-			throw new RuntimeException("There cant exist 2 Player with the same owner identyfier!");
+			throw new RuntimeException(
+					"There cant exist 2 Player with the same owner identyfier!");
 		}
 	}
 
@@ -130,8 +131,18 @@ public class Player {
 	public int getActualUnitCOunter() {
 		return actualUnits;
 	}
-	
+
 	public boolean hasResources(ResourceInfo res) {
 		return wood >= res.wood && iron >= res.iron && stone >= res.stone;
+	}
+
+	public void consumeResources(ResourceInfo amount) {
+		if (hasResources(amount)) {
+			wood -= amount.wood;
+			iron -= amount.iron;
+			stone -= amount.stone;
+		} else {
+			System.out.println("Illegal consume call in Class Player!");
+		}
 	}
 }
