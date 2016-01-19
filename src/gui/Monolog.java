@@ -20,6 +20,7 @@ public class Monolog extends GuiElement {
 		private ArrayList<String> words;
 		private Color textcolor = Color.WHITE, backgroundcolor = Color.BLACK;
 		private Font font;
+		private boolean withBorder;
 
 		public Monolog(String text) {
 			this.text = text;
@@ -43,6 +44,7 @@ public class Monolog extends GuiElement {
 			m.words.add("stone: "+res.stone+"; ");
 			m.words.add("Iron: "+res.iron);
 			m.backgroundcolor = new Color(0,0,0,0.75f);
+			m.withBorder = true;
 			
 			return m;
 		}
@@ -81,15 +83,15 @@ public class Monolog extends GuiElement {
 				int rows = height/(stringheight+5);
 				int maxtextlength = rows*width;
 				
-				int x=0,y=stringheight;
+				int x = withBorder? 2 : 0,y=stringheight;
 				
 				g2d.setColor(backgroundcolor);
 				g2d.fill3DRect(getX(), getY(), width, height, true);
 				g2d.setColor(textcolor);
 				for (String word : words){
 					int wordwidth = g2d.getFontMetrics().stringWidth(word);
-					if (x+wordwidth+5>width || word == "\n"){
-						x=0;
+					if (x+wordwidth+5>(width - ((withBorder)? 2 : 0)) || word == "\n"){
+						x = withBorder? 2 : 0;
 						y+=stringheight+5;
 						
 						if (y > getHeight()){
@@ -101,11 +103,23 @@ public class Monolog extends GuiElement {
 					g2d.drawString(word, getX() + x ,getY()+y);
 					x+= wordwidth+5;
 				}
+				
+				if (withBorder){
+					drawBorder(g2d);
+				}
+				
 				if (swap != null){
 					g2d.setFont(swap);
 			}
 		}
 
+		@Override
+		public void drawBorder(Graphics2D g2d) {
+			g2d.setColor(Color.RED);
+			for(int i = 0; i > -2; i--)
+				g2d.draw3DRect(getX()+i, getY()+i, getWidth()-2*i, getHeight()-2*i, false);
+		}
+		
 		public void onUpdate(Screen screen) {
 		}
 }
