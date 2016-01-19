@@ -2,9 +2,8 @@ package entity;
 
 public class Worker extends Unit {
 
-	protected static final ResourceInfo res = new ResourceInfo(50, 0, 25);
-	protected static final ProduceInfomation produceInformation = new ProduceInfomation(
-			res, description());
+	protected static final ResourceInfo res = new ResourceInfo(50, 0, 0);
+	protected static final ProduceInfomation produceInformation = new ProduceInfomation(res, description());
 
 	private static final int rad = 6;
 	private static final String img_name = "worker.png";
@@ -26,7 +25,7 @@ public class Worker extends Unit {
 		// TODO Auto-generated method stub
 
 	}
-	
+
 	public static String description() {
 		return "Worker";
 	}
