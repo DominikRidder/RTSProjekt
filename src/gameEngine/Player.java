@@ -80,8 +80,7 @@ public class Player {
 		if (getPlayer(owner) == null) {
 			allplayer.add(this);
 		} else {
-			throw new RuntimeException(
-					"There cant exist 2 Player with the same owner identyfier!");
+			throw new RuntimeException("There cant exist 2 Player with the same owner identyfier!");
 		}
 	}
 

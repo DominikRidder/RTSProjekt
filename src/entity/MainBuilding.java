@@ -5,7 +5,6 @@ import gameEngine.MousepadListener;
 import gameEngine.Player;
 import gameEngine.Screen;
 import gameScreens.GameScreen;
-import gui.Button;
 import gui.EntityOptions;
 import gui.Monolog;
 
@@ -16,8 +15,12 @@ import java.util.ArrayList;
 public class MainBuilding extends Building implements ActionListener {
 
 	protected static final ResourceInfo res = new ResourceInfo(250, 50, 0);
-	protected static final ProduceInfomation produceInformation = new ProduceInfomation(
-			res, description());
+	protected static final ProduceInfomation produceInformation = new ProduceInfomation(res, description());
+
+	protected static final ResourceInfo resUpgrade1 = new ResourceInfo(300, 150, 75);
+	protected static final ProduceInfomation produceInformationUpgrade1 = new ProduceInfomation(resUpgrade1, "Main Building Upgrade to Main Fort");
+	protected static final ResourceInfo resUpgrade2 = new ResourceInfo(475, 225, 175);
+	protected static final ProduceInfomation produceInformationUpgrade2 = new ProduceInfomation(resUpgrade2, "Main Fort Upgrade to Castle");
 
 	private boolean wasnotmarked = true;
 	private boolean menueisopen;
@@ -38,8 +41,7 @@ public class MainBuilding extends Building implements ActionListener {
 	public void update(Screen screen) {
 		super.update(screen);
 
-		MousepadListener mpl = screen.getScreenFactory().getGame()
-				.getMousepadListener();
+		MousepadListener mpl = screen.getScreenFactory().getGame().getMousepadListener();
 		if (mpl.isLeftClicked()) {
 			if (mpl.isDragging()) {
 				// if (screen.getDraggingZone().intersects(getBounds())) {
@@ -48,10 +50,9 @@ public class MainBuilding extends Building implements ActionListener {
 				// marked = false;
 				// }
 			} else {
-				if (getImageBounds().contains(mpl.getX(), mpl.getY())
-						&& getOwner() == Player.MAIN_PLAYER) { // 50
-																// dynamisch
-																// machen
+				if (getImageBounds().contains(mpl.getX(), mpl.getY()) && getOwner() == Player.MAIN_PLAYER) { // 50
+																												// dynamisch
+																												// machen
 					marked = true;
 				} else {
 					marked = false;
@@ -65,8 +66,7 @@ public class MainBuilding extends Building implements ActionListener {
 		} else if (!marked) {
 			wasnotmarked = true;
 
-			if (menueisopen && mpl.isLeftClicked()
-					&& !EntityOptions.singleton.isMarked()) {
+			if (menueisopen && mpl.isLeftClicked() && !EntityOptions.singleton.isMarked()) {
 				EntityOptions.singleton.setOptions(null, null);
 			}
 		}
@@ -75,35 +75,30 @@ public class MainBuilding extends Building implements ActionListener {
 	public void openMenue() {
 		ArrayList<Option> options = new ArrayList<Option>();
 
-		options.add(new Option(Game.getImageManager().getImage("worker.png"),
-				false, false));
+		options.add(new Option(Game.getImageManager().getImage("worker.png"), false, false));
 		options.get(0).addActionListener(this);
 		options.get(0).setText("Worker");
-		options.get(0).setToolTip(
-				Monolog.createToolTip(200, 100, Worker.produceInformation));
+		options.get(0).setToolTip(Monolog.createToolTip(200, 100, Worker.produceInformation));
 		if (level < 2) {
-			options.add(new Option(Game.getImageManager().getImage(
-					"M_MainBuilding_" + (level + 1) + ".png"), false, false));
+			options.add(new Option(Game.getImageManager().getImage("M_MainBuilding_" + (level + 1) + ".png"), false, false));
 			options.get(1).addActionListener(this);
 			options.get(1).setText("Upgrade");
+			options.get(1).setToolTip(Monolog.createToolTip(200, 100, produceInformationUpgrade1));
 		} else if (level < 3) {
-			options.add(new Option(Game.getImageManager().getImage(
-					"Soldier.png"), false, false));
+			options.add(new Option(Game.getImageManager().getImage("Soldier.png"), false, false));
 			options.get(1).addActionListener(this);
 			options.get(1).setText("Soldier");
 			options.get(1).setToolTip(Monolog.createToolTip(200, 100, Soldier.produceInformation));
-			options.add(new Option(Game.getImageManager().getImage(
-					"M_MainBuilding_" + (level + 1) + ".png"), false, false));
+			options.add(new Option(Game.getImageManager().getImage("M_MainBuilding_" + (level + 1) + ".png"), false, false));
 			options.get(2).addActionListener(this);
 			options.get(2).setText("Upgrade");
+			options.get(2).setToolTip(Monolog.createToolTip(200, 100, produceInformationUpgrade2));
 		} else if (level == 3) {
-			options.add(new Option(Game.getImageManager().getImage(
-					"Soldier.png"), false, false));
+			options.add(new Option(Game.getImageManager().getImage("Soldier.png"), false, false));
 			options.get(1).addActionListener(this);
 			options.get(1).setText("Soldier");
 			options.get(1).setToolTip(Monolog.createToolTip(200, 100, Soldier.produceInformation));
 		}
-
 		EntityOptions.singleton.setOptions(options, this);
 
 		menueisopen = true;
@@ -121,12 +116,25 @@ public class MainBuilding extends Building implements ActionListener {
 			toSpawn = 2;
 			break;
 		case "Upgrade":
-			System.out.println("Upgrade");
-			m_curtask = task.t_upgrading;
-			Game.getImageManager().getImage(img_name, size, size);
-			img_name = "M_MainBuilding_" + (level + 1) + ".png";
-			setMaxLife(getMaxLife() * 2);
-			setStatus(STATUS_BUIDLING);
+			boolean hasRes = false;
+			if (level == 1) {
+				if (Player.getPlayer(getOwner()).hasResources(resUpgrade1)) {
+					hasRes = true;
+					Player.getPlayer(getOwner()).consumeResources(resUpgrade1);
+				}
+			} else {
+				if (Player.getPlayer(getOwner()).hasResources(resUpgrade2)) {
+					hasRes = true;
+					Player.getPlayer(getOwner()).consumeResources(resUpgrade2);
+				}
+			}
+			if (hasRes) {
+				m_curtask = task.t_upgrading;
+				Game.getImageManager().getImage(img_name, size, size);
+				img_name = "M_MainBuilding_" + (level + 1) + ".png";
+				setMaxLife(getMaxLife() * 2);
+				setStatus(STATUS_BUIDLING);
+			}
 			break;
 		default:
 			m_curtask = task.t_none;
@@ -135,12 +143,9 @@ public class MainBuilding extends Building implements ActionListener {
 	}
 
 	@Override
-	/*	public Rectangle getImageBounds() {
-			super.getImageBounds();
-			imgrg.width = size;
-			imgrg.height = size;
-			return imgrg;
-		}*/
+	/*
+	 * public Rectangle getImageBounds() { super.getImageBounds(); imgrg.width = size; imgrg.height = size; return imgrg; }
+	 */
 	/*************** Task Section ****************/
 	public void taskSpawn(Screen screen) {
 		GameScreen gamescreen = (GameScreen) screen; // needed for
@@ -159,7 +164,6 @@ public class MainBuilding extends Building implements ActionListener {
 			if (!Player.getPlayer(getOwner()).hasResources(Soldier.res)) {
 				System.out.println("Get at least 100 Wood and 75 Stone and 50 Iron to Spawn a Unit!");
 				System.out.println("This is an example of using Resources to spawn Units.");
-
 				m_curtask = task.t_none;
 				return;
 			} else {
