@@ -47,7 +47,7 @@ public abstract class AbstractEntity implements IEntity, Comparable<AbstractEnti
 		l_Entities.add(this);
 	}
 	
-	protected static String description() {
+	public static String description() {
 		return "Default Description";
 	}
 
