@@ -15,7 +15,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 
-public class ControlScreen extends Screen implements ActionListener{
+public class ControlScreen extends Screen implements ActionListener {
 
 	public ControlScreen(ScreenFactory screenFactory, Screen prevScreen) {
 		super(screenFactory, prevScreen);
@@ -25,49 +25,48 @@ public class ControlScreen extends Screen implements ActionListener{
 	@Override
 	public void onCreate() {
 		int width = getScreenFactory().getGame().getWindow().getWidth();
-		
+
 		Button placeholder = new Button(0, 0, width, getScreenFactory().getGame().getWindow().getHeight(), "", false, false);
 		placeholder.setImage(null);
 		placeholder.setBackgroundColor(new Color(0, 0, 0, 0.5f));
 		addGuiElement(placeholder);
-		
+
 		Panel p = null;
-		for(int j = 0; j < 4; j++)//Columns
+		for (int j = 0; j < 4; j++)//Columns
 		{
-			p = new Panel(j*width/4+5, 30, width/4-10, 90*20);
+			p = new Panel(j * width / 4 + 5, 30, width / 4 - 10, 90 * 20);
 			p.setLayout(new GridLayout(90, 1, p));
-			for(int i = 33+j*25; i <= 58+j*25 && i <= 122; i++)//from space to z in the ascii table//some default button, at least you can add them :D
+			for (int i = 33 + j * 25; i <= 58 + j * 25 && i <= 122; i++)//from space to z in the ascii table//some default button, at least you can add them :D
 			{
-				ControlSettingField newb = new ControlSettingField(""+(char)i, "btn_"+(char)i);
+				ControlSettingField newb = new ControlSettingField("" + (char) i, "btn_" + (char) i);
 				newb.addActionListener(this);
 				p.addElement(newb);
 			}
 			addGuiElement(p);
 		}
-		
-		Button back = new Button(0, 0, 50, 20, "Zurück", true, false);
+
+		Button back = new Button(0, 0, 50, 20, "Zurueck", true, false);
 		back.addActionListener(this);
 		addGuiElement(back);
-		
-		
+
 	}
-	
+
 	@Override
 	public void onUpdate() {
 		super.onUpdate();//update gui elements first!
 		KeyboardListener kbl = this.getScreenFactory().getGame().getKeyboardListener();
-		if(kbl.isOnPress("btn_ESC"))//ESC button
+		if (kbl.isOnPress("btn_ESC"))//ESC button
 		{
-			Button b = new Button("Zurück", false, false);
+			Button b = new Button("Zurueck", false, false);
 			b.addActionListener(this);
 			b.callActions();
 		}
-		
+
 	}
-	
+
 	@Override
 	public void onDraw(Graphics2D g2d) {
-		if(prevscreen != null)
+		if (prevscreen != null)
 			prevscreen.onDraw(g2d);
 		super.onDraw(g2d); // Drawing gui elements
 	}
@@ -85,7 +84,7 @@ public class ControlScreen extends Screen implements ActionListener{
 		}
 		switch (e.getActionCommand()) { // name of the button
 		//MainSettings
-		case "Zurück":
+		case "Zurueck":
 			this.getScreenFactory().activeScreen(prevscreen);
 			break;
 		}

@@ -17,7 +17,6 @@ import entity.Stone;
 import entity.Tree;
 import entity.Worker;
 import gameEngine.Game;
-import gameEngine.Player;
 import gui.BigField;
 import gui.Carrier;
 import gui.Field;
@@ -28,6 +27,7 @@ public class MapManager {
 
 	public static List<AbstractEntity> loadMap(LayerPanel pWorld, String maplocation) {
 		File fMap = null;
+		int spawnCouter = 0;
 		List<AbstractEntity> defaultEntitys = new ArrayList<AbstractEntity>();
 		if (maplocation == null) {
 			JFileChooser chooser = new JFileChooser();
@@ -110,11 +110,12 @@ public class MapManager {
 						}
 					}
 					if (imgname.startsWith("s_")) {
-						defaultEntitys.add(new MainBuilding(containerI * 16, (containerJ + 2) * 16, 10, "M_MainBuilding_1.png", Player.MAIN_PLAYER));
-						defaultEntitys.add(new Worker(containerI * 16, (containerJ + 2) * 16 + 120, Player.MAIN_PLAYER));
-						defaultEntitys.add(new Worker(containerI * 16 + 16, (containerJ + 2) * 16 + 120, Player.MAIN_PLAYER));
-						defaultEntitys.add(new Worker(containerI * 16 + 32, (containerJ + 2) * 16 + 120, Player.MAIN_PLAYER));
-						defaultEntitys.add(new Worker(containerI * 16 + 48, (containerJ + 2) * 16 + 120, Player.MAIN_PLAYER));
+						defaultEntitys.add(new MainBuilding(containerI * 16, (containerJ + 2) * 16, 10, "M_MainBuilding_1.png", spawnCouter));
+						defaultEntitys.add(new Worker(containerI * 16, (containerJ + 2) * 16 + 120, spawnCouter));
+						defaultEntitys.add(new Worker(containerI * 16 + 16, (containerJ + 2) * 16 + 120, spawnCouter));
+						defaultEntitys.add(new Worker(containerI * 16 + 32, (containerJ + 2) * 16 + 120, spawnCouter));
+						defaultEntitys.add(new Worker(containerI * 16 + 48, (containerJ + 2) * 16 + 120, spawnCouter));
+						spawnCouter++;
 					} else if (imgname.startsWith("res_")) {
 						String res = imgname.substring(4, imgname.length());
 						if (res.startsWith("w")) {

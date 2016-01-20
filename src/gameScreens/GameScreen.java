@@ -2,7 +2,6 @@ package gameScreens;
 
 import dataManagement.MapManager;
 import entity.AbstractEntity;
-import entity.OrkTest;
 import gameEngine.Game;
 import gameEngine.KeyboardListener;
 import gameEngine.MousepadListener;
@@ -77,8 +76,9 @@ public class GameScreen extends Screen implements ActionListener {
 		LayerPanel pWorld = new LayerPanel(0, 0, 50 * 16, 50 * 16);
 
 		Player.dropAllPlayer();
-		Player hum_sp = new Player(Player.MAIN_PLAYER);
-		Player comp_sp = new Player(1);
+		for (int i = 0; i < 10; i++) {
+			new Player(i);
+		}
 
 		MapManager.loadMap(pWorld, maplocation);// null to call JFileChooser
 
@@ -93,32 +93,32 @@ public class GameScreen extends Screen implements ActionListener {
 		pWorld.removeLayout(4);
 		addGuiElement(pWorld);
 
-		for (int i = 0; i < 10; i++) {
+		/*for (int i = 0; i < entitys.size(); i++) {
 			new OrkTest(rnd.nextInt(700) + 40, rnd.nextInt(500) + 40, 1);
 			entitysOnMap.put(entitys.get(i), pointToMapConst(entitys.get(i).getX(), entitys.get(i).getY()));
-		}
+		}*/
 
 		/*********** HUD ***********************/
 
-		unitLimit = new Label("unitLimit: " + hum_sp.getStone());
+		unitLimit = new Label("unitLimit: " + Player.getPlayer(Player.MAIN_PLAYER).getStone());
 		unitLimit.setX(this.getScreenFactory().getGame().getWindow().getWidth() - 100);
 		unitLimit.setY(0);
 		unitLimit.setWidth(100);
 		unitLimit.setHeight(50);
 
-		wood = new Label("Wood: " + hum_sp.getWood());
+		wood = new Label("Wood: " + Player.getPlayer(Player.MAIN_PLAYER).getWood());
 		wood.setX(this.getScreenFactory().getGame().getWindow().getWidth() - 250);
 		wood.setY(0);
 		wood.setWidth(150);
 		wood.setHeight(50);
 
-		stone = new Label("stone: " + hum_sp.getStone());
+		stone = new Label("stone: " + Player.getPlayer(Player.MAIN_PLAYER).getStone());
 		stone.setX(this.getScreenFactory().getGame().getWindow().getWidth() - 400);
 		stone.setY(0);
 		stone.setWidth(150);
 		stone.setHeight(50);
 
-		iron = new Label("iron: " + hum_sp.getStone());
+		iron = new Label("iron: " + Player.getPlayer(Player.MAIN_PLAYER).getStone());
 		iron.setX(this.getScreenFactory().getGame().getWindow().getWidth() - 550);
 		iron.setY(0);
 		iron.setWidth(150);
@@ -148,15 +148,14 @@ public class GameScreen extends Screen implements ActionListener {
 	public void onUpdate() {
 		int scrollspeed = Game.getSetting().getValueInt("cl_g_scrollspeed");
 		KeyboardListener kbl = this.getScreenFactory().getGame().getKeyboardListener();
-		if (kbl.isOnPress("btn_ESC"))// ESC button
-		{
+		if (kbl.isOnPress("btn_ESC")) {// ESC button
+
 			Button b = new Button("ESC", false, false);
 			b.addActionListener(this);
 			b.callActions();
 			return;
 		}
-		if (kbl.isKeyPressed(39))// i would let this unchangeable
-		{
+		if (kbl.isKeyPressed(39)) {// i would let this unchangeable
 			viewX += scrollspeed;
 		}
 		if (kbl.isKeyPressed(37)) {
@@ -175,10 +174,10 @@ public class GameScreen extends Screen implements ActionListener {
 		iron.setText("Iron " + Player.getPlayer(0).getIron());
 		unitLimit.setText("Units " + Player.getPlayer(0).getActualUnitCOunter() + "/" + Player.getPlayer(0).getUnitLimit());
 
-		if (mpl.getCurrentX() > getScreenFactory().getGame().getWindow().getWidth() - 30 || mpl.getCurrentX() - 30 < 0) {
+		if (mpl.getCurrentX() > getScreenFactory().getGame().getWindow().getWidth() - 15 || mpl.getCurrentX() - 15 < 0) {
 			viewX += mpl.getCurrentX() > getScreenFactory().getGame().getWidth() / 2 ? scrollspeed : -scrollspeed;
 		}
-		if (mpl.getCurrentY() > getScreenFactory().getGame().getWindow().getHeight() - 60 || mpl.getCurrentY() - 30 < 0) {
+		if (mpl.getCurrentY() > getScreenFactory().getGame().getWindow().getHeight() - 30 || mpl.getCurrentY() - 15 < 0) {
 			viewY += mpl.getCurrentY() > getScreenFactory().getGame().getWidth() / 2 ? scrollspeed : -scrollspeed;
 		}
 

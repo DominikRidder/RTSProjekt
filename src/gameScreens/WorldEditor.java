@@ -30,8 +30,8 @@ import Utilitys.Point;
 
 public class WorldEditor extends Screen implements ActionListener {
 	int scale = 16;
-	int width = 50;
-	int height = 50;
+	int width = 100;
+	int height = 100;
 	LayerPanel pWorld;
 	ScrollPane world;
 	Point lastposition;
